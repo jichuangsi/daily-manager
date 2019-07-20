@@ -1,2 +1,2 @@
-# daily-manger
+# daily-manager
 考勤管理
