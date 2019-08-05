@@ -21,6 +21,14 @@
 		.layui-btn {
 			background: #04A3FF;
 		}
+		
+		.layui-form-select dl dd.layui-this {
+			background-color: #1E9FFF;
+		}
+		
+		.toast-success {
+			background-color: #04A3FF !important;
+		}
 	</style>
 
 	<body>
@@ -37,6 +45,13 @@
 							<form class="layui-form layui-col-md12">
 								<div class="layui-input-inline">
 									<input type="text" name="userName" placeholder="姓名" autocomplete="off" class="layui-input">
+								</div>
+								<div class="layui-input-inline">
+									<select name="statusId" lay-verify="required" id="setStatus">
+										<option value="-1">审核状态</option>
+										<option value="1">已审核</option>
+										<option value="2">待审核</option>
+									</select>
 								</div>
 								<div class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></div>
 							</form>

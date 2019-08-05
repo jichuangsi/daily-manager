@@ -17,11 +17,20 @@
 		<script type="text/javascript" src="../js/util.js"></script>
 		<script type="text/javascript" src="../js/page/AppealList.js"></script>
 	</head>
-		<style type="text/css">
-			.layui-btn{
-				background: #04A3FF;
-			}
-		</style>
+	<style type="text/css">
+		.layui-btn {
+			background: #04A3FF;
+		}
+		
+		.layui-form-select dl dd.layui-this {
+			background-color: #1E9FFF;
+		}
+		
+		.toast-success {
+			background-color: #04A3FF !important;
+		}
+	</style>
+
 	<body>
 		<div class="x-nav">
 			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right;" href="javascript:location.replace(location.href);" title="刷新">
@@ -36,6 +45,13 @@
 							<form class="layui-form layui-col-md12">
 								<div class="layui-input-inline">
 									<input type="text" name="userName" placeholder="姓名" autocomplete="off" class="layui-input">
+								</div>
+								<div class="layui-input-inline">
+									<select name="statusId" lay-verify="required" id="setStatus">
+										<option value="-1">审核状态</option>
+										<option value="1">已审核</option>
+										<option value="2">待审核</option>
+									</select>
 								</div>
 								<div class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></div>
 							</form>

@@ -200,7 +200,10 @@ layui.use(['form', 'table', 'tree', 'util'], function() {
 		if(checkedData.length == 0) {
 			layui.notice.warning("提示信息:请选择相关权限");
 		} else {
-			children = checkedData[0].children;
+			var children=[];
+			for(var i=0;i<checkedData.length;i++){
+				children.push(checkedData[i].children[0])
+			}
 			var list = [];
 			console.log(tableId + "+" + children)
 			for(var i = 0; i < children.length; i++) {
@@ -242,13 +245,15 @@ layui.use(['form', 'table', 'tree', 'util'], function() {
 		if(checkedData.length == 0) {
 			layui.notice.warning("提示信息:请选择相关权限");
 		} else {
-			children = checkedData[0].children;
+			var children=[];
+			for(var i=0;i<checkedData.length;i++){
+				children.push(checkedData[i].children[0])
+			}
 			console.log(checkedData)
 			var list = [];
 			for(var i = 0; i < children.length; i++) {
 				list.push({
-					rid: tableId,
-					uid: children[i].id
+					id: children[i].relationId
 				})
 			}
 			var urlRelations = {
