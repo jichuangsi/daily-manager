@@ -1,0 +1,83 @@
+{
+	"description": "项目配置文件",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"autoAudits": false,
+		"checkInvalidKey": true
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.7.7",
+	"appid": "wxb8f0f7c6edd6d9e6",
+	"projectname": "app",
+	"debugOptions": {
+		"hidedInDevtools": []
+	},
+	"isGameTourist": false,
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 4,
+			"list": [
+				{
+					"id": -1,
+					"name": "Appeal",
+					"pathName": "pages/Appeal/Appeal",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "index",
+					"pathName": "pages/index/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "overtime",
+					"pathName": "pages/overtime/overtime",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "query",
+					"pathName": "pages/query/query",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "leave",
+					"pathName": "pages/leave/leave",
+					"query": "",
+					"scene": null
+				}
+			]
+		}
+	}
+}

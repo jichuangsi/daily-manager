@@ -1,0 +1,422 @@
+/**index.wxss**/
+page {
+  background-color: #FAFAFA;
+  padding-bottom: 100rpx;
+}
+.bjimg {
+  width: 100%;
+  height: 336rpx;
+  position: relative;
+}
+.bjimg image {
+  width: 100%;
+  height: 100%;
+}
+.bjimg .bj_bottom {
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  background-color: rgba(15,109,163,0.53);
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  display: flex;
+}
+.bjimg .bj_bottom view {
+  width: 100%;
+  color: #fff;
+}
+.bjimg .bj_bottom view:first-child{
+  text-indent: 40rpx;
+}
+.bjimg .date {
+  color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 40rpx;
+  transform: translateX(-50%);
+}
+.bjimg .date span:first-child{
+  margin-right: 20rpx;
+}
+.bjimg .time {
+  color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 106rpx;
+  transform: translateX(-50%);
+  font-size: 80rpx;
+  font-weight: 600;
+  letter-spacing: 2rpx;
+  vertical-align: middle;
+}
+.Obtain {
+  width: 100%;
+  height: 110rpx;
+  padding: 0px 36rpx;
+  display: flex;
+  align-items: center;
+  border-bottom: 2rpx solid #DCDCDC;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+.Obtain view:first-child{
+  color: #666666;
+  flex: 1;
+}
+.Obtain view:last-child{
+  color: #03A3FF;
+  /* width: 90px; */
+  display: flex;
+  align-items: center;
+}
+.Obtain view:last-child image{
+  width: 32rpx;
+  height: 28rpx;
+  margin-right: 10rpx;
+}
+.Obtain .xz image {
+  animation: xz 1s linear infinite;
+}
+.clock {
+  width: 100%;
+  margin-top: 30rpx;
+}
+.clock .clock_box {
+  width: 100%;
+  height: 150rpx;
+  padding: 0px 40rpx;
+  border: 2rpx solid #DCDCDC;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  background-color: #fff;
+  border-bottom: none;
+}
+.clock .clock_box .clock_left {
+  flex: 1;
+  display: flex;
+}
+.clock .clock_box .clock_left view:first-child{
+  width: 82rpx;
+  height: 82rpx;
+  border-radius: 50%;
+  background-color: #03A3FF;
+  margin-right: 20rpx;
+  position:relative;
+}
+.clock .clock_box .clock_left image {
+  width: 50%;
+  height: 50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+}
+.clock .clock_box .clock_left view:last-child span{
+  display: block;
+  color:#888888;
+  font-style: 22rpx;
+  transform: translateX(-10rpx) scale(0.8);
+}
+.clock .clock_box .clock_left view:last-child span:first-child{
+  color:#666;
+  font-style: 32rpx;
+  letter-spacing: 20rpx;
+  transform: translateX(0px) scale(1);
+}
+.clock .clock_box .clock_right {
+  width: 150rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: center;
+  color: #fff;
+  /* padding: 16rpx 50rpx; */
+  background-color: #03A3FF;
+  border-radius: 8rpx;
+}
+.clock .clock_box .clock_right:active {
+  background-color: #B8B8B8;
+}
+.clock .clock_box .hui {
+  background-color: #B8B8B8;
+}
+.clock .overtime {
+  width: 100%;
+  height: 120rpx;
+  line-height: 120rpx;
+  text-align: center;
+  color: #03A3FF;
+  background-color: #fff;
+  border: 2rpx solid #DCDCDC;
+}
+.remind {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  background-color: rgba(0,0,0,0.6);
+  z-index: 10;
+}
+.remind .remindbox {
+  width: 600rpx;
+  height: 550rpx;
+  background-color: #fff;
+  border-radius: 8rpx;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+}
+.remind .remindbox .none {
+  color:#B2B2B2;
+  float: right;
+  padding: 4rpx 20rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+.remind .remindbox image {
+  width: 216rpx;
+  height: 224rpx;
+  display: block;
+  margin: 50rpx auto;
+}
+.remind .remindbox .btn {
+  width: 100%;
+  height: 100rpx;
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 66rpx;
+  box-sizing: border-box;
+}
+.remind .remindbox .left_btn {
+  width: 220rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  border-radius: 8rpx;
+  text-align: center;
+  border: 2rpx solid #03A3FF;
+  color: #03A3FF;
+}
+.remind .remindbox .right_btn {
+  width: 220rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  border-radius: 8rpx;
+  text-align: center;
+  background-color: #03A3FF;
+  color: #fff;
+}
+.remind .remindbox .text {
+  font-size: 36rpx;
+  color:#666666;
+  text-align: center;
+  margin-bottom: 36rpx;
+}
+.remind .loginbox {
+  width: 600rpx;
+  /* height: 450rpx; */
+  background-color: #fff;
+  border-radius: 8rpx;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  box-sizing: border-box;
+  padding: 20rpx 10rpx;
+}
+.remind .loginbox .box {
+  width:80%;
+  margin: 40rpx auto;
+  display:flex;
+  position:relative;
+}
+.remind .loginbox input{
+  flex: 1;
+  display: inline-block;
+  border-bottom: 2rpx solid #03A3FF;
+  text-align:center;
+}
+.remind .loginbox em{
+  display: inline-block;
+  border: 10rpx solid #03A3FF;
+  border-color: #03A3FF transparent transparent transparent;
+  position:absolute;
+  right: 20rpx;
+}
+.remind .loginbox .text {
+  display:block;
+  margin: 0rpx; 
+}
+.remind .loginbox .listbox {
+  display:block;
+  margin: 0rpx;
+  flex: 1;
+  border-bottom: 2rpx solid #03A3FF;
+  text-align:center;
+  position:relative;
+}
+.remind .loginbox .list {
+  display:block;
+  width: 100%;
+  background-color: #fff;
+  position:absolute;
+  left:0px;
+  top:50rpx;
+  border-bottom: none;
+  z-index: 10;
+}
+.remind .loginbox .listtext{
+  display:block;
+  line-height: 60rpx;
+  border-bottom: none;
+}
+.remind .loginbox .loginbtn {
+  display:block;
+  width: 150rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align:center;
+  border-radius: 8rpx;
+  background-color: #03A3FF;
+  color: #fff;
+  margin: 20rpx auto;
+  margin-top: 60rpx;
+}
+.Ranking {
+  width: 100%;
+  height: 120rpx;
+  line-height: 120rpx;
+  text-align: center;
+  border: 2rpx solid #DCDCDC;
+  margin-top: 58rpx;
+  color: #03A3FF;
+  letter-spacing: 4rpx;
+  background-color: #fff;
+}
+.Ranking image {
+  width: 34rpx;
+  height: 46rpx;
+  margin-right: 20rpx;
+  vertical-align: middle;
+}
+.ranklist {
+  width: 100%;
+}
+.ranklist view {
+  width: 100%;
+  height: 120rpx;
+  background-color: #fff;
+  border: 2rpx solid #DCDCDC;
+  color: #666;
+  display: flex;
+  align-items: center;
+  border-top:none;
+}
+.ranklist view:first-child {
+  height: 74rpx;
+  background-color: #FAFAFA;
+  color: #03A3FF;
+}
+.ranklist view span:nth-child(1){
+  width: 160rpx;
+  /* text-indent: 15px; */
+  text-align: center;
+}
+.ranklist view span:nth-child(1) em{
+  width: 44rpx;
+  height: 54rpx;
+  /* text-indent: 15px; */
+  text-align: center;
+  display: block;
+  margin: 0 auto;
+  position:relative;
+}
+.ranklist view span:nth-child(2){
+  flex: 1;
+  text-indent: 20rpx;
+}
+.ranklist view span:nth-child(2) image{
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+.ranklist view span:nth-child(3){
+  width: 200rpx;
+}
+.ranklist view .one image{
+  width: 44rpx;
+  height: 54rpx;
+  position:absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.ranklist view .one text{
+  width: 100%;
+  font-size: 26rpx;
+  text-align: center;
+  position:absolute;
+  color: #fff;
+  left: 0px;
+  z-index: 10;
+}
+.ranklist view .two image{
+  width: 44rpx;
+  height: 54rpx;
+  position:absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.ranklist view .two text{
+  width: 100%;
+  font-size: 26rpx;
+  text-align: center;
+  position:absolute;
+  color: #fff;
+  left: 0px;
+  z-index: 10;
+}
+.ranklist view .three image{
+  width: 44rpx;
+  height: 54rpx;
+  position:absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.ranklist view .three text{
+  width: 100%;
+  font-size: 26rpx;
+  text-align: center;
+  position:absolute;
+  color: #fff;
+  left: 0px;
+  z-index: 10;
+}
+.floot {
+  position:fixed;
+  left:0px;
+  bottom:0px;
+  display:flex;
+  align-items:center;
+  width:100%;
+  height:100rpx;
+  border-top: 2rpx solid #DCDCDC;
+  background-color:#fff;
+}
+.floot view {
+  flex: 1;
+  text-align: center;
+}
+.floot_check {
+  color: #03A3FF;
+}
+@keyframes xz {
+  0% {
+    transform: rotate(0deg)
+  }
+  100% {
+    transform: rotate(360deg)
+  }
+}

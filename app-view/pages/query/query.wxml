@@ -1,0 +1,82 @@
+<!--logs.wxml-->
+<view class="query">
+    <view class="nav" wx:for="{{navList}}">
+        <view class="{{index == 0 ?'nav_top first':'nav_top'}}" bindtap="navclick" data-index="{{index}}">
+            <text class="title" wx:if="{{item.stuas == 1}}">加班申请</text>
+            <text class="title" wx:if="{{item.stuas == 2}}">请假申请</text>
+            <text class="time">{{item.time}}</text>
+        </view> 
+        <view class="{{item.check?'nav_bottom check':'nav_bottom'}}">
+            <text>时间：{{item.time}}</text>
+            <text>理由：{{item.msg}}</text>
+            <text class="state" wx:if="{{item.stuas2 == 0}}">未审核</text>
+            <text class="state" wx:if="{{item.stuas2 == 1}}">未同意</text>
+            <text class="state" wx:if="{{item.stuas2 == 2}}">已同意</text>
+        </view>
+    </view>
+    <view class="nav" wx:for="{{list}}">
+        <view class="{{index == 0 ?'nav_top first':'nav_top'}}" bindtap="listclick" data-index="{{index}}">
+            <text class="title">申诉</text>
+            <text class="time">{{item.time}}</text>
+        </view> 
+        <view class="{{item.check?'nav_bottom check':'nav_bottom'}}">
+            <text>时间：{{item.time}}</text>
+            <text>理由：{{item.msg}}</text>
+            <text class="state" wx:if="{{item.stuas == 0}}">未审核</text>
+            <text class="state" wx:if="{{item.stuas == 1}}">未同意</text>
+            <text class="state" wx:if="{{item.stuas == 2}}">已同意</text>
+        </view>
+    </view>
+      <view class="floot">
+        <view bindtap="Indexgo">
+          首页
+        </view>
+        <view bindtap="Leavego">
+          请假
+        </view>
+        <view class="floot_check">
+          记录
+        </view>
+      </view>
+      
+      <view class="remind" wx:if="{{loginstate}}">
+        <view class="loginbox">
+          <view class="box">
+            工号：<input type="text" placeholder="请输入工号" bindinput="ghipt"/>
+          </view>
+          <view class="box">
+            密码：<input type="password" placeholder="请输入密码" bindinput="mmipt"/>
+          </view>
+          <view class="box">
+            姓名：<input type="text" placeholder="请输入姓名" bindinput="ipt"/>
+          </view>
+          <view class="box" bindtap="department">
+            <view class="text">
+              部门：
+            </view>
+            <view class="listbox">
+            {{departmenttext}}
+              <view class="list" wx:if="{{departmentstate}}">
+                <text class="listtext" wx:for="{{bmlist}}" catchtap="departmentclick" data-id="{{item.id}}" data-text="{{item.deptname}}">{{item.deptname}}</text>
+              </view>
+            </view>
+            <em></em>
+          </view>
+          <view class="box" bindtap="position">
+            <view class="text">
+              职位：
+            </view>
+            <view class="listbox">
+            {{positiontext}}
+              <view class="list" wx:if="{{positionstate}}">
+                <text class="listtext" wx:for="{{zwlist}}" catchtap="positionclick" data-id="{{item.id}}" data-text="{{item.rolename}}">{{item.rolename}}</text>
+              </view>
+            </view>
+            <em></em>
+          </view>
+          <view class="loginbtn" bindtap="register">
+            确定
+          </view>
+        </view>
+      </view>
+</view>
