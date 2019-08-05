@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: userservice
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/dailymanager
+    username: root
+    password: root
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MySQL5Dialect
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+server:
+  port: 8083
+
+app:
+  token:
+    headerName: accessToken # token在header里面的name
+    userInfoHeader: userInfo #重新构建请求时，将用户信息加到请求头里的headname
+    cache:
+      initialCapacity: 500 #token缓存初始大小
+      maximumSize: 100000 #token缓存的最大大小
+      expireAfterAccessWithMinutes: 30 #最后一次访问后间隔多少分钟失效
+    ingoreTokenUrls: /backuser/LoginBackUser, /staff/getWxToken , /staff/loginStaff, /staff/checkStaff, /staff/registStaff #忽略检查token的URL
+    publicKey: EC86@34$123c
+    userInfoKey: userInfo #token里面的用户信息键值
+
+com:
+  jichuangsi:
+    school:
+      file: D:\
+      token:
+          jwt:
+            secret: EC86@34$123c
+            survivalTime: 7200000
+          userClaim : userInfo
+      swagger:
+        enable: true
+      wx:
+        host: "https://api.weixin.qq.com"
+        source: "source"
+        formatStr: "EEE, dd MMM yyyy HH:mm:ss 'GMT'"
+        timeZone: "GMT"
+        secretKey: "K5oMIj9A5z8JqRvcrq1IHruy9LQiQN5XgxupUc9o"
+        secretId: "AKIDl044BUeuP5wN9eTwU0j3U4t5xV9C1TvlBNlm"
+        appid: "wxb8f0f7c6edd6d9e6"
+        appSecret: "1a88783accd027b70794d7fd261e3318"
+        getToken:
+          path: "/sns/jscode2session"
+          method: "GET"
+        getUserInfo:
+          path: "/sns/userinfo"
+          method: "GET"
+        sendMessage:
+          path: "/cgi-bin/message/mass/sendall"
+          thod: "POST"
+
