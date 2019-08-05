@@ -1,18 +1,15 @@
 package com.jichuangsi.school.timingservice.controller;
 
 import com.jichuangsi.school.timingservice.entity.Role;
-import com.jichuangsi.school.timingservice.entity.RoleUrl;
 import com.jichuangsi.school.timingservice.exception.BackUserException;
 import com.jichuangsi.school.timingservice.model.ResponseModel;
 import com.jichuangsi.school.timingservice.model.UrlModel;
 import com.jichuangsi.school.timingservice.model.UserInfoForToken;
 import com.jichuangsi.school.timingservice.service.BackRoleService;
 import com.jichuangsi.school.timingservice.service.BackRoleUrlService;
-import com.jichuangsi.school.timingservice.utils.MappingEntity2ModelCoverter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

@@ -24,9 +24,9 @@ public interface UrlRelationMapper {
     List<UrlMapping> getModelAndStaticPageByRoleId(String roleId);
 
     //查询角色可以访问的静态页面和url
-    @Select("SELECT sp.id as staticPageId,sp.`name` as staticPageName,sp.static_url as staticPageUrl,ru.id as roleUrlId,ru.`name` as roleUrlName ,ru.url as roleUrl FROM staticpage_url as su INNER JOIN static_page as sp ON su.static_page_id=sp.id INNER JOIN roleurl as ru ON su.url_id=ru.id  WHERE url_id in(SELECT uid FROM urlrelation WHERE rid =#{roleId}) AND sp.id=#{pageId}")
+    @Select("SELECT u.id as relationId,sp.id as staticPageId,sp.`name` as staticPageName,sp.static_url as staticPageUrl,ru.id as id,ru.`name` as name ,ru.url as roleUrl FROM staticpage_url as su INNER JOIN static_page as sp ON su.static_page_id=sp.id INNER JOIN roleurl as ru ON su.url_id=ru.id INNER JOIN urlrelation u ON ru.id=u.uid  WHERE url_id in(SELECT uid FROM urlrelation WHERE rid =#{roleId}) AND sp.id=#{pageId}")
     List<UrlMapping> getStaticPageAndRoleUrlByRoleIdAndPageId(String roleId,String pageId);
 
-    @Select("SELECT sp.id as staticPageId,sp.`name` as staticPageName,sp.static_url as staticPageUrl,ru.id as roleUrlId,ru.`name` as roleUrlName ,ru.url as roleUrl  FROM staticpage_url as su INNER JOIN static_page as sp ON su.static_page_id=sp.id INNER JOIN roleurl as ru ON su.url_id=ru.id  WHERE url_id in(SELECT uid FROM urlrelation WHERE rid =#{roleId})")
+    @Select("SELECT u.id as relationId,sp.id as staticPageId,sp.`name` as staticPageName,sp.static_url as staticPageUrl,ru.id as id,ru.`name` as name ,ru.url as roleUrl  FROM staticpage_url as su INNER JOIN static_page as sp ON su.static_page_id=sp.id INNER JOIN roleurl as ru ON su.url_id=ru.id INNER JOIN urlrelation u ON ru.id=u.uid  WHERE url_id in(SELECT uid FROM urlrelation WHERE rid =#{roleId}) AND u.rid=#{roleId}")
     List<UrlMapping> getStaticPageAndRoleUrlByRoleId(String roleId);
 }

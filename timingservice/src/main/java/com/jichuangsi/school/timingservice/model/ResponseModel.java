@@ -1,6 +1,5 @@
 package com.jichuangsi.school.timingservice.model;
 
-
 import com.jichuangsi.school.timingservice.constant.ResultCode;
 
 public class ResponseModel<T> {
@@ -17,6 +16,11 @@ public class ResponseModel<T> {
 		this.code = code;
 		this.msg = msg;
 		this.data = data;
+	}
+	public ResponseModel(String code, String msg) {
+		super();
+		this.code = code;
+		this.msg = msg;
 	}
 
 	public static <T> ResponseModel<T> sucessWithEmptyData(String tranId) {

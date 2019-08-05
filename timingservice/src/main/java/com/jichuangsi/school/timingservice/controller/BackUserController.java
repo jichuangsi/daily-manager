@@ -5,6 +5,7 @@ import com.jichuangsi.school.timingservice.exception.BackUserException;
 import com.jichuangsi.school.timingservice.model.BackUserModel;
 import com.jichuangsi.school.timingservice.model.ResponseModel;
 import com.jichuangsi.school.timingservice.model.UserInfoForToken;
+import com.jichuangsi.school.timingservice.model.WxLoginModel;
 import com.jichuangsi.school.timingservice.service.BackRoleUrlService;
 import com.jichuangsi.school.timingservice.service.BackUserService;
 import io.swagger.annotations.Api;
@@ -23,13 +24,18 @@ public class BackUserController {
     private BackUserService backUserService;
     @Resource
     private BackRoleUrlService backRoleUrlService;
-    /*@ApiOperation("后台注册")
+
+    @ApiOperation("后台注册")
     @ApiImplicitParams({})
-    @PostMapping("/registUser")
-    public ResponseModel saveDepartment(@ModelAttribute UserInfoForToken userInfo,@RequestBody BackUser user){
-        backUserService.registBackUser(user);
+    @PostMapping("/registBackUser")
+    public ResponseModel registBackUser(@RequestBody WxLoginModel userModel){
+        try {
+            backUserService.registBackUser(userModel);
+        }catch (BackUserException e){
+            return ResponseModel.fail("",e.getMessage());
+        }
         return ResponseModel.sucessWithEmptyData("");
-    }*/
+    }
     @ApiOperation("后台登录")
     @ApiImplicitParams({})
     @PostMapping("/LoginBackUser")

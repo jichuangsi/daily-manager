@@ -6,9 +6,10 @@ public class UrlMapping {
     private String staticPageId;//静态页面id
     private String staticPageName;//静态页面名字
     private String staticPageUrl;//静态页面URL
-    private String roleUrlId;//可访问URLid/方法的id
-    private String roleUrlName;//可访问URL名字/方法的名字
+    private String id;//可访问URLid/方法的id
+    private String name;//可访问URL名字/方法的名字
     private String roleUrl;//可访问URL/方法的URL
+    private String relationId;
 
     public String getModelId() {
         return modelId;
@@ -50,20 +51,20 @@ public class UrlMapping {
         this.staticPageUrl = staticPageUrl;
     }
 
-    public String getRoleUrlId() {
-        return roleUrlId;
+    public String getId() {
+        return id;
     }
 
-    public void setRoleUrlId(String roleUrlId) {
-        this.roleUrlId = roleUrlId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getRoleUrlName() {
-        return roleUrlName;
+    public String getName() {
+        return name;
     }
 
-    public void setRoleUrlName(String roleUrlName) {
-        this.roleUrlName = roleUrlName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getRoleUrl() {
@@ -72,5 +73,13 @@ public class UrlMapping {
 
     public void setRoleUrl(String roleUrl) {
         this.roleUrl = roleUrl;
+    }
+
+    public String getRelationId() {
+        return relationId;
+    }
+
+    public void setRelationId(String relationId) {
+        this.relationId = relationId;
     }
 }
