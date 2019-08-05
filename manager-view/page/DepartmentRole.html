@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>部门角色</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../css/font.css">
+		<link rel="stylesheet" href="../css/xadmin.css">
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all">
+		<script src="../lib/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/xadmin.js"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
+		<script type="text/javascript" src="../js/page/DepartmentRole.js"></script>
+	</head>
+	<style type="text/css">
+		#updataDept {
+			display: none;
+			margin-top: 10px;
+		}
+		
+		.toast-success {
+			background-color: #04A3FF !important;
+		}
+		
+		#updatarRole {
+			display: none;
+			margin-top: 10px;
+		}
+	</style>
+
+	<body>
+		<div class="x-nav">
+			<a class="layui-btn layui-btn-small layui-btn-normal" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+				<i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+		</div>
+		<div class="x-body">
+			<div class="layui-row">
+				<div class="layui-col-md3">
+					<div class="layui-row grid-demo">
+						<div class="layui-col-md12">
+							<fieldset class="layui-elem-field">
+								<legend>添加部门</legend>
+								<div class="layui-field-box">
+									<form class="layui-form" autocomplete="off">
+										<div class="layui-form-item">
+											<label class="layui-form-label">部门名称：</label>
+											<div class="layui-input-block widths">
+												<input type="text" name="deptname" class="layui-input" lay-verify="required">
+											</div>
+										</div>
+										<div class="layui-form-item">
+											<label class="layui-form-label">部门信息：</label>
+											<div class="layui-input-block widths">
+												<input type="text" name="deptdescribe" class="layui-input" lay-verify="required">
+											</div>
+										</div>
+										<div class="layui-form-item">
+											<div class="layui-input-block">
+												<button class="layui-btn layui-btn-normal" lay-submit lay-filter="addDept" type="submit">立即提交</button>
+												<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</fieldset>
+						</div>
+						<div class="layui-col-md12">
+							<fieldset class="layui-elem-field">
+								<legend>添加角色</legend>
+								<div class="layui-field-box">
+									<form class="layui-form" autocomplete="off">
+										<div class="layui-form-item">
+											<label class="layui-form-label">角色名称：</label>
+											<div class="layui-input-block widths">
+												<input type="text" name="rolename" class="layui-input" lay-verify="required">
+											</div>
+										</div>
+										<div class="layui-form-item">
+											<div class="layui-input-block">
+												<button class="layui-btn layui-btn-normal" lay-submit lay-filter="addRole" type="submit">立即提交</button>
+												<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+
+				</div>
+				<div class="layui-col-md8 layui-col-md-offset1">
+					<fieldset class="layui-elem-field layui-field-title">
+						<legend>部门列表</legend>
+						<div class="layui-field-box">
+							<table id="demo" lay-filter="demo"></table>
+						</div>
+					</fieldset>
+					<fieldset class="layui-elem-field layui-field-title">
+						<legend>角色列表</legend>
+						<div class="layui-field-box">
+							<table id="role" lay-filter="role"></table>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+		</div>
+		<script type="text/html" id="operation">
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="dept()">修改</span>
+		</script>
+		<script type="text/html" id="del">
+			<span class="layui-btn-sm layui-btn layui-btn-danger" id="delDept">删除</span>
+		</script>
+		<script type="text/html" id="operationRole">
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="Role()">修改</span>
+		</script>
+		<script type="text/html" id="delRole">
+			<span class="layui-btn-sm layui-btn layui-btn-danger" id="Role">删除</span>
+		</script>
+		<script>
+			function dept() {
+				index = layer.open({
+					type: 1,
+					area: ['500px', '260px'],
+					anim: 2,
+					title: '部门修改',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content: $('#updataDept')
+				});
+			}
+
+			function Role() {
+				index = layer.open({
+					type: 1,
+					area: ['500px', '260px'],
+					anim: 2,
+					title: '角色修改',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content: $('#updatarRole')
+				});
+			}
+		</script>
+	</body>
+	<div id="updataDept" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="test">
+			<div class="layui-form-item">
+				<label class="layui-form-label">部门名称：</label>
+				<div class="layui-input-block widths">
+					<input type="hidden" name="id" />
+					<input type="text" name="deptname" class="layui-input" lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">部门信息：</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="deptdescribe" class="layui-input" lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn layui-btn-normal" lay-submit lay-filter="updataDept" type="submit">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div id="updatarRole" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="test2">
+			<div class="layui-form-item">
+				<label class="layui-form-label">角色名称：</label>
+				<div class="layui-input-block widths">
+					<input type="hidden" name="id" />
+					<input type="text" name="rolename" class="layui-input" lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn layui-btn-normal"  lay-submit lay-filter="updataRole" type="submit">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+</html>

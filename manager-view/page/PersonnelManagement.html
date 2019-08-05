@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>人员管理</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../css/font.css">
+		<link rel="stylesheet" href="../css/xadmin.css">
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all">
+		<script src="../lib/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/xadmin.js"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/page/PersonnelManagement.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
+	</head>
+	<style type="text/css">
+		/*.layui-btn {
+			background: #04A3FF;
+		}*/
+		
+		.layui-laypage-em {
+			background: #04A3FF !important;
+		}
+		
+		.toast-success {
+			background-color: #04A3FF !important;
+		}
+		
+		#updata {
+			display: none;
+			margin-top: 10px;
+		}
+		
+		#updataDept {
+			display: none;
+			margin-top: 10px;
+		}
+		
+		#updataRole {
+			display: none;
+			margin-top: 10px;
+		}
+		
+		.layui-form-select dl dd.layui-this {
+			background-color: #1E9FFF;
+		}
+	</style>
+
+	<body>
+		<div class="x-nav">
+			<a class="layui-btn layui-btn-small layui-btn layui-btn-normal" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+				<i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+		</div>
+		<div class="x-body">
+			<div class="layui-row">
+				<fieldset class="layui-elem-field">
+					<legend>人员列表列表</legend>
+					<div class="layui-field-box">
+						<div class="layui-row">
+							<form class="layui-form layui-col-md12">
+								<div class="layui-input-inline">
+									<input type="text" name="staffName" placeholder="姓名" autocomplete="off" class="layui-input">
+								</div>
+								<div class="layui-input-inline">
+									<select name="statusId" lay-verify="required"  id="setStatus">
+										<option value="-1">请选择状态</option>
+										<option value="">在职</option>
+										<option value="">请假</option>
+										<option value="">离职</option>
+									</select>
+								</div>
+								<div class="layui-btn layui-btn layui-btn-normal" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></div>
+							</form>
+						</div>
+						<table id="demo" lay-filter="demo"></table>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+		<script type="text/html" id="operation">
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" id="updataStatus" onclick="status()">更改状态</span>
+		</script>
+		<script type="text/html" id="modify">
+			<span class="layui-btn-sm layui-btn layui-btn-normal" onclick="dept()">部门</span>
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="role()">职位</span>
+		</script>
+		<script>
+			function status() {
+				index = layer.open({
+					type: 1,
+					area: ['400px', '300px'],
+					anim: 2,
+					title: '状态修改',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content: $('#updata')
+				});
+			}
+
+			function dept() {
+				index = layer.open({
+					type: 1,
+					area: ['400px', '300px'],
+					anim: 2,
+					title: '部门修改',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content: $('#updataDept')
+				});
+			}
+
+			function role() {
+				index = layer.open({
+					type: 1,
+					area: ['400px', '300px'],
+					anim: 2,
+					title: '职位修改',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content: $('#updataRole')
+				});
+			}
+		</script>
+	</body>
+	<div id="updata" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="test">
+			<div class="layui-form-item">
+				<label class="layui-form-label">员工状态：</label>
+				<div class="layui-input-inline">
+					<input type="hidden" name="staffId" />
+					<select name="statusId" lay-verify="required" lay-filter="status" id="status">
+						<option value="-1">请选择状态</option>
+						<option value="">在职</option>
+						<option value="">请假</option>
+						<option value="">离职</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn layui-btn-normal" lay-submit lay-filter="updataDept" type="submit">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div id="updataDept" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="testDept">
+			<div class="layui-form-item">
+				<label class="layui-form-label">调整部门：</label>
+				<div class="layui-input-inline">
+					<input type="hidden" name="staffId" />
+					<select name="deptId" lay-verify="required" lay-filter="Dept" id="dept">
+						<option value="-1">请选择部门</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn layui-btn-normal" lay-submit lay-filter="modifyDept" type="submit">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div id="updataRole" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="testRole">
+			<div class="layui-form-item">
+				<label class="layui-form-label">调整职位：</label>
+				<div class="layui-input-inline">
+					<input type="hidden" name="staffId" />
+					<select name="roleId" lay-verify="required" lay-filter="role" id="role">
+						<option value="-1">请选择职位</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn layui-btn-normal" lay-submit lay-filter="modifyRole" type="submit">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+</html>

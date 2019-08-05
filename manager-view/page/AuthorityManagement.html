@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../css/font.css">
+		<link rel="stylesheet" href="../css/xadmin.css">
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all">
+		<script src="../lib/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/xadmin.js"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js" ></script>
+		<script type="text/javascript" src="../js/page/AuthorityManagement.js"></script>
+
+	</head>
+	<style>
+		.bor {
+			border: solid 2px;
+			border-color: #04A3FF;
+		}
+		
+		.widths {
+			width: 300px;
+		}
+		
+		.liys {
+			line-height: 40px;
+			user-select: none;
+			font-size: 18px;
+			border: 1px solid #009688;
+			margin-bottom: 10px;
+		}
+		
+		.liys:hover {
+			cursor: pointer;
+			/*background-color: #009688;
+			color: white;*/
+		}
+		.layui-form-select dl dd.layui-this{
+			    background-color: #1E9FFF;
+		}
+		.toast-success {
+			background-color: #04A3FF !important;
+		}
+		
+		.ys {
+			user-select: none;
+			background-color: #009688;
+			color: white;
+		}
+		*{
+			    font-size: 18px;
+		}
+	</style>
+
+	<body>
+		<div class="x-nav">
+			<a class="layui-btn layui-btn-small layui-btn layui-btn-normal" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+				<i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+		</div>
+		<div class="x-body">
+			<div class="layui-row ">
+				<form class="layui-form" autocomplete="off" lay-filter="test">
+					<div class="layui-form-item">
+						<label class="layui-form-label"></label>
+						<div class="layui-input-block widths">
+							<select name="role" lay-verify="required" lay-filter="role" id="status">
+								<option value="-1">请选择角色用户</option>
+								<option value="">院长</option>
+								<option value="">副院长</option>
+								<option value="">科长</option>
+							</select>
+
+						</div>
+					</div>
+				</form>
+				<div class="layui-col-md3 layui-col-lg-offset1">
+					<fieldset class="layui-elem-field bor layui-anim-scaleSpring">
+						<legend>权限分配</legend>
+						<div class="layui-field-box">
+							<div style="width: 100%;  height:600px;overflow:auto;font-size: 18px;" class="bor layui-anim-scaleSpring" id="library">
+								<div id="urlTree" class="demo-tree-more layui-anim-scaleSpring "></div>
+								<!--<ul style="width: 90%;margin:10px auto;text-align: center;line-height: 45px;">
+								</ul>-->
+							</div>
+						</div>
+					</fieldset>
+
+				</div>
+				<div class="layui-col-md2" style="height:600px;align-content: center;">
+					<div class="layui-row grid-demo" style="margin-top: 100%;">
+						<div class="layui-col-md6" style="text-align: center;">
+							<button class="layui-btn layui-btn-radius layui-btn-normal" id="del" title="取消角色权限">
+							<i class="layui-icon layui-icon-prev" style="font-size: 30px;" ></i> 
+						</button>
+						</div>
+						<div class="layui-col-md6" style="text-align: center;">
+							<span class="layui-btn layui-btn-radius layui-btn-normal" id="add" lay-demo="getChecked" title="添加角色权限">
+							<i class="layui-icon layui-icon-next" style="font-size: 30px; " ></i> 
+						</span>
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md3">
+					<fieldset class="layui-elem-field bor layui-anim-scaleSpring" >
+						<legend>角色权限</legend>
+						<div class="layui-field-box">
+							<div style="width: 100%; height: 600px;overflow:auto;" class="bor " id="area">
+								<div id="roleTree" class="demo-tree-more layui-anim-scaleSpring"></div>
+								<!--<ul style="width: 90%;margin:10px auto;text-align: center;line-height: 45px;">
+								</ul>-->
+							</div>
+						</div>
+					</fieldset>
+
+				</div>
+			</div>
+		</div>
+
+	</body>
+
+</html>

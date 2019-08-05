@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../css/font.css">
+		<link rel="stylesheet" href="../css/xadmin.css">
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all">
+		<script src="../lib/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/xadmin.js"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/page/CardingRules.js"></script>
+	</head>
+	<style>
+		.widths {
+			width: 300px;
+		}
+		
+		.add {
+			font-size: 30px;
+		}
+		
+		.add:hover {
+			cursor: pointer;
+		}
+	</style>
+
+	<body>
+		<div class="x-nav">
+			<a class="layui-btn layui-btn-small layui-btn layui-btn-normal" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+				<i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+		</div>
+		<div class="x-body">
+			<div class="layui-row">
+				<fieldset class="layui-elem-field layui-col-md5">
+					<legend>打卡规则：</legend>
+					<div class="layui-field-box">
+						<form class="layui-form" autocomplete="off">
+							<div class="layui-form-item">
+								<div class="layui-inline">
+									<label class="layui-form-label">名称：</label>
+									<div class="layui-input-inline widths">
+										<input type="text" name="price_min" autocomplete="off" class="layui-input">
+									</div>
+									<div class="layui-form-mid">时间：</div>
+									<div class="layui-input-inline">
+										<input type="text" name="price_max" autocomplete="off" class="layui-input time" placeholder="选择时间">
+									</div>
+								</div>
+							</div>
+							<div class="layui-row" id="card">
+								<div class="layui-form-item" value="1">
+									<div class="layui-inline">
+										<label class="layui-form-label">名称：</label>
+										<div class="layui-input-inline widths">
+											<input type="text" name="price_min" class="layui-input">
+										</div>
+										<div class="layui-form-mid">时间：</div>
+										<div class="layui-input-inline">
+											<input type="text" name="price_max" autocomplete="off" class="layui-input time" placeholder="选择时间">
+										</div>
+										<div class="layui-form-mid layui-word-aux"><i class="layui-icon layui-icon-add-circle-fine add" id="add"></i> </div>
+									</div>
+								</div>
+							</div>
+
+							<div class="layui-form-item">
+								<div class="layui-input-block">
+									<button class="layui-btn layui-btn-normal" lay-submit lay-filter="add" type="submit">立即提交</button>
+									<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</fieldset>
+				<div class="layui-col-md5 layui-col-md-offset1">
+					<fieldset class="layui-elem-field ">
+						<legend>规则列表：</legend>
+						<div class="layui-field-box">
+							<table id="demo" lay-filter="demo"></table>
+						</div>
+					</fieldset>
+					<fieldset class="layui-elem-field ">
+						<legend>当天规则列表：</legend>
+						<div class="layui-field-box">
+							<table id="today" lay-filter="today"></table>
+						</div>
+						<script type="text/html" id="operation">
+							<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="dept()">修改</span>
+						</script>
+					</fieldset>
+				</div>
+
+			</div>
+		</div>
+	</body>
+
+</html>
