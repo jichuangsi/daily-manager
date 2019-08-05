@@ -1,0 +1,203 @@
+
+page {
+  background-color: #FAFAFA;
+  padding-bottom: 100rpx;
+}
+.nav {
+    width: 100%;
+    background-color: #fff;
+}
+.nav .nav_top {
+    height: 124rpx;
+    line-height: 124rpx;
+    padding: 0 42rpx;
+    box-sizing: border-box;
+    border: 2rpx solid #DCDCDC;
+    border-top: none;
+}
+.nav .nav_top text{
+    width:50%;
+    display: inline-block;
+}
+.nav .nav_top .time{
+    color: #999999;
+    font-size: 24rpx;
+    text-align: right;
+}
+.nav .nav_bottom {
+    width: 100%;
+    height: 0rpx;
+    padding: 0rpx;
+    box-sizing: border-box;
+    position: relative;
+    overflow:hidden;
+    transition: height 1s liner;
+    border: none;
+}
+.nav .check {
+    height: 450rpx;
+    padding: 42rpx;
+    border: 2rpx solid #DCDCDC;
+    border-top: none;
+}
+.nav .nav_bottom text{
+    display:block;
+}
+.nav .nav_bottom .state{
+    position: absolute;
+    right:42rpx;
+    bottom:42rpx;
+}
+.floot {
+  position:fixed;
+  left:0px;
+  bottom:0px;
+  display:flex;
+  align-items:center;
+  width:100%;
+  height:100rpx;
+  border-top: 2rpx solid #DCDCDC;
+  background-color:#fff;
+}
+.floot view {
+  flex: 1;
+  text-align: center;
+}
+.floot_check {
+  color: #03A3FF;
+}
+
+.remind {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  background-color: rgba(0,0,0,0.6);
+  z-index: 10;
+}
+.remind .remindbox {
+  width: 600rpx;
+  height: 550rpx;
+  background-color: #fff;
+  border-radius: 8rpx;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+}
+.remind .remindbox .none {
+  color:#B2B2B2;
+  float: right;
+  padding: 4rpx 20rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+.remind .remindbox image {
+  width: 216rpx;
+  height: 224rpx;
+  display: block;
+  margin: 50rpx auto;
+}
+.remind .remindbox .btn {
+  width: 100%;
+  height: 100rpx;
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 66rpx;
+  box-sizing: border-box;
+}
+.remind .remindbox .left_btn {
+  width: 220rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  border-radius: 8rpx;
+  text-align: center;
+  border: 2rpx solid #03A3FF;
+  color: #03A3FF;
+}
+.remind .remindbox .right_btn {
+  width: 220rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  border-radius: 8rpx;
+  text-align: center;
+  background-color: #03A3FF;
+  color: #fff;
+}
+.remind .remindbox .text {
+  font-size: 36rpx;
+  color:#666666;
+  text-align: center;
+  margin-bottom: 36rpx;
+}
+.remind .loginbox {
+  width: 600rpx;
+  /* height: 450rpx; */
+  background-color: #fff;
+  border-radius: 8rpx;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  box-sizing: border-box;
+  padding: 20rpx 10rpx;
+}
+.remind .loginbox .box {
+  width:80%;
+  margin: 40rpx auto;
+  display:flex;
+  position:relative;
+}
+.remind .loginbox input{
+  flex: 1;
+  display: inline-block;
+  border-bottom: 2rpx solid #03A3FF;
+  text-align:center;
+}
+.remind .loginbox em{
+  display: inline-block;
+  border: 10rpx solid #03A3FF;
+  border-color: #03A3FF transparent transparent transparent;
+  position:absolute;
+  right: 20rpx;
+}
+.remind .loginbox .text {
+  display:block;
+  margin: 0rpx; 
+}
+.remind .loginbox .listbox {
+  display:block;
+  margin: 0rpx;
+  flex: 1;
+  border-bottom: 2rpx solid #03A3FF;
+  text-align:center;
+  position:relative;
+}
+.remind .loginbox .list {
+  display:block;
+  width: 100%;
+  background-color: #fff;
+  position:absolute;
+  left:0px;
+  top:50rpx;
+  border-bottom: none;
+  z-index: 10;
+}
+.remind .loginbox .listtext{
+  display:block;
+  line-height: 60rpx;
+  border-bottom: none;
+}
+.remind .loginbox .loginbtn {
+  display:block;
+  width: 150rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align:center;
+  border-radius: 8rpx;
+  background-color: #03A3FF;
+  color: #fff;
+  margin: 20rpx auto;
+  margin-top: 60rpx;
+}

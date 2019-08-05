@@ -1,0 +1,20 @@
+<view class="overtime">
+    <picker mode="time" value="{{StartTime}}" start="00:00" end="24:00" bindchange="bindTimeStart">
+        <view class="picker">
+        开始时间<text>{{StartTime}}</text>
+        </view>
+    </picker>
+    <picker mode="time" value="{{EndTime}}" start="00:00" end="24:00" bindchange="bindTimeEnd">
+        <view class="picker last">
+        结束时间<text>{{EndTime}}</text>
+        </view>
+    </picker>
+      <view class="Reason">
+        <h3>加班原因:</h3>
+        <textarea placeholder="请输入加班原因..." bindinput="textnum" value='text'></textarea>
+        <view class="fr"><span>{{num}}</span>/140字</view>
+      </view>
+    <view class="btn" bindtap='btn'>
+      提交
+    </view>
+</view>
