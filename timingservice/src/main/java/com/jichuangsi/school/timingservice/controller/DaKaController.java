@@ -8,6 +8,7 @@ import com.jichuangsi.school.timingservice.model.*;
 import com.jichuangsi.school.timingservice.service.PeopleService;
 import com.jichuangsi.school.timingservice.service.RecordService;
 import com.jichuangsi.school.timingservice.service.RuleService;
+import com.jichuangsi.school.timingservice.utils.TimeUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Component;
@@ -184,7 +185,7 @@ public class DaKaController {
 
     @ApiOperation(value = "报表", notes = "")
     @PostMapping("/getBB")
-    public ResponseModel<List<ReportFormModel>> getBB(@RequestParam long timeStart,@RequestParam long timeEnd){
+    public ResponseModel<List<ReportFormModel>> getBB(@RequestParam String timeStart,@RequestParam String timeEnd){
         try{
                 List<People> peopleList = peopleService.findAll();
                 List<ReportFormModel> models = new ArrayList<>();
@@ -192,8 +193,9 @@ public class DaKaController {
                     ) {
                 ReportFormModel rModel = new ReportFormModel();
                 List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndStuas(people.getOpenId());
-                int time = (int) (timeEnd - timeStart) / (24 * 60 * 60);
-                int qq=time-allByOpenIdAndStuas.size();
+                    List<Rule> ruleForTime = ruleService.getRuleForTime(TimeUtils.startTime(timeStart), TimeUtils.endTime(timeEnd));
+//                    int time = (int) (timeEnd - timeStart) / (24 * 60 * 60);
+                int qq=ruleForTime.size()-allByOpenIdAndStuas.size();
                 rModel.setQq(qq);
                 rModel.setKq(allByOpenIdAndStuas.size());
                 rModel.setDepartment(people.getDepartment());
@@ -209,16 +211,17 @@ public class DaKaController {
 
     @ApiOperation(value = "根据名字做报表", notes = "")
     @PostMapping("/getGRBB")
-    public ResponseModel<List<ReportFormModel>> getGRBB(@RequestParam long timeStart, @RequestParam long timeEnd,@RequestParam String name){
+    public ResponseModel<List<ReportFormModel>> getGRBB(@RequestParam String timeStart, @RequestParam String timeEnd,@RequestParam String name){
         try{
-            List<People> allPeople = peopleService.findAllPeople(name);
+            List<People> peopleList = peopleService.findAllPeople(name);
             List<ReportFormModel> models = new ArrayList<>();
-            for ( People people:allPeople
+            for ( People people:peopleList
                     ) {
                 ReportFormModel rModel = new ReportFormModel();
                 List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndStuas(people.getOpenId());
-                int time = (int) (timeEnd - timeStart) / (24 * 60 * 60);
-                int qq=time-allByOpenIdAndStuas.size();
+                List<Rule> ruleForTime = ruleService.getRuleForTime(TimeUtils.startTime(timeStart), TimeUtils.endTime(timeEnd));
+//                    int time = (int) (timeEnd - timeStart) / (24 * 60 * 60);
+                int qq=ruleForTime.size()-allByOpenIdAndStuas.size();
                 rModel.setQq(qq);
                 rModel.setKq(allByOpenIdAndStuas.size());
                 rModel.setDepartment(people.getDepartment());
@@ -234,7 +237,7 @@ public class DaKaController {
 
     @ApiOperation(value = "今日报表", notes = "")
     @PostMapping("/getTDBB")
-    public ResponseModel<List<ReportFormModel2>> getGRBB(@RequestParam long timeStart, @RequestParam long timeEnd){
+    public ResponseModel<List<ReportFormModel2>> getGRBB(){
         try{
             List<People> peopleList = peopleService.findAll();
             List<ReportFormModel2> models = new ArrayList<>();
@@ -242,8 +245,8 @@ public class DaKaController {
                     ) {
                 ReportFormModel2 rModel = new ReportFormModel2();
                 List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndStuas(people.getOpenId());
-                int time = (int) (timeEnd - timeStart) / (24 * 60 * 60);
-                int qq=time-allByOpenIdAndStuas.size();
+
+                int qq=allByOpenIdAndStuas.size();
 
                 rModel.setDepartment(people.getDepartment());
                 rModel.setJurisdiction(people.getJurisdiction());

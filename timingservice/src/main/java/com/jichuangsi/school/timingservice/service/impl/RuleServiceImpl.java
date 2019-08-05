@@ -76,5 +76,10 @@ public class RuleServiceImpl implements RuleService {
         ruleRepostitory.updateRule(rule.getWucha(),rule.getId(),rule.getTime(),rule.getStuas(),rule.getLongitudeLatitude(),rule.getWifiName() );
     }
 
+    @Override
+    public List<Rule> getRuleForTime(long timeStart, long timeEnd) {
+        return ruleRepostitory.findAllByTimeBetween(timeStart,timeEnd);
+    }
+
 
 }

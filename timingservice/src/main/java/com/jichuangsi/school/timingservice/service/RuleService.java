@@ -25,4 +25,6 @@ public interface RuleService {
     void copyRlueModel();
 
     void updateRule(Rule rule);
+
+    List<Rule> getRuleForTime(long timeStart, long timeEnd);
 }

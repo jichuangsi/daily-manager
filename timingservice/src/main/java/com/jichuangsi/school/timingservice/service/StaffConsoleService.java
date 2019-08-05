@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.persistence.criteria.*;
@@ -25,6 +26,8 @@ import java.util.List;
 
 @Service
 public class StaffConsoleService {
+    @Resource
+    private PeopleRepostitory peopleRepostitory;
     @Resource
     private IStaffRepository staffRepository;
     @Resource
@@ -99,6 +102,8 @@ public class StaffConsoleService {
         opLog.setOperatorId(userInfo.getUserId());
         String action="修改员工部门";
         opLog.setOpAction(action);
+        //lai
+        peopleRepostitory.updateDPMTforOPENID(deptId,wechat);
         opLogRepository.save(opLog);
     }
     //修改角色
@@ -109,6 +114,8 @@ public class StaffConsoleService {
         opLog.setOperatorId(userInfo.getUserId());
         String action="修改员工角色信息";
         opLog.setOpAction(action);
+        //lai
+        peopleRepostitory.updateJSQXforOPENID(roleId,wechat);
         opLogRepository.save(opLog);
     }
 
@@ -196,6 +203,14 @@ public class StaffConsoleService {
             staff.setPwd(Md5Util.encodeByMd5(model.getPwd()));
             staffRepository.save(staff);
             backUserService.registBackUser(model);
+
+            //赖
+            People people = new People();
+            people.setDepartment(model.getDeptId());
+            people.setJurisdiction(model.getRoleName());
+            people.setOpenId(model.getOpendId());
+            people.setPeopleName(model.getName());
+            peopleRepostitory.save(people);
         }
         UserInfoForToken userInfo=MappingEntity2ModelCoverter.CONVERTERFROMSTAFF(staff);
         try {

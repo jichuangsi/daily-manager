@@ -28,4 +28,6 @@ public interface RuleRepostitory extends JpaRepository<Rule,String>{
     @Modifying
     @Query(value = "UPDATE rule SET longitude_latitude=?5,stuas=?4,time=?3,wifi_name=?6,wucha=?1, WHERE id=?2",nativeQuery = true)
     int updateRule(String wucha, Integer id, long time, String stuas, String longitudeLatitude, String wifiName);
+
+    List<Rule> findAllByTimeBetween(long timeStart, long timeEnd);
 }

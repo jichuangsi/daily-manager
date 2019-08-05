@@ -37,7 +37,7 @@ public class RuleController {
         ResponseModel<List<Rule>> stringResponseModel = new ResponseModel<>();
         List<Rule> rulelist = ruleService.getRulelist();
         stringResponseModel.setData(rulelist);
-
+        stringResponseModel.setCode(ResultCode.SUCESS);
         return stringResponseModel;
     }
 
