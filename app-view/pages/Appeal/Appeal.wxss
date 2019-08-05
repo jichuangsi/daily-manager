@@ -1,0 +1,121 @@
+
+page {
+  background-color: #FAFAFA;
+}
+.top {
+  width: 100%;
+  padding: 0px 40rpx;
+  box-sizing: border-box;
+  background-color: #fff;
+  padding-bottom: 40rpx;
+}
+.top h3 {
+  font-size: 36rpx;
+  color: #666666;
+  margin: 10px 0px;
+  font-weight: 600;
+  letter-spacing: 4rpx;
+}
+.top textarea {
+  width: 100%;
+  height: 250rpx;
+  margin-top: 20rpx;
+}
+.top .fr {
+  float: right;
+  color: #DCDCDC
+}
+.top .fr span{
+  color: #FF8330
+}
+.top .img {
+  width: 100%;
+  margin-top: 36rpx;
+  display: flex;
+  flex-wrap: wrap;
+}
+.top .img .Exhibition {
+  margin-right: 20rpx;
+}
+.top .img .Exhibition_box {
+  display: inline-block;
+  position: relative;
+  margin-right: 9rpx;
+}
+.top .img .Exhibition_box .none{
+  position: absolute;
+  right: 4rpx;
+  top: -8rpx;
+  width: 32rpx;
+  height: 32rpx;
+  color: #fff;
+  background-color: #FF0000;
+  line-height: 24rpx;
+  text-align: center;
+  border-radius: 50%;
+}
+.top .img .Exhibition_box image {
+  width: 110rpx;
+  height: 110rpx;
+  margin-right: 17rpx;
+}
+.top .img .xiangji{
+  width: 110rpx;
+  height: 110rpx;
+  border-radius: 4rpx;
+  border: 2rpx solid #DCDCDC;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.top .img .xiangji image{
+  width: 54rpx;
+  height: 48rpx;
+}
+.bottom {
+  width: 100%;
+  margin-top: 26rpx;
+}
+.bottom .bottom_div {
+  width: 100%;
+  height: 240rpx;
+  border: 2rpx solid #DCDCDC;
+  box-sizing: border-box;
+  padding: 32rpx 40rpx;
+}
+.bottom .bottom_div view:first-child {
+  font-style: 32rpx;
+  font-weight: 600;
+  color:#666666;
+}
+.bottom .bottom_div view:first-child span{
+  font-style: 32rpx;
+  font-weight: 600;
+  color: #FF0000;
+}
+.bottom .bottom_div view:last-child{
+  width: 100%;
+}
+.bottom .bottom_div view:last-child .img{
+  width: 84rpx;
+  height: 84rpx;
+  margin-top: 20rpx;
+}
+.bottom .bottom_div view:last-child .img image{
+  width: 48rpx;
+  height: 48rpx;
+  margin-left: 18rpx;
+  margin-top: 18rpx;
+}
+.btn {
+  width: 620rpx;
+  height: 86rpx;
+  line-height: 86rpx;
+  text-align: center;
+  border-radius: 16rpx;
+  background-color: #03A3FF;
+  color: #fff;
+  margin: 40rpx auto;
+  font-size: 32rpx;
+  font-weight: 600;
+}

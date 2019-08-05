@@ -1,0 +1,20 @@
+<!--logs.wxml-->
+<view class="Appeal">
+    <view class="top">
+      <h3>申诉理由</h3>
+      <textarea placeholder="请输入您的理由..." bindinput="textnum" value='{{text}}'></textarea>
+      <view class="fr"><span>{{num}}</span>/140字</view>
+      <view class="img">
+          <view class="Exhibition_box" wx:for="{{imglist}}"  bindtap="changex" data-index="{{index}}">
+            <image src="{{item}}" alt="" />
+            <view class="none" catchtap="out" data-index="{{index}}">x</view>
+          </view>
+        <view class="xiangji" bindtap="tp">
+          <image src="../../static/images/xj.png" alt="" />
+        </view>
+      </view>
+    </view>
+    <view class="btn" bindtap="btn">
+      提交
+    </view>
+</view>

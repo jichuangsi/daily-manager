@@ -1,0 +1,138 @@
+<!--index.wxml-->
+<view class="index">
+      <view class="bjimg">
+          <image src="../../static/images/bj.png" alt="" />
+          <view class="date">
+            <span>{{date}}</span><span>{{Week}}</span>
+          </view>
+          <view class="time">
+            {{time}}
+          </view>
+          <view class="bj_bottom">
+            <view>考勤规则：根据定位和连接指定WIFI打卡</view>
+          </view>
+      </view>
+      <view class="Obtain">
+        <view>
+          {{Obtaintext}}
+        </view>
+        <view bindtap="wz" wx:if="{{!clickstate}}">
+          <image src="../../static/images/sx.png" alt="" />
+          <span wx:if="{{positionstate == 0}}">获取位置</span>
+          <span wx:if="{{positionstate == 1}}">重新获取</span>
+        </view>
+        <view bindtap="wz" class="xz" wx:if="{{clickstate}}">
+          <image src="../../static/images/sx.png" alt="" />
+          <span wx:if="{{positionstate == 0}}">获取位置</span>
+          <span wx:if="{{positionstate == 1}}">重新获取</span>
+        </view>
+      </view>
+      <view class="clock">
+        <view class="clock_box" wx:for="{{dklist}}">
+          <view class="clock_left">
+            <view wx:if="{{item.stuas == 1}}"><image src="../../static/images/zao.png" /></view>
+            <view wx:if="{{item.stuas == 2}}"><image src="../../static/images/zao.png" /></view>
+            <view>
+              <span wx:if="{{item.stuas == 1}}">上班</span>
+              <span wx:if="{{item.stuas == 2}}">下班</span>
+              <span>{{item.sj}}</span>
+            </view>
+          </view>
+          <view class="clock_right" data-id = "{{item.id}}" bindtap="clock"  wx:if="{{item.stuas2 == 1}}">
+            打卡
+          </view>
+          <view class="clock_right hui" wx:if="{{item.stuas2 == 0}}">
+            已打卡
+          </view>
+        </view>
+        <view class="overtime" bindtap="overtimego">
+        加班申请
+        </view>
+      </view>
+      <view class="remind" wx:if="{{remindstate}}">
+        <view class="remindbox">
+          <view class="none" bindtap="remindstateout">x</view>
+          <image src="../../static/images/dd.png" alt="" />
+          <view class="text">{{msg}}</view>
+          <view class="btn">
+            <view class="left_btn" bindtap="Appealgo">去申诉</view>
+            <view class="right_btn" bindtap="remindstateout">重新考勤</view>
+          </view>
+        </view>
+      </view>
+      <view class="remind" wx:if="{{loginstate}}">
+        <view class="loginbox">
+          <view class="box">
+            工号：<input type="text" placeholder="请输入工号" bindinput="ghipt"/>
+          </view>
+          <view class="box">
+            密码：<input type="password" placeholder="请输入密码" bindinput="mmipt"/>
+          </view>
+          <view class="box">
+            姓名：<input type="text" placeholder="请输入姓名" bindinput="ipt"/>
+          </view>
+          <view class="box" bindtap="department">
+            <view class="text">
+              部门：
+            </view>
+            <view class="listbox">
+            {{departmenttext}}
+              <view class="list" wx:if="{{departmentstate}}">
+                <text class="listtext" wx:for="{{bmlist}}" catchtap="departmentclick" data-id="{{item.id}}" data-text="{{item.deptname}}">{{item.deptname}}</text>
+              </view>
+            </view>
+            <em></em>
+          </view>
+          <view class="box" bindtap="position">
+            <view class="text">
+              职位：
+            </view>
+            <view class="listbox">
+            {{positiontext}}
+              <view class="list" wx:if="{{positionstate}}">
+                <text class="listtext" wx:for="{{zwlist}}" catchtap="positionclick" data-id="{{item.id}}" data-text="{{item.rolename}}">{{item.rolename}}</text>
+              </view>
+            </view>
+            <em></em>
+          </view>
+          <view class="loginbtn" bindtap="register">
+            确定
+          </view>
+        </view>
+      </view>
+      <view class="Ranking" bindtap="rankcilck">
+        <span wx:if="{{!rankstate}}">查看排行榜</span>
+        <span wx:if="{{rankstate}}"><image src="../../static/images/jiangbei.png" alt="" />查看排行榜</span>
+      </view>
+      <view class="ranklist" wx:if="{{rankstate}}">
+        <view>
+          <span>名次</span>
+          <span>员工名字</span>
+          <span>打卡时间</span>
+        </view>
+        <view wx:for="{{ranklist}}">
+          <span>
+          <em class="one" wx:if="{{index == 0}}"><image src="../../static/images/j1.png" /><text>{{index+1}}</text></em>
+          <em class="two" wx:if="{{index == 1}}"><image src="../../static/images/y2.png" /><text>{{index+1}}</text></em>
+          <em class="three" wx:if="{{index == 2}}"><image src="../../static/images/t3.png" /><text>{{index+1}}</text></em>
+          <em wx:if="{{index > 2}}">{{index+1}}</em>
+          </span>
+          <span>
+            <image :src="item.userimg" alt="" />
+            {{item.people.peopleName}}
+          </span>
+          <span>{{item.time}}</span>
+        </view>
+      </view>
+      <view class="floot">
+        <view class="floot_check">
+          首页
+        </view>
+        <view bindtap="Leavego">
+          请假
+        </view>
+        <view bindtap="Querygo">
+          记录
+        </view>
+      </view>
+</view>
