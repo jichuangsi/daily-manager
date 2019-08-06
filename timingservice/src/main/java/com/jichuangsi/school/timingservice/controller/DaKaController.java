@@ -157,27 +157,33 @@ public class DaKaController {
     @ApiOperation(value = "个人读取今日规则含状态", notes = "")
     @PostMapping("/getrulelist")
     public ResponseModel<List<RuleModel>> getRuleListStuas(@RequestParam String openId){
+try {
 
-        ResponseModel<List<RuleModel>> stringResponseModel = new ResponseModel<>();
-        List<RuleModel> rulelist = new ArrayList<>();
-        List<Rule> rules = ruleService.getRulelist();
-        for (Rule r:rules
-             ) {
-            RuleModel ruleModel = new RuleModel();
-            Record stuas = recordService.findAllByOpenIdAndRuleIdAndStuas(openId, r.getId().toString());
-            if (stuas!=null){
-                ruleModel.setStuas2("0");
-            }
-            ruleModel.setStuas(r.getStuas());
-            ruleModel.setId(r.getId());
-            ruleModel.setLongitudeLatitude(r.getLongitudeLatitude());
-            ruleModel.setTime(r.getTime());
-            ruleModel.setWifiName(r.getWifiName());
-            rulelist.add(ruleModel);
+    ResponseModel<List<RuleModel>> stringResponseModel = new ResponseModel<>();
+    List<RuleModel> rulelist = new ArrayList<>();
+    List<Rule> rules = ruleService.getRulelist();
+    for (Rule r:rules
+            ) {
+        RuleModel ruleModel = new RuleModel();
+        Record stuas = recordService.findAllByOpenIdAndRuleIdAndStuas(openId, r.getId().toString());
+        if (stuas!=null){
+            ruleModel.setStuas2("0");
         }
-        stringResponseModel.setData(rulelist);
+        ruleModel.setStuas(r.getStuas());
+        ruleModel.setId(r.getId());
+        ruleModel.setLongitudeLatitude(r.getLongitudeLatitude());
+        ruleModel.setTime(r.getTime());
+        ruleModel.setWifiName(r.getWifiName());
+        rulelist.add(ruleModel);
+    }
+    stringResponseModel.setData(rulelist);
+    stringResponseModel.setCode(ResultCode.SUCESS);
+    return stringResponseModel;
+}catch (Exception e){
+    return ResponseModel.fail("");
+}
 
-        return stringResponseModel;
+
     }
 
     @ApiOperation(value = "报表", notes = "")
