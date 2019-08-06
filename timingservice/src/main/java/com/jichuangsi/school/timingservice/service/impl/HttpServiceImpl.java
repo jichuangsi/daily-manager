@@ -1,6 +1,5 @@
 package com.jichuangsi.school.timingservice.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.jichuangsi.school.timingservice.config.HttpHeaderConfig;
 import com.jichuangsi.school.timingservice.constant.ResultCode;
 import com.jichuangsi.school.timingservice.exception.StaffHttpException;

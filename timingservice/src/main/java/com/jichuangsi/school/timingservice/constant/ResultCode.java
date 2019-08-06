@@ -9,7 +9,7 @@ public class ResultCode {
 	public static final String SYS_ERROR = "0050";//系统内部异常
 	public static final String SYS_BUSY = "0051";//熔断
 	public static final String SOS = "007";//重复申诉
-	
+
 	public static final String SUCESS_MSG = "成功";
 	public static final String PARAM_MISS_MSG = "缺少参数";
 	public static final String PARAM_ERR_MSG = "参数不正确";

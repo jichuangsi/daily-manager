@@ -9,7 +9,6 @@ import com.jichuangsi.school.timingservice.model.UserInfoForToken;
 import com.jichuangsi.school.timingservice.repository.IBackUserRepository;
 import com.jichuangsi.school.timingservice.repository.IDepartmentRepository;
 import com.jichuangsi.school.timingservice.repository.IOpLogRepository;
-import com.jichuangsi.school.timingservice.repository.IStaffRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
