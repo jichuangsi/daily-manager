@@ -7,6 +7,8 @@ import com.jichuangsi.school.timingservice.constant.Status;
 import com.jichuangsi.school.timingservice.entity.BackUser;
 import com.jichuangsi.school.timingservice.exception.BackUserException;
 import com.jichuangsi.school.timingservice.model.BackUserModel;
+import com.jichuangsi.school.timingservice.model.UpdatePwdModel;
+import com.jichuangsi.school.timingservice.model.UserInfoForToken;
 import com.jichuangsi.school.timingservice.model.WxLoginModel;
 import com.jichuangsi.school.timingservice.repository.IBackUserRepository;
 import com.jichuangsi.school.timingservice.utils.MappingEntity2ModelCoverter;
@@ -23,7 +25,7 @@ public class BackUserService {
     private IBackUserRepository backUserRepository;
     @Resource
     private BackTokenService backTokenService;
-    public void registBackUser(WxLoginModel model) throws BackUserException{
+    public void registBackUser(WxLoginModel model) throws BackUserException {
         /*if (StringUtils.isEmpty(model.getAccount()) || StringUtils.isEmpty(model.getPwd())
                 || StringUtils.isEmpty(model.getName()) || StringUtils.isEmpty(model.getOpendId())
                 || StringUtils.isEmpty(model.getDeptId()) || StringUtils.isEmpty(model.getRoleId())){
@@ -78,10 +80,25 @@ public class BackUserService {
         backUserRepository.save(userInfo);
     }
 
-    public BackUser getBackUserById(String userId) throws BackUserException{
+    public BackUser getBackUserById(String userId) throws BackUserException {
         if(StringUtils.isEmpty(userId)){
             throw new BackUserException(ResultCode.PARAM_MISS_MSG);
         }
         return backUserRepository.findByid(userId);
+    }
+
+    public void updateBackUserPwd(UserInfoForToken userInfoForToken, UpdatePwdModel model)throws BackUserException {
+        if(StringUtils.isEmpty(model.getFirstPwd()) || StringUtils.isEmpty(model.getSecondPwd())){
+            throw new BackUserException(ResultCode.PARAM_MISS_MSG);
+        }
+        if(model.getFirstPwd().equals(model.getSecondPwd())){
+            throw new BackUserException(ResultCode.PARAM_MISS_MSG);
+        }
+        BackUser user=backUserRepository.findByid(userInfoForToken.getUserId());
+        if(null==user){
+            throw new BackUserException(ResultCode.ACCOUNT_NOTEXIST_MSG);
+        }
+        user.setPwd(Md5Util.encodeByMd5(model.getSecondPwd()));
+        backUserRepository.save(user);
     }
 }

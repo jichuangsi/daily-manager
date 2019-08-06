@@ -1,11 +1,7 @@
 package com.jichuangsi.school.timingservice.controller;
 
-import com.jichuangsi.school.timingservice.entity.BackUser;
 import com.jichuangsi.school.timingservice.exception.BackUserException;
-import com.jichuangsi.school.timingservice.model.BackUserModel;
-import com.jichuangsi.school.timingservice.model.ResponseModel;
-import com.jichuangsi.school.timingservice.model.UserInfoForToken;
-import com.jichuangsi.school.timingservice.model.WxLoginModel;
+import com.jichuangsi.school.timingservice.model.*;
 import com.jichuangsi.school.timingservice.service.BackRoleUrlService;
 import com.jichuangsi.school.timingservice.service.BackUserService;
 import io.swagger.annotations.Api;
@@ -42,6 +38,18 @@ public class BackUserController {
     public ResponseModel loginBackUser(@RequestBody BackUserModel userModel){
         try {
             return ResponseModel.sucess("",backUserService.loginBackUser(userModel));
+        }catch (BackUserException e){
+            return ResponseModel.fail("",e.getMessage());
+        }
+    }
+
+    @ApiOperation("后台修改密码")
+    @ApiImplicitParams({})
+    @PostMapping("/updateBackUserPwd")
+    public ResponseModel updateBackUserPwd(@ModelAttribute UserInfoForToken userInfoForToken, @RequestBody UpdatePwdModel model){
+        try {
+            backUserService.updateBackUserPwd(userInfoForToken,model);
+            return ResponseModel.sucessWithEmptyData("");
         }catch (BackUserException e){
             return ResponseModel.fail("",e.getMessage());
         }

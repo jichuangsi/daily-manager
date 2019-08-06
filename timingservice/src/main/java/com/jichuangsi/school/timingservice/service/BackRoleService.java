@@ -38,7 +38,7 @@ public class BackRoleService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void deleteRole(UserInfoForToken userInfo,String id)throws BackUserException {
+    public void deleteRole(UserInfoForToken userInfo, String id)throws BackUserException {
         if(StringUtils.isEmpty(id)){
             throw new BackUserException(ResultCode.PARAM_MISS_MSG);
         }
@@ -48,12 +48,12 @@ public class BackRoleService {
         if(backUserRepository.countByRoleId(id)>0){
             throw new BackUserException(ResultCode.ROLE_BACKUSER_EXIST);
         }
-        roleRepository.deleteById(id);
         OpLog opLog=new OpLog();
         opLog.setOperatorId(userInfo.getUserId());
         String action="删除了一个角色";
         opLog.setOpAction(action);
         opLogRepository.save(opLog);
+        roleRepository.deleteById(id);
     }
 
     public List<Role> getRoleList(){

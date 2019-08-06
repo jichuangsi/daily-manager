@@ -5,8 +5,11 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.jichuangsi.school.timingservice.constant.ResultCode;
 import com.jichuangsi.school.timingservice.model.ResponseModel;
+import com.jichuangsi.school.timingservice.model.UserInfoForToken;
+import com.jichuangsi.school.timingservice.service.BackRoleUrlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,8 +33,12 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
     private String[] ingoreTokenUrls;
     @Value("${app.token.cache.expireAfterAccessWithMinutes}")
     private long expireAfterAccessWithMinutes;
+    @Value("${app.token.userInfoKey}")
+    private String userClaim;
     @Autowired
     private Algorithm tokenAlgorithm;
+    @Resource
+    private BackRoleUrlService backRoleUrlService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         final String url=request.getRequestURI();//地址
@@ -49,7 +57,14 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
             if(!StringUtils.isEmpty(accessToken)){
                 final JWTVerifier verifier=JWT.require(tokenAlgorithm).build();
                 verifier.verify(accessToken);
-                return true;
+                DecodedJWT jwt=JWT.decode(accessToken);
+                String userId=jwt.getClaim(userClaim).asString();
+                UserInfoForToken userInfo=JSONObject.parseObject(userId,UserInfoForToken.class);
+                if (!backRoleUrlService.checkauthorityByUser(userInfo,url)){
+                    returnJson(response,request,ResultCode.TOKEN_CHECK_ERR,ResultCode.NO_ACCESS);
+                }else {
+                    return true;
+                }
             }else {
                 returnJson(response,request,ResultCode.TOKEN_MISS,ResultCode.TOKEN_MISS_MSG);
             }

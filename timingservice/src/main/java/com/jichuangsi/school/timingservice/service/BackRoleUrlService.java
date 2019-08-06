@@ -19,7 +19,9 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BackRoleUrlService {
@@ -35,6 +37,8 @@ public class BackRoleUrlService {
     private IOpLogRepository opLogRepository;
     @Resource
     private IStaticPageRespository staticPageRespository;
+    @Resource
+    private IBackUserRepository backUserRepository;
 
     //获得全部url
     public List<RoleUrl> getRoleUrlList(){
@@ -42,7 +46,7 @@ public class BackRoleUrlService {
     }
 
     //按条件分页查询url
-    public Page<RoleUrl> getRoleUrlListByPage(int pageNum,int pageSize,String usewayid,String name){
+    public Page<RoleUrl> getRoleUrlListByPage(int pageNum, int pageSize, String usewayid, String name){
         pageNum=pageNum-1;
         Pageable pageable=new PageRequest(pageNum,pageSize);
         Page<RoleUrl> page=roleUrlRepository.findAll((Root<RoleUrl> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)->{
@@ -77,7 +81,7 @@ public class BackRoleUrlService {
     }
     //根据id批量删除用户相关url
     @Transactional(rollbackFor = Exception.class)
-    public void batchDeleteRoleUrl(UserInfoForToken userInfo,List<UrlRelation>  urlRelationId){
+    public void batchDeleteRoleUrl(UserInfoForToken userInfo, List<UrlRelation>  urlRelationId){
         urlRelationRepository.deleteInBatch(urlRelationId);
         OpLog opLog=new OpLog();
         opLog.setOperatorId(userInfo.getUserId());
@@ -103,7 +107,7 @@ public class BackRoleUrlService {
         return urlRelationMapper.getModelAndStaticPageByRoleId(roleId);
     }
 
-    public List<UrlMapping> getStaticPageAndRoleUrlByRoleId(String roleId,String pageId)throws BackUserException{
+    public List<UrlMapping> getStaticPageAndRoleUrlByRoleId(String roleId, String pageId)throws BackUserException {
         if(StringUtils.isEmpty(roleId)||StringUtils.isEmpty(pageId)){
             throw  new BackUserException(ResultCode.PARAM_MISS_MSG);
         }
@@ -118,6 +122,38 @@ public class BackRoleUrlService {
     public List<StaticPage> getAllStaticPage(){
         return staticPageRespository.findAll();
     }
+
     //根据角色id查询url
     public List<UrlMapping> getUrlByRoleId(String roleId){return urlRelationMapper.getStaticPageAndRoleUrlByRoleId(roleId);}
+
+    //查询后台权限
+    public boolean checkauthorityByUser(UserInfoForToken userInfo, String url){
+        BackUser user=backUserRepository.findByid(userInfo.getUserId());
+        if(user.getRoleName().equals("M")){
+            return  true;
+        }
+        List<UrlMapping> userurl=getUrlByRoleId(user.getRoleId());
+        Map<String,String> urlList=null;
+        if (null!=userurl){
+            urlList=new HashMap<String,String>();
+            for (UrlMapping item:userurl) {
+                urlList.put(item.getId(),item.getRoleUrl());
+            }
+            urlList.put("获取用户信息","/backuser/getBackuserById");
+            urlList.put("查询全部url列表","/backrole/getRoleUrlList");
+            urlList.put("查询角色全部对应url列表","/backrole/getAllRoleUrlByRoleId/");
+            urlList.put("查询角色对应模块列表","/backrole/getModelAndStaticPageByRoleId/");
+            urlList.put("查询角色对应url列表","/backrole/getModelAndStaticPageByRoleId");
+            urlList.put("查询模块列表","/backrole/getUsemoduleList");
+            urlList.put("查询静态页面列表","/backrole/getStaticPageList");
+        }
+        if(null!=urlList && urlList.size()!=0){
+            for (Map.Entry<String,String> entry: urlList.entrySet()) {
+                if (url.equals(entry.getValue())|| url.startsWith(entry.getValue())){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

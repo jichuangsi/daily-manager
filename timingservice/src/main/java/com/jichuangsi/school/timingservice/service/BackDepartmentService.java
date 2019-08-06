@@ -27,7 +27,7 @@ public class BackDepartmentService {
     private IBackUserRepository backUserRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public void saveDepartment(UserInfoForToken userInfo,Department department){
+    public void saveDepartment(UserInfoForToken userInfo, Department department){
         departmentRepository.save(department);
         OpLog opLog=new OpLog();
         opLog.setOperatorId(userInfo.getUserId());
@@ -37,19 +37,20 @@ public class BackDepartmentService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void deleteDepartment(UserInfoForToken userInfo,String id)throws BackUserException{
+    public void deleteDepartment(UserInfoForToken userInfo, String id)throws BackUserException {
         if(staffMapper.countStaffByDeptid(id)>0){
             throw new BackUserException(ResultCode.DEPT_STAFF_EXIST);
         }
         if(backUserRepository.countByDeptId(id)>0){
             throw new BackUserException(ResultCode.DEPT_BACKUSER_EXIST);
         }
-        departmentRepository.deleteById(id);
         OpLog opLog=new OpLog();
         opLog.setOperatorId(userInfo.getUserId());
-        String action="删除了一个部门：".concat(departmentRepository.findByid(id).getDeptname());
+        Department d=departmentRepository.findByid(id);
+        String action="删除了一个部门：".concat(d.getDeptname());
         opLog.setOpAction(action);
         opLogRepository.save(opLog);
+        departmentRepository.deleteById(id);
     }
 
     public List<Department> getDepartmentList(){
