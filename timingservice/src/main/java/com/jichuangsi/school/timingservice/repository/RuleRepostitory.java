@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.util.List;
 @Repository
-public interface RuleRepostitory extends JpaRepository<Rule,String>{
+public interface RuleRepostitory extends JpaRepository<Rule,Integer>{
 
     Rule findFirstByTimeGreaterThanEqual(long time);
 
@@ -30,4 +30,6 @@ public interface RuleRepostitory extends JpaRepository<Rule,String>{
     int updateRule(String wucha, Integer id, long time, String stuas, String longitudeLatitude, String wifiName);
 
     List<Rule> findAllByTimeBetween(long timeStart, long timeEnd);
+
+    Rule findFirstById(Integer Id);
 }

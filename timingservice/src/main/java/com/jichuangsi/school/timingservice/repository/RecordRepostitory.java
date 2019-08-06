@@ -18,9 +18,17 @@ public interface RecordRepostitory extends JpaRepository<Record,String>{
 
     List<Record> findAllByOpenIdAndTimeGreaterThanEqual(String openId,long time);
 
-    List<Record> findAllByTimeGreaterThanEqualOrderByTimeDesc(long time);
+    List<Record> findAllByTimeGreaterThanEqualOrderByTime(long time);
 
     Record findFirstByOpenIdAndRuleIdAndStuas(String openId,String ruleId,String stuas);
 
     List<Record> findAllByOpenIdAndStuas(String openId, String stuas);
+
+    Record findFirstByOpenIdAndRuleIdAndStuasOrStuasOrStuas(String openId, String ruleId, String s, String s1, String s2);
+
+
+    List<Record> findFirstByOpenIdAndRuleIdAndStuasOrStuas(String openId, String ruleId, String Stuas, String Stuas1);
+
+    @Query(value = "SELECT * FROM record WHERE `open_id`=?1 AND `rule_id`=?2 AND (`stuas`=?3 OR `stuas`=?4)",nativeQuery = true)
+    List<Record> findFirstByOpenIdAndRuleIdAndStuasOrOpenIdAndRuleIdAndStuasOrderByStuas(String openId1, String ruleId1, String s, String s1);
 }

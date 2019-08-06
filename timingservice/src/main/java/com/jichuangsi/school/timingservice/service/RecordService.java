@@ -15,7 +15,9 @@ public interface RecordService {
 
     List<Record> findPxcPeopleOpenid();
 
-    Record findAllByOpenIdAndRuleIdAndStuas(String openid, String id);
+    List<Record> findAllByOpenIdAndRuleIdAndStuas(String openid, String id);
 
     List<Record> findAllByOpenIdAndStuas(String openId);
+
+    List<Record> findAllByOpenIdAndRuleIdAndStuas2(String openId, String s);
 }

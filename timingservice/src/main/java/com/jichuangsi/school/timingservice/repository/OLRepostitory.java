@@ -18,11 +18,17 @@ public interface OLRepostitory extends JpaRepository<Overtimeleave,String> {
 
     List<Overtimeleave> findAllByOpenId(String openId);
 
-    List<Overtimeleave> findAllByStuas(String stuas);
+    List<Overtimeleave> findAllByStuas2(String stuas);
 
-    List<Overtimeleave> findAllByStuasAndStuas(String stuas, String stuas2);
+    List<Overtimeleave> findAllByStuas2AndStuas2(String stuas, String stuas2);
 
-    List<Overtimeleave> findAllByOpenIdAndStuas(String openId, String stuas);
+    List<Overtimeleave> findAllByOpenIdAndStuas2(String openId, String stuas);
 
-    List<Overtimeleave> findAllByOpenIdAndStuasAndStuas(String openId, String stuas, String stuas1);
+    List<Overtimeleave> findAllByOpenIdAndStuas2AndStuas2(String openId, String stuas, String stuas1);
+
+    List<Overtimeleave> findAllByStuas2OrStuas2(String s, String s1);
+
+    List<Overtimeleave> findAllByOpenIdOrStuas2(String openId, String s);
+
+    List<Overtimeleave> findAllByOpenIdAndStuas2OrStuas2(String openId, String s, String s1);
 }

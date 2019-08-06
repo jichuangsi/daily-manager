@@ -35,16 +35,17 @@ public class DaKaController {
 
     @ApiOperation(value = "给参数打卡", notes = "")
     @PostMapping("/daka")
-    public ResponseModel<List<String>> daKa(@RequestParam String wifiName,@RequestParam String longitudeLatitude,@RequestParam String openId){
+    public ResponseModel<List<String>> daKa(@RequestParam String wifiName,@RequestParam String longitudeLatitude,@RequestParam String openId,@RequestParam String ruleId){
         String wifi=ruleService.findWifi();
         String peopleName=peopleService.findPeopleName(openId);
         String lL=ruleService.findLL();
-        Rule rule = ruleService.getRule();
+        Rule rule = ruleService.getRuleById(Integer.parseInt(ruleId));
         String stuas="0";
-        String c="0";
-        String z="0";
-        String w="0";
-        String d="0";
+
+        String c="c0";
+        String z="z0";
+        String w="w0";
+        String d="d0";
         StringBuilder sb = new StringBuilder();
         List<String> strings = new ArrayList<>();
 
@@ -58,38 +59,53 @@ public class DaKaController {
             listResponseModel.setMsg(s);
             return listResponseModel;
         }
-        if (!wifi.equalsIgnoreCase(wifiName)){
-            String[] LL=lL.split(",");
-            String[] ll=longitudeLatitude.split(",");
-           double wd=Double.parseDouble(LL[0]);
-           double jd=Double.parseDouble(LL[1]);
-           double gwd=Double.parseDouble(ll[0]);
-           double gjd=Double.parseDouble(ll[1]);
-            if(!(gwd>=(wd-Double.parseDouble(rule.getWucha())*0.00001)&&gwd<=(wd+Double.parseDouble(rule.getWucha())*0.00001))&&gjd>=(jd-Double.parseDouble(rule.getWucha())*0.00001)&&gjd<=(jd+Double.parseDouble(rule.getWucha())*0.00001)){
-                String s=" 定位不对" ;
-                sb.append(s);
-                d="d";
-                stuas="1";
-            }
+        if (wifi.equalsIgnoreCase(wifiName)){
             if (rule.getStuas().equalsIgnoreCase("1")&&rule.getTime()<=System.currentTimeMillis()){
                 c="c";
                 String s=" 迟到";
                 sb.append(s);
-                stuas="1";
+                stuas="2";
             }
 
             if (rule.getStuas().equalsIgnoreCase("2")&&rule.getTime()>=System.currentTimeMillis()){
                 z="z";
                 String s=" 早退";
                 sb.append(s);
-                stuas="1";
+                stuas="3";
             }
+
+        }else {
             String s= " wifi不对";
             sb.append(s);
             w="w";
-            stuas="1";
-        }
 
+            String[] LL=lL.split(",");
+            String[] ll=longitudeLatitude.split(",");
+            double wd=Double.parseDouble(LL[0]);
+            double jd=Double.parseDouble(LL[1]);
+            double gwd=Double.parseDouble(ll[0]);
+            double gjd=Double.parseDouble(ll[1]);
+            if((gwd>=(wd-Double.parseDouble(rule.getWucha())*0.00001)&&gwd<=(wd+Double.parseDouble(rule.getWucha())*0.00001))&&gjd>=(jd-Double.parseDouble(rule.getWucha())*0.00001)&&gjd<=(jd+Double.parseDouble(rule.getWucha())*0.00001)){
+                if (rule.getStuas().equalsIgnoreCase("1")&&rule.getTime()<=System.currentTimeMillis()){
+                    c="c";
+                    String s2=" 迟到";
+                    sb.append(s2);
+                    stuas="2";
+                }
+
+                if (rule.getStuas().equalsIgnoreCase("2")&&rule.getTime()>=System.currentTimeMillis()){
+                    z="z";
+                    String s3=" 早退";
+                    sb.append(s3);
+                    stuas="3";
+                }
+            }else {
+                String s1=" 定位不对" ;
+                sb.append(s1);
+                d="d";
+                stuas="1";
+            }
+        }
         recordService.daKa( peopleName ,wifiName,longitudeLatitude,stuas,openId,rule.getId().toString());
         strings.add(stuas);
         strings.add(c);
@@ -157,31 +173,63 @@ public class DaKaController {
     @ApiOperation(value = "个人读取今日规则含状态", notes = "")
     @PostMapping("/getrulelist")
     public ResponseModel<List<RuleModel>> getRuleListStuas(@RequestParam String openId){
-try {
+        try {
 
-    ResponseModel<List<RuleModel>> stringResponseModel = new ResponseModel<>();
-    List<RuleModel> rulelist = new ArrayList<>();
-    List<Rule> rules = ruleService.getRulelist();
-    for (Rule r:rules
-            ) {
-        RuleModel ruleModel = new RuleModel();
-        Record stuas = recordService.findAllByOpenIdAndRuleIdAndStuas(openId, r.getId().toString());
-        if (stuas!=null){
-            ruleModel.setStuas2("0");
+            ResponseModel<List<RuleModel>> stringResponseModel = new ResponseModel<>();
+            List<RuleModel> rulelist = new ArrayList<>();
+            List<Rule> rules = ruleService.getRulelist();
+            for (Rule r:rules
+                    ) {
+                if(r.getStuas().equalsIgnoreCase("1")){
+                    RuleModel ruleModel = new RuleModel();
+                    List<Record> stuas = recordService.findAllByOpenIdAndRuleIdAndStuas(openId, r.getId().toString());
+                    if (stuas!=null){
+                        for (Record r789 :stuas
+                                ) {
+                            if (r789.getStuas().equalsIgnoreCase("2")){
+                                ruleModel.setStuas2(r789.getStuas());
+                            }
+                            if (r789.getStuas().equalsIgnoreCase("0")){
+                                ruleModel.setStuas2(r789.getStuas());
+                                break;
+                            }
+                        }
+                    }
+                    ruleModel.setStuas(r.getStuas());
+                    ruleModel.setId(r.getId());
+                    ruleModel.setLongitudeLatitude(r.getLongitudeLatitude());
+                    ruleModel.setTime(r.getTime());
+                    ruleModel.setWifiName(r.getWifiName());
+                    rulelist.add(ruleModel);
+                }else {
+                    RuleModel ruleModel = new RuleModel();
+                    List<Record> stuas = recordService.findAllByOpenIdAndRuleIdAndStuas2(openId, r.getId().toString());
+                    if (stuas!=null){
+                        for (Record r789 :stuas
+                                ) {
+                            if (r789.getStuas().equalsIgnoreCase("3")){
+                                ruleModel.setStuas2(r789.getStuas());
+                            }
+                            if (r789.getStuas().equalsIgnoreCase("0")){
+                                ruleModel.setStuas2(r789.getStuas());
+                                break;
+                            }
+                        }
+                    }
+                    ruleModel.setStuas(r.getStuas());
+                    ruleModel.setId(r.getId());
+                    ruleModel.setLongitudeLatitude(r.getLongitudeLatitude());
+                    ruleModel.setTime(r.getTime());
+                    ruleModel.setWifiName(r.getWifiName());
+                    rulelist.add(ruleModel);
+                }
+            }
+            stringResponseModel.setData(rulelist);
+            stringResponseModel.setCode(ResultCode.SUCESS);
+            return stringResponseModel;
+        }catch (Exception e){
+            return ResponseModel.fail("");
         }
-        ruleModel.setStuas(r.getStuas());
-        ruleModel.setId(r.getId());
-        ruleModel.setLongitudeLatitude(r.getLongitudeLatitude());
-        ruleModel.setTime(r.getTime());
-        ruleModel.setWifiName(r.getWifiName());
-        rulelist.add(ruleModel);
-    }
-    stringResponseModel.setData(rulelist);
-    stringResponseModel.setCode(ResultCode.SUCESS);
-    return stringResponseModel;
-}catch (Exception e){
-    return ResponseModel.fail("");
-}
 
 
     }

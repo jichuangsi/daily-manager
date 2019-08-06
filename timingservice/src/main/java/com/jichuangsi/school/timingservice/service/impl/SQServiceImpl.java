@@ -66,7 +66,7 @@ public class SQServiceImpl implements SQService{
 
     @Override
     public List<SQFlie> getAllapproved() {
-        return sqRepostitory.findAllByStuasAndStuas("1","2");
+        return sqRepostitory.findAllByStuasOrStuas("1","2");
     }
 
     @Override
@@ -76,6 +76,6 @@ public class SQServiceImpl implements SQService{
 
     @Override
     public List<SQFlie> getapprovedSQForName(String openId) {
-        return sqRepostitory.findAllByOpenIdAndStuasAndStuas(openId,"1","2");
+        return sqRepostitory.findAllByOpenIdAndStuasOrStuas(openId,"1","2");
     }
 }

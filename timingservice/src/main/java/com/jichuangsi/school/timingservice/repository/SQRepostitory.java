@@ -28,5 +28,7 @@ public interface SQRepostitory extends JpaRepository<SQFlie,String> {
 
     List<SQFlie> findAllByOpenIdAndStuas(String openId, String stuas);
 
-    List<SQFlie> findAllByOpenIdAndStuasAndStuas(String openId, String stuas, String stuas1);
+    List<SQFlie> findAllByOpenIdAndStuasOrStuas(String openId, String stuas, String stuas1);
+
+    List<SQFlie> findAllByStuasOrStuas(String s, String s1);
 }

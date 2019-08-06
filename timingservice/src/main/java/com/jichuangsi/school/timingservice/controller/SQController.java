@@ -38,7 +38,7 @@ public class SQController {
     public ResponseModel<String> SQ(@RequestParam String openId,@RequestParam String ruleId,@RequestParam String msg) throws IOException {
         ResponseModel<String> stringResponseModel = new ResponseModel<>();
         SQFlie sq = sqService.getSQ(openId, ruleId);
-        if (sq==null){
+        if (sq!=null){
             stringResponseModel.setCode(ResultCode.SOS);
             return stringResponseModel;
         }

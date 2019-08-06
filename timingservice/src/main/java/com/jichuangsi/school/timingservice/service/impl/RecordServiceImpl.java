@@ -40,17 +40,23 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public List<Record> findPxcPeopleOpenid() {
 
-        return recordRepostitory.findAllByTimeGreaterThanEqualOrderByTimeDesc(TimeUtils.todayMorning());
+        return recordRepostitory.findAllByTimeGreaterThanEqualOrderByTime(TimeUtils.todayMorning());
     }
 
     @Override
-    public Record findAllByOpenIdAndRuleIdAndStuas(String openId, String ruleId) {
-
-        return recordRepostitory.findFirstByOpenIdAndRuleIdAndStuas(openId,ruleId,"0");
+    public List<Record> findAllByOpenIdAndRuleIdAndStuas(String openId, String ruleId) {
+        List<Record> list = recordRepostitory.findFirstByOpenIdAndRuleIdAndStuasOrOpenIdAndRuleIdAndStuasOrderByStuas(openId, ruleId, "0", "2");
+        System.out.println(1);
+        return list;
     }
 
     @Override
     public List<Record> findAllByOpenIdAndStuas(String openId) {
         return recordRepostitory.findAllByOpenIdAndStuas(openId,"0");
+    }
+
+    @Override
+    public List<Record> findAllByOpenIdAndRuleIdAndStuas2(String openId, String ruleId) {
+        return recordRepostitory.findFirstByOpenIdAndRuleIdAndStuasOrOpenIdAndRuleIdAndStuasOrderByStuas(openId, ruleId, "0", "3");
     }
 }

@@ -99,5 +99,12 @@ public class RuleServiceImpl implements RuleService {
         return rfRepostitory.findAll();
     }
 
+    @Override
+    public Rule getRuleById(Integer ruleId) {
+        return ruleRepostitory.findFirstById(ruleId);
+    }
+
+
+
 
 }

@@ -19,7 +19,7 @@ public class OLServiceImpl implements OLService {
     @Override
     public void AOL(String openId, String stuas, String msg,long start,long end) {
         long nowTime =System.currentTimeMillis();
-        olRepostitory.insertRecord(openId,stuas,msg,start,end,nowTime,"1");
+        olRepostitory.insertRecord(openId,stuas,msg,start,end,nowTime,"0");
     }
 
     @Override
@@ -29,21 +29,21 @@ public class OLServiceImpl implements OLService {
 
     @Override
     public List<Overtimeleave> getOLList1() {
-        return olRepostitory.findAllByStuas("0");
+        return olRepostitory.findAllByStuas2("0");
     }
 
     @Override
     public List<Overtimeleave> getOLList2() {
-        return  olRepostitory.findAllByStuasAndStuas("1","2");
+        return  olRepostitory.findAllByStuas2OrStuas2("1","2");
     }
 
     @Override
     public List<Overtimeleave> getOLForOpenId1(String openId) {
-        return olRepostitory.findAllByOpenIdAndStuas(openId,"0");
+        return olRepostitory.findAllByOpenIdAndStuas2(openId,"0");
     }
 
     @Override
     public List<Overtimeleave> getOLForOpenId2(String openId) {
-        return olRepostitory.findAllByOpenIdAndStuasAndStuas(openId,"1","2");
+        return olRepostitory.findAllByOpenIdAndStuas2OrStuas2(openId,"1","2");
     }
 }

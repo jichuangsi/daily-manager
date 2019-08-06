@@ -6,6 +6,9 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/dailymanager
     username: root
     password: root
+    initialization-mode: always
+    data : classpath:data.sql
+
   jpa:
     show-sql: true
     generate-ddl: true

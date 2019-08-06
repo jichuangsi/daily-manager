@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class Rule {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
     private long time;
     private String wifiName;
     private String longitudeLatitude;
@@ -25,13 +25,12 @@ public class Rule {
     }
 
     public Integer getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Integer id) {
-        Id = id;
+        this.id = id;
     }
-
 
     public long getTime() {
         return time;

@@ -34,4 +34,8 @@ public interface RuleService {
     void delRule(String ruleFatherId);
 
     List<RuleFather> getRuleFatherList();
+
+
+
+    Rule getRuleById(Integer Id);
 }
