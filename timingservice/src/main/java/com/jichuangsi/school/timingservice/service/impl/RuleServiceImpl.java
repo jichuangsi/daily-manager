@@ -65,9 +65,11 @@ public class RuleServiceImpl implements RuleService {
     @Override
     public void copyRlueModel() {
         List<RuleFather> all = rfRepostitory.findAll();
+        ;
         for (RuleFather rf:all
              ) {
-            ruleRepostitory.insertRule(rf.getTime(),rf.getWifiName(),rf.getLongitudeLatitude(),rf.getStuas(),rf.getWucha());
+            long time= rf.getTime()+TimeUtils.todayMorning();
+            ruleRepostitory.insertRule(time,rf.getWifiName(),rf.getLongitudeLatitude(),rf.getStuas(),rf.getWucha());
         }
     }
 
@@ -79,6 +81,22 @@ public class RuleServiceImpl implements RuleService {
     @Override
     public List<Rule> getRuleForTime(long timeStart, long timeEnd) {
         return ruleRepostitory.findAllByTimeBetween(timeStart,timeEnd);
+    }
+
+    @Override
+    public List<Rule> getRulelistForTime() {
+        long nowTime =System.currentTimeMillis();
+        return ruleRepostitory.findAllByTimeBetween(TimeUtils.todayMorning(),nowTime);
+    }
+
+    @Override
+    public void delRule(String ruleFatherId) {
+        rfRepostitory.deleteById(ruleFatherId);
+    }
+
+    @Override
+    public List<RuleFather> getRuleFatherList() {
+        return rfRepostitory.findAll();
     }
 
 

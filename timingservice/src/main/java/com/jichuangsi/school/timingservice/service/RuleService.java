@@ -1,6 +1,7 @@
 package com.jichuangsi.school.timingservice.service;
 
 import com.jichuangsi.school.timingservice.entity.Rule;
+import com.jichuangsi.school.timingservice.entity.RuleFather;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,4 +28,10 @@ public interface RuleService {
     void updateRule(Rule rule);
 
     List<Rule> getRuleForTime(long timeStart, long timeEnd);
+
+    List<Rule> getRulelistForTime();
+
+    void delRule(String ruleFatherId);
+
+    List<RuleFather> getRuleFatherList();
 }

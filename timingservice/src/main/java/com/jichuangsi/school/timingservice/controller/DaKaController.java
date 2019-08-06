@@ -65,7 +65,7 @@ public class DaKaController {
            double jd=Double.parseDouble(LL[1]);
            double gwd=Double.parseDouble(ll[0]);
            double gjd=Double.parseDouble(ll[1]);
-            if(!(gwd>=(wd-Double.parseDouble(rule.getWucha()))&&gwd<=(wd+Double.parseDouble(rule.getWucha())))&&gjd>=(jd-Double.parseDouble(rule.getWucha()))&&gjd<=(jd+Double.parseDouble(rule.getWucha()))){
+            if(!(gwd>=(wd-Double.parseDouble(rule.getWucha())*0.00001)&&gwd<=(wd+Double.parseDouble(rule.getWucha())*0.00001))&&gjd>=(jd-Double.parseDouble(rule.getWucha())*0.00001)&&gjd<=(jd+Double.parseDouble(rule.getWucha())*0.00001)){
                 String s=" 定位不对" ;
                 sb.append(s);
                 d="d";
@@ -240,15 +240,57 @@ public class DaKaController {
             List<ReportFormModel2> models = new ArrayList<>();
             for ( People people:peopleList
                     ) {
-                ReportFormModel2 rModel = new ReportFormModel2();
+
                 List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndStuas(people.getOpenId());
 
-                int qq=allByOpenIdAndStuas.size();
-
-                rModel.setDepartment(people.getDepartment());
-                rModel.setJurisdiction(people.getJurisdiction());
-                rModel.setPeopleName(people.getPeopleName());
-                models.add(rModel);
+                List<Rule> rulelistForTime = ruleService.getRulelistForTime();
+                if (allByOpenIdAndStuas.size()==rulelistForTime.size()){
+                    for (Rule rule :rulelistForTime
+                         ) {
+                        ReportFormModel2 rModel = new ReportFormModel2();
+                        rModel.setStuas(rule.getStuas());
+                        rModel.setStuas2("0");
+                        rModel.setTime(rule.getTime());
+                        rModel.setDepartment(people.getDepartment());
+                        rModel.setJurisdiction(people.getJurisdiction());
+                        rModel.setPeopleName(people.getPeopleName());
+                        models.add(rModel);
+                    }
+                }else {
+                    for (Rule rule:rulelistForTime
+                         ) {
+                        int i=0;
+                        for (Record record :allByOpenIdAndStuas
+                             ) {
+                            if (rule.getTime()==record.getTime()){
+                                    i++;
+                            }
+                        }
+                        if (i==0){
+                            ReportFormModel2 rModel = new ReportFormModel2();
+                            rModel.setStuas(rule.getStuas());
+                            rModel.setStuas2("1");
+                            rModel.setTime(rule.getTime());
+                            rModel.setDepartment(people.getDepartment());
+                            rModel.setJurisdiction(people.getJurisdiction());
+                            rModel.setPeopleName(people.getPeopleName());
+                            models.add(rModel);
+                        } else {
+                            ReportFormModel2 rModel = new ReportFormModel2();
+                            rModel.setStuas(rule.getStuas());
+                            rModel.setStuas2("0");
+                            rModel.setTime(rule.getTime());
+                            rModel.setDepartment(people.getDepartment());
+                            rModel.setJurisdiction(people.getJurisdiction());
+                            rModel.setPeopleName(people.getPeopleName());
+                            models.add(rModel);
+                        }
+                    }
+                }
+//                rModel.setDepartment(people.getDepartment());
+//                rModel.setJurisdiction(people.getJurisdiction());
+//                rModel.setPeopleName(people.getPeopleName());
+//                models.add(rModel);
             }
             return ResponseModel.sucess("",models);
         }catch (Exception e){
