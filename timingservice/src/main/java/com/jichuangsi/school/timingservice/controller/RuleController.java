@@ -4,6 +4,7 @@ import com.jichuangsi.school.timingservice.constant.ResultCode;
 import com.jichuangsi.school.timingservice.entity.Rule;
 import com.jichuangsi.school.timingservice.entity.RuleFather;
 import com.jichuangsi.school.timingservice.model.ResponseModel;
+import com.jichuangsi.school.timingservice.model.RuleModel2;
 import com.jichuangsi.school.timingservice.service.RuleService;
 import com.jichuangsi.school.timingservice.utils.TimeUtils;
 import io.swagger.annotations.Api;
@@ -20,13 +21,17 @@ import java.util.List;
 public class RuleController {
     @Resource
     private RuleService ruleService;
-
+//@RequestParam String timeString,@RequestParam String wifiName,@RequestParam String longitudeLatitude,@RequestParam String stuas,@RequestParam String wucha
     @ApiOperation(value = "设置规则", notes = "")
     @PostMapping("/ruleset")
-    public ResponseModel<String> ruleSet(@RequestParam String timeString,@RequestParam String wifiName,@RequestParam String longitudeLatitude,@RequestParam String stuas,@RequestParam String wucha){
-        long time = TimeUtils.gettime(timeString);
+    public ResponseModel<String> ruleSet(@RequestBody List<RuleModel2> rules){
+
         ruleService.cleanFather();
-        ruleService.insertRule(time,wifiName,longitudeLatitude,stuas,wucha);
+        for (RuleModel2 r2 :rules
+             ) {
+            long time = TimeUtils.gettime(r2.getTime());
+            ruleService.insertRule(time,r2.getWifiName(),r2.getLongitudeLatitude(),r2.getStuas(),r2.getWucha());
+        }
         ResponseModel<String> stringResponseModel = new ResponseModel<>();
         stringResponseModel.setMsg("ok");
         return stringResponseModel;
@@ -45,9 +50,31 @@ public class RuleController {
 
     @ApiOperation(value = "根据ruleid修改今日规则", notes = "")
     @PostMapping("/updaterule")
-    public ResponseModel<String> updateRule(@RequestBody Rule rule){
+    public ResponseModel<String> updateRule(@RequestBody RuleModel2 rule){
         try{
-            ruleService.updateRule(rule);
+            Rule rule1 = new Rule();
+            rule1.setLongitudeLatitude(rule.getLongitudeLatitude());
+            rule1.setStuas(rule.getStuas());
+            rule1.setTime(TimeUtils.gettime(rule.getTime()));
+            rule1.setWucha(rule.getWucha());
+            rule1.setWifiName(rule.getWifiName());
+            ruleService.updateRule(rule1);
+            return ResponseModel.sucess("",ResultCode.SUCESS);
+        }catch (Exception e){
+            return ResponseModel.fail("", ResultCode.PARAM_ERR);
+        }
+    }
+    @ApiOperation(value = "添加今日规则", notes = "")
+    @PostMapping("/insertrule")
+    public ResponseModel<String> insertRule(@RequestBody RuleModel2 rule ){
+        try{
+            Rule rule1 = new Rule();
+            rule1.setLongitudeLatitude(rule.getLongitudeLatitude());
+            rule1.setStuas(rule.getStuas());
+            rule1.setTime(TimeUtils.gettime(rule.getTime()));
+            rule1.setWucha(rule.getWucha());
+            rule1.setWifiName(rule.getWifiName());
+            ruleService.insertRule(rule1);
             return ResponseModel.sucess("",ResultCode.SUCESS);
         }catch (Exception e){
             return ResponseModel.fail("", ResultCode.PARAM_ERR);
@@ -69,6 +96,17 @@ public class RuleController {
     public ResponseModel<List<RuleFather>> getRuleFatherList(){
         try{
             return ResponseModel.sucess("",ruleService.getRuleFatherList());
+        }catch (Exception e){
+            return ResponseModel.fail("", ResultCode.PARAM_ERR);
+        }
+    }
+
+    @ApiOperation(value = "启停模板规则", notes = "")
+    @PostMapping("/rulefatherstopandstart")
+    public ResponseModel<String> ruleFatherStopAndStart(@RequestBody RuleFather ruleFather){
+        try{
+            ruleService.ruleFatherStopAndStart(ruleFather);
+            return ResponseModel.sucess("","ok");
         }catch (Exception e){
             return ResponseModel.fail("", ResultCode.PARAM_ERR);
         }

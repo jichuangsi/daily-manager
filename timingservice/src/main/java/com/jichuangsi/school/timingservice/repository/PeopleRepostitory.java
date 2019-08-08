@@ -15,7 +15,7 @@ public interface PeopleRepostitory extends JpaRepository<People,String>{
 
     People findAllByOpenId(String openId);
 
-    List<People> findAllByPeopleName(String name);
+    List<People> findByPeopleNameLike(String name);
 
     @Transactional
     @Modifying

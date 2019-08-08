@@ -29,7 +29,7 @@ public class PeopleServiceImpl implements PeopleService {
 
     @Override
     public List<People> findAllPeople(String name) {
-        return peopleRepostitory.findAllByPeopleName(name);
+        return peopleRepostitory.findByPeopleNameLike("%"+name+"%");
     }
 
     @Override

@@ -31,4 +31,6 @@ public interface RecordRepostitory extends JpaRepository<Record,String>{
 
     @Query(value = "SELECT * FROM record WHERE `open_id`=?1 AND `rule_id`=?2 AND (`stuas`=?3 OR `stuas`=?4)",nativeQuery = true)
     List<Record> findFirstByOpenIdAndRuleIdAndStuasOrOpenIdAndRuleIdAndStuasOrderByStuas(String openId1, String ruleId1, String s, String s1);
+
+    List<Record> findAllByOpenIdAndStuasAndTimeBetween(String openId,String stuas, long timeStart, long timeEnd);
 }

@@ -2,8 +2,6 @@ package com.jichuangsi.school.timingservice.service;
 
 import com.jichuangsi.school.timingservice.entity.Rule;
 import com.jichuangsi.school.timingservice.entity.RuleFather;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,6 +9,7 @@ import java.util.List;
 public interface RuleService {
 
     String findWifi();
+
     String findLL();
 
     void insertRule(Long time, String wifiName, String longitudeLatitude, String stuas,String wucha);
@@ -35,7 +34,9 @@ public interface RuleService {
 
     List<RuleFather> getRuleFatherList();
 
-
-
     Rule getRuleById(Integer Id);
+
+    Rule insertRule(Rule rule);
+
+    void ruleFatherStopAndStart(RuleFather ruleFather);
 }

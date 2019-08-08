@@ -5,12 +5,14 @@ import com.jichuangsi.school.timingservice.entity.Img;
 import com.jichuangsi.school.timingservice.entity.People;
 import com.jichuangsi.school.timingservice.entity.SQFlie;
 import com.jichuangsi.school.timingservice.model.ResponseModel;
+import com.jichuangsi.school.timingservice.model.SQFlieModel2;
 import com.jichuangsi.school.timingservice.service.PeopleService;
 import com.jichuangsi.school.timingservice.service.SQService;
 import com.jichuangsi.school.timingservice.utils.Byte2File;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -85,58 +87,89 @@ public class SQController {
     }
     @ApiOperation(value = "查看全部未审批申诉记录", notes = "")
     @PostMapping("/getAllUnapprovedSQ")
-    public ResponseModel<List<SQFlie>> SQAllUnapproved()  {
-        List<SQFlie> file = sqService.getAllUnapproved();
-        ResponseModel<List<SQFlie>> odel = new ResponseModel<>();
-        odel.setData(file);
-        odel.setCode(ResultCode.SUCESS);
-        return odel;
+    public ResponseModel<List<SQFlieModel2>> SQAllUnapproved(@RequestParam @Nullable String name)  {
+if (name==null||name.equalsIgnoreCase("")){
+    List<SQFlie> file = sqService.getAllUnapproved();
+    List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
+    ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
+    for (SQFlie sqFlie:file
+            ) {
+        SQFlieModel2 sqFlieModel2 = new SQFlieModel2();
+
+        sqFlieModel2.setPeople(peopleService.findPeople(sqFlie.getOpenId()));
+        sqFlieModel2.setSqFlie(sqFlie);
+        sqFlieModel2s.add(sqFlieModel2);
     }
+
+    odel.setData(sqFlieModel2s);
+    odel.setCode(ResultCode.SUCESS);
+    return odel;
+}
+        else{
+            List<People> allPeople = peopleService.findAllPeople(name);
+
+            List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
+            for (People people:allPeople
+                    ) {
+                List<SQFlie> file =sqService.getUnapprovedSQForName(people.getOpenId());
+                for (SQFlie sqFlie:file
+                        ) {
+                    SQFlieModel2 sqFlieModel2 = new SQFlieModel2();
+
+                    sqFlieModel2.setPeople(peopleService.findPeople(sqFlie.getOpenId()));
+                    sqFlieModel2.setSqFlie(sqFlie);
+                    sqFlieModel2s.add(sqFlieModel2);
+                }
+
+            }
+            ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
+            odel.setData(sqFlieModel2s);
+            odel.setCode(ResultCode.SUCESS);
+            return odel;
+        }
+    }
+
+
     @ApiOperation(value = "查看全部已审批申诉记录", notes = "")
-    @PostMapping("/getAllapprovedSQ")
-    public ResponseModel<List<SQFlie>> SQAllapproved()   {
-        List<SQFlie> file = sqService.getAllapproved();
-        ResponseModel<List<SQFlie>> odel = new ResponseModel<>();
-        odel.setData(file);
-        odel.setCode(ResultCode.SUCESS);
-        return odel;
-    }
-    @ApiOperation(value = "根据name查看全部未审批申诉记录", notes = "")
-    @PostMapping("/getAllUnapprovedSQforname")
-    public ResponseModel<List<SQFlie>> SQAllUnapprovedforname(@RequestParam String name)  {
-        List<People> allPeople = peopleService.findAllPeople(name);
-        List<SQFlie> sqFlies = new ArrayList<>();
-        for (People people:allPeople
-             ) {
-            List<SQFlie> file =sqService.getUnapprovedSQForName(people.getOpenId());
+    @PostMapping("/getAllapprovedSQForName")
+    public ResponseModel<List<SQFlieModel2>> SQAllapprovedforname(@RequestParam @Nullable String name)  {
+        if (name==null||name.equalsIgnoreCase("")){
+            List<SQFlie> file = sqService.getAllapproved();
+            List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
+            ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
             for (SQFlie sqFlie:file
                     ) {
-                sqFlies.add(sqFlie);
+                SQFlieModel2 sqFlieModel2 = new SQFlieModel2();
+
+                sqFlieModel2.setPeople(peopleService.findPeople(sqFlie.getOpenId()));
+                sqFlieModel2.setSqFlie(sqFlie);
+                sqFlieModel2s.add(sqFlieModel2);
             }
 
-        }
-        ResponseModel<List<SQFlie>> odel = new ResponseModel<>();
-        odel.setData(sqFlies);
-        odel.setCode(ResultCode.SUCESS);
-        return odel;
-    }
-    @ApiOperation(value = "根据name查看全部已审批申诉记录", notes = "")
-    @PostMapping("/getAllapprovedSQForName")
-    public ResponseModel<List<SQFlie>> SQAllapprovedforname(@RequestParam String name)  {
-        List<People> allPeople = peopleService.findAllPeople(name);
-        List<SQFlie> sqFlies = new ArrayList<>();
-        for (People people:allPeople
-                ) {
-            List<SQFlie> file = sqService.getapprovedSQForName(people.getOpenId());
-            for (SQFlie sqFlie:file
-                 ) {
-                sqFlies.add(sqFlie);
-            }
+            odel.setData(sqFlieModel2s);
+            odel.setCode(ResultCode.SUCESS);
+            return odel;
+        }else {
+            List<People> allPeople = peopleService.findAllPeople(name);
 
+            List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
+            for (People people:allPeople
+                    ) {
+                List<SQFlie> file =sqService.getapprovedSQForName(people.getOpenId());
+                for (SQFlie sqFlie:file
+                        ) {
+                    SQFlieModel2 sqFlieModel2 = new SQFlieModel2();
+
+                    sqFlieModel2.setPeople(peopleService.findPeople(sqFlie.getOpenId()));
+                    sqFlieModel2.setSqFlie(sqFlie);
+                    sqFlieModel2s.add(sqFlieModel2);
+                }
+
+            }
+            ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
+            odel.setData(sqFlieModel2s);
+            odel.setCode(ResultCode.SUCESS);
+            return odel;
         }
-        ResponseModel<List<SQFlie>> odel = new ResponseModel<>();
-        odel.setData(sqFlies);
-        odel.setCode(ResultCode.SUCESS);
-        return odel;
     }
 }

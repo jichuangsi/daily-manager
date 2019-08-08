@@ -1,41 +1,18 @@
-package com.jichuangsi.school.timingservice.entity;
+package com.jichuangsi.school.timingservice.model;
 
-import javax.persistence.*;
+public class RuleModel2 {
 
-@Entity
-@Table(name = "rulefather")
-public class RuleFather {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer Id;
-    private long time;
+    private String time;
     private String wifiName;
     private String longitudeLatitude;
     private String wucha;
     private String stuas;
-    private String qiting;
 
-    public String getQiting() {
-        return qiting;
-    }
-
-    public void setQiting(String qiting) {
-        this.qiting = qiting;
-    }
-
-    public Integer getId() {
-        return Id;
-    }
-
-    public void setId(Integer id) {
-        Id = id;
-    }
-
-    public long getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(long time) {
+    public void setTime(String time) {
         this.time = time;
     }
 

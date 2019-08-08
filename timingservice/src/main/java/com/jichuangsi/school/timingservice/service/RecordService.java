@@ -20,4 +20,7 @@ public interface RecordService {
     List<Record> findAllByOpenIdAndStuas(String openId);
 
     List<Record> findAllByOpenIdAndRuleIdAndStuas2(String openId, String s);
+
+
+    List<Record> findAllByOpenIdAndStuasAndTimeBetween(String openId, long timeStart, long timeEnd);
 }

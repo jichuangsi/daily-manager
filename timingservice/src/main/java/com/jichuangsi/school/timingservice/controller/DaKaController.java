@@ -11,6 +11,7 @@ import com.jichuangsi.school.timingservice.service.RuleService;
 import com.jichuangsi.school.timingservice.utils.TimeUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -234,61 +235,60 @@ public class DaKaController {
 
     }
 
-    @ApiOperation(value = "报表", notes = "")
+
+    @ApiOperation(value = "做报表", notes = "")
     @PostMapping("/getBB")
-    public ResponseModel<List<ReportFormModel>> getBB(@RequestParam String timeStart,@RequestParam String timeEnd){
-        try{
+    public ResponseModel<List<ReportFormModel>> getGRBB(@RequestParam String timeStart, @RequestParam String timeEnd, @RequestParam @Nullable String name){
+        if (name==null||name.equalsIgnoreCase("")){
+            try{
                 List<People> peopleList = peopleService.findAll();
                 List<ReportFormModel> models = new ArrayList<>();
                 for ( People people:peopleList
-                    ) {
-                ReportFormModel rModel = new ReportFormModel();
-                List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndStuas(people.getOpenId());
+                        ) {
+                    ReportFormModel rModel = new ReportFormModel();
+                    List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndStuasAndTimeBetween(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.startTime(timeEnd));
                     List<Rule> ruleForTime = ruleService.getRuleForTime(TimeUtils.startTime(timeStart), TimeUtils.endTime(timeEnd));
 //                    int time = (int) (timeEnd - timeStart) / (24 * 60 * 60);
-                int qq=ruleForTime.size()-allByOpenIdAndStuas.size();
-                rModel.setQq(qq);
-                rModel.setKq(allByOpenIdAndStuas.size());
-                rModel.setDepartment(people.getDepartment());
-                rModel.setJurisdiction(people.getJurisdiction());
-                rModel.setPeopleName(people.getPeopleName());
-                models.add(rModel);
+                    int qq=ruleForTime.size()-allByOpenIdAndStuas.size();
+                    rModel.setQq(qq);
+                    rModel.setKq(allByOpenIdAndStuas.size());
+                    rModel.setDepartment(people.getDepartment());
+                    rModel.setJurisdiction(people.getJurisdiction());
+                    rModel.setPeopleName(people.getPeopleName());
+                    models.add(rModel);
+                }
+                return ResponseModel.sucess("",models);
+            }catch (Exception e){
+                return ResponseModel.fail("",ResultCode.SYS_ERROR);
             }
-            return ResponseModel.sucess("",models);
-        }catch (Exception e){
-                    return ResponseModel.fail("",ResultCode.SYS_ERROR);
-            }
-    }
-
-    @ApiOperation(value = "根据名字做报表", notes = "")
-    @PostMapping("/getGRBB")
-    public ResponseModel<List<ReportFormModel>> getGRBB(@RequestParam String timeStart, @RequestParam String timeEnd,@RequestParam String name){
-        try{
-            List<People> peopleList = peopleService.findAllPeople(name);
-            List<ReportFormModel> models = new ArrayList<>();
-            for ( People people:peopleList
-                    ) {
-                ReportFormModel rModel = new ReportFormModel();
-                List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndStuas(people.getOpenId());
-                List<Rule> ruleForTime = ruleService.getRuleForTime(TimeUtils.startTime(timeStart), TimeUtils.endTime(timeEnd));
+        }else {
+            try{
+                List<People> peopleList = peopleService.findAllPeople(name);
+                List<ReportFormModel> models = new ArrayList<>();
+                for ( People people:peopleList
+                        ) {
+                    ReportFormModel rModel = new ReportFormModel();
+                    List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndStuasAndTimeBetween(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.startTime(timeEnd));
+                    List<Rule> ruleForTime = ruleService.getRuleForTime(TimeUtils.startTime(timeStart), TimeUtils.endTime(timeEnd));
 //                    int time = (int) (timeEnd - timeStart) / (24 * 60 * 60);
-                int qq=ruleForTime.size()-allByOpenIdAndStuas.size();
-                rModel.setQq(qq);
-                rModel.setKq(allByOpenIdAndStuas.size());
-                rModel.setDepartment(people.getDepartment());
-                rModel.setJurisdiction(people.getJurisdiction());
-                rModel.setPeopleName(people.getPeopleName());
-                models.add(rModel);
+                    int qq=ruleForTime.size()-allByOpenIdAndStuas.size();
+                    rModel.setQq(qq);
+                    rModel.setKq(allByOpenIdAndStuas.size());
+                    rModel.setDepartment(people.getDepartment());
+                    rModel.setJurisdiction(people.getJurisdiction());
+                    rModel.setPeopleName(people.getPeopleName());
+                    models.add(rModel);
+                }
+                return ResponseModel.sucess("",models);
+            }catch (Exception e){
+                return ResponseModel.fail("",ResultCode.SYS_ERROR);
             }
-            return ResponseModel.sucess("",models);
-        }catch (Exception e){
-            return ResponseModel.fail("",ResultCode.SYS_ERROR);
         }
     }
 
     @ApiOperation(value = "今日报表", notes = "")
     @PostMapping("/getTDBB")
-    public ResponseModel<List<ReportFormModel2>> getGRBB(){
+    public ResponseModel<List<ReportFormModel2>> getTDBB(){
         try{
             List<People> peopleList = peopleService.findAll();
             List<ReportFormModel2> models = new ArrayList<>();

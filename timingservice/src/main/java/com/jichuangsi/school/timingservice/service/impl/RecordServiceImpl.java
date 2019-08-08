@@ -59,4 +59,11 @@ public class RecordServiceImpl implements RecordService {
     public List<Record> findAllByOpenIdAndRuleIdAndStuas2(String openId, String ruleId) {
         return recordRepostitory.findFirstByOpenIdAndRuleIdAndStuasOrOpenIdAndRuleIdAndStuasOrderByStuas(openId, ruleId, "0", "3");
     }
+
+    @Override
+    public List<Record> findAllByOpenIdAndStuasAndTimeBetween(String openId, long timeStart, long timeEnd) {
+        return recordRepostitory.findAllByOpenIdAndStuasAndTimeBetween(openId,"0",timeStart,timeEnd);
+    }
+
+
 }

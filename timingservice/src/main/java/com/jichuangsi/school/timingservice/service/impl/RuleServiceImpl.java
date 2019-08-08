@@ -6,13 +6,10 @@ import com.jichuangsi.school.timingservice.repository.RFRepostitory;
 import com.jichuangsi.school.timingservice.repository.RuleRepostitory;
 import com.jichuangsi.school.timingservice.service.RuleService;
 import com.jichuangsi.school.timingservice.utils.TimeUtils;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -37,7 +34,7 @@ public class RuleServiceImpl implements RuleService {
 
     @Override
     public void insertRule(Long time, String wifiName, String longitudeLatitude, String stuas,String wucha) {
-        rfRepostitory.insertRule(time,wifiName,longitudeLatitude,stuas,wucha);
+        rfRepostitory.insertRule(time,wifiName,longitudeLatitude,stuas,wucha,"1");
     }
 
     @Override
@@ -91,7 +88,7 @@ public class RuleServiceImpl implements RuleService {
 
     @Override
     public void delRule(String ruleFatherId) {
-        rfRepostitory.deleteById(ruleFatherId);
+        rfRepostitory.deleteForId(ruleFatherId);
     }
 
     @Override
@@ -104,7 +101,15 @@ public class RuleServiceImpl implements RuleService {
         return ruleRepostitory.findFirstById(ruleId);
     }
 
+    @Override
+    public Rule insertRule(Rule rule) {
+        return ruleRepostitory.save(rule);
+    }
 
+    @Override
+    public void ruleFatherStopAndStart(RuleFather ruleFather) {
+        rfRepostitory.save(ruleFather);
+    }
 
 
 }
