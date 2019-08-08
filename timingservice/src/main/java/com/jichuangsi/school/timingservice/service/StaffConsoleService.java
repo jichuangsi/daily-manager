@@ -7,7 +7,10 @@ import com.jichuangsi.school.timingservice.dao.mapper.StaffMapper;
 import com.jichuangsi.school.timingservice.entity.*;
 import com.jichuangsi.school.timingservice.exception.BackUserException;
 import com.jichuangsi.school.timingservice.exception.StaffHttpException;
-import com.jichuangsi.school.timingservice.model.*;
+import com.jichuangsi.school.timingservice.model.HttpTokenModel;
+import com.jichuangsi.school.timingservice.model.LoginElementModel;
+import com.jichuangsi.school.timingservice.model.UserInfoForToken;
+import com.jichuangsi.school.timingservice.model.WxLoginModel;
 import com.jichuangsi.school.timingservice.repository.*;
 import com.jichuangsi.school.timingservice.utils.MappingEntity2ModelCoverter;
 import org.springframework.data.domain.Page;
@@ -61,7 +64,7 @@ public class StaffConsoleService {
     }
 
     //按条件分页查询url
-    public Page<Staff> getStaffListByPage(int pageNum,int pageSize,String staffName,String statusId){
+    public Page<Staff> getStaffListByPage(int pageNum, int pageSize, String staffName, String statusId){
         pageNum=pageNum-1;
         Pageable pageable=new PageRequest(pageNum,pageSize);
         Page<Staff> page=staffRepository.findAll((Root<Staff> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)->{
@@ -85,41 +88,32 @@ public class StaffConsoleService {
 
     //修改状态
     @Transactional(rollbackFor = Exception.class)
-    public void updateStatusById(UserInfoForToken userInfo,String statusId,String wechat){
+    public void updateStatusById(UserInfoForToken userInfo, String statusId, String wechat){
         staffMapper.updateStatusById(wechat,statusId);
-        OpLog opLog=new OpLog();
-        opLog.setOperatorId(userInfo.getUserId());
-        String action="修改员工状态";
-        opLog.setOpAction(action);
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"修改","修改员工状态");
         opLogRepository.save(opLog);
     }
     //修改部门
     @Transactional(rollbackFor = Exception.class)
-    public void updateDeptById(UserInfoForToken userInfo,String deptId,String wechat){
+    public void updateDeptById(UserInfoForToken userInfo, String deptId, String wechat){
         staffMapper.updateDepartmentById(wechat,deptId);
-        OpLog opLog=new OpLog();
-        opLog.setOperatorId(userInfo.getUserId());
-        String action="修改员工部门";
-        opLog.setOpAction(action);
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"修改","修改员工部门");
         //lai
         peopleRepostitory.updateDPMTforOPENID(deptId,wechat);
         opLogRepository.save(opLog);
     }
     //修改角色
     @Transactional(rollbackFor = Exception.class)
-    public void updateRoleById(UserInfoForToken userInfo,String roleId,String wechat){
+    public void updateRoleById(UserInfoForToken userInfo, String roleId, String wechat){
         staffMapper.updateRoleById(wechat,roleId);
-        OpLog opLog=new OpLog();
-        opLog.setOperatorId(userInfo.getUserId());
-        String action="修改员工角色信息";
-        opLog.setOpAction(action);
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"修改","修改员工角色信息");
         //lai
         peopleRepostitory.updateJSQXforOPENID(roleId,wechat);
         opLogRepository.save(opLog);
     }
 
     //获取token
-    public HttpTokenModel findTokenByCode(String code) throws StaffHttpException{
+    public HttpTokenModel findTokenByCode(String code) throws StaffHttpException {
         if (StringUtils.isEmpty(code)){
             throw new StaffHttpException(ResultCode.PARAM_MISS_MSG);
         }
@@ -134,7 +128,7 @@ public class StaffConsoleService {
     }
 
     //查询用户是否存在
-    public LoginElementModel checkStaff(String opendId) throws StaffHttpException{
+    public LoginElementModel checkStaff(String opendId) throws StaffHttpException {
         if(StringUtils.isEmpty(opendId)){
             throw new StaffHttpException(ResultCode.PARAM_MISS_MSG);
         }
@@ -155,7 +149,7 @@ public class StaffConsoleService {
     }
 
     //用户登录
-    public LoginElementModel loginStaff(String opendId) throws StaffHttpException{
+    public LoginElementModel loginStaff(String opendId) throws StaffHttpException {
         if(StringUtils.isEmpty(opendId)){
             throw new StaffHttpException(ResultCode.PARAM_MISS_MSG);
         }

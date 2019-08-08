@@ -37,15 +37,15 @@ public class BackRoleConsoleController {
     @ApiOperation("修改角色信息")
     @ApiImplicitParams({})
     @PostMapping("/updateRole")
-    public ResponseModel updateRole(@ModelAttribute UserInfoForToken userInfo,@RequestBody Role role){
-        roleService.saveRole(userInfo,role);
+    public ResponseModel updateRole(@ModelAttribute UserInfoForToken userInfo, @RequestBody Role role){
+        roleService.updateRole(userInfo,role);
         return ResponseModel.sucessWithEmptyData("");
     }
 
     @ApiOperation("删除角色信息")
     @ApiImplicitParams({})
     @GetMapping("/deleteRole/{roleId}")
-    public ResponseModel deleteRole(@ModelAttribute UserInfoForToken userInfo,@PathVariable String roleId){
+    public ResponseModel deleteRole(@ModelAttribute UserInfoForToken userInfo, @PathVariable String roleId){
         try {
             roleService.deleteRole(userInfo,roleId);
             return ResponseModel.sucessWithEmptyData("");
@@ -110,7 +110,7 @@ public class BackRoleConsoleController {
     @ApiOperation(value = "批量添加角色可以访问的url", notes = "")
     @ApiImplicitParams({})
     @PostMapping("/batchAddRoleUrl")
-    public ResponseModel batchAddUrlRelation(@ModelAttribute UserInfoForToken userInfo,@RequestBody UrlModel urlModel){
+    public ResponseModel batchAddUrlRelation(@ModelAttribute UserInfoForToken userInfo, @RequestBody UrlModel urlModel){
         try {
             backRoleUrlService.batchInsertUrlRelation(userInfo,urlModel.getUrlRelations());
         }catch (Exception e){
@@ -122,7 +122,7 @@ public class BackRoleConsoleController {
     @ApiOperation(value = "根据id批量删除角色相关url", notes = "")
     @ApiImplicitParams({})
     @PostMapping("/batchDeleteRoleUrl")
-    public ResponseModel batchDeleteRoleUrl(@ModelAttribute UserInfoForToken userInfo,@RequestBody UrlModel urlModel){
+    public ResponseModel batchDeleteRoleUrl(@ModelAttribute UserInfoForToken userInfo, @RequestBody UrlModel urlModel){
         try {
             backRoleUrlService.batchDeleteRoleUrl(userInfo,urlModel.getUrlRelations());
         }catch (Exception e){
@@ -134,7 +134,7 @@ public class BackRoleConsoleController {
     @ApiOperation("查询角色对应url列表")
     @ApiImplicitParams({})
     @GetMapping("/getAllRoleUrlByRoleId/{roleId}")
-    public ResponseModel getAllRoleUrlByRoleId(@ModelAttribute UserInfoForToken userInfo,@PathVariable String roleId){
+    public ResponseModel getAllRoleUrlByRoleId(@ModelAttribute UserInfoForToken userInfo, @PathVariable String roleId){
         //return ResponseModel.sucess("",backRoleUrlService.getAllRoleUrlModel(roleId));
         return ResponseModel.sucess("",backRoleUrlService.getUrlByRoleId(roleId));
     }
@@ -152,7 +152,7 @@ public class BackRoleConsoleController {
     @ApiOperation("查询角色对应url列表")
     @ApiImplicitParams({})
     @GetMapping("/getModelAndStaticPageByRoleId")
-    public ResponseModel getModelAndStaticPageByRoleId(@RequestParam String roleId,@RequestParam String pageId){
+    public ResponseModel getModelAndStaticPageByRoleId(@RequestParam String roleId, @RequestParam String pageId){
         try {
             return ResponseModel.sucess("",backRoleUrlService.getStaticPageAndRoleUrlByRoleId(roleId,pageId));
         }catch (BackUserException e){

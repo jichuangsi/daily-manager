@@ -11,8 +11,10 @@ import com.jichuangsi.school.timingservice.model.UpdatePwdModel;
 import com.jichuangsi.school.timingservice.model.UserInfoForToken;
 import com.jichuangsi.school.timingservice.model.WxLoginModel;
 import com.jichuangsi.school.timingservice.repository.IBackUserRepository;
+import com.jichuangsi.school.timingservice.repository.IStatusRepository;
 import com.jichuangsi.school.timingservice.utils.MappingEntity2ModelCoverter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -25,6 +27,8 @@ public class BackUserService {
     private IBackUserRepository backUserRepository;
     @Resource
     private BackTokenService backTokenService;
+    @Resource
+    private IStatusRepository statusRepository;
     public void registBackUser(WxLoginModel model) throws BackUserException {
         /*if (StringUtils.isEmpty(model.getAccount()) || StringUtils.isEmpty(model.getPwd())
                 || StringUtils.isEmpty(model.getName()) || StringUtils.isEmpty(model.getOpendId())
@@ -100,5 +104,9 @@ public class BackUserService {
         }
         user.setPwd(Md5Util.encodeByMd5(model.getSecondPwd()));
         backUserRepository.save(user);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void saveStatus(com.jichuangsi.school.timingservice.entity.Status status){
+        statusRepository.save(status);
     }
 }

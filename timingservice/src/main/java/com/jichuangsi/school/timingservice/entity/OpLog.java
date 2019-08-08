@@ -15,7 +15,8 @@ public class OpLog {
     @Id
     @GeneratedValue(generator = "jpa-uuid")
     private String id;
-    private String operatorId;
+    private String operatorName;
+    private String opActionname;
     private String opAction;
     private long createdTime = new Date().getTime();
 
@@ -27,12 +28,20 @@ public class OpLog {
         this.id = id;
     }
 
-    public String getOperatorId() {
-        return operatorId;
+    public String getOperatorName() {
+        return operatorName;
     }
 
-    public void setOperatorId(String operatorId) {
-        this.operatorId = operatorId;
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
+    }
+
+    public String getOpActionname() {
+        return opActionname;
+    }
+
+    public void setOpActionname(String opActionname) {
+        this.opActionname = opActionname;
     }
 
     public String getOpAction() {
@@ -49,5 +58,14 @@ public class OpLog {
 
     public void setCreatedTime(long createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public OpLog() {
+    }
+
+    public OpLog(String operatorName, String opActionname, String opAction) {
+        this.operatorName = operatorName;
+        this.opActionname = opActionname;
+        this.opAction = opAction;
     }
 }

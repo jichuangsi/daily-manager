@@ -1,9 +1,11 @@
 package com.jichuangsi.school.timingservice.controller;
 
+import com.jichuangsi.school.timingservice.entity.Status;
 import com.jichuangsi.school.timingservice.exception.BackUserException;
 import com.jichuangsi.school.timingservice.model.*;
 import com.jichuangsi.school.timingservice.service.BackRoleUrlService;
 import com.jichuangsi.school.timingservice.service.BackUserService;
+import com.jichuangsi.school.timingservice.service.OpLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +22,8 @@ public class BackUserController {
     private BackUserService backUserService;
     @Resource
     private BackRoleUrlService backRoleUrlService;
+    @Resource
+    private OpLogService opLogService;
 
     @ApiOperation("后台注册")
     @ApiImplicitParams({})
@@ -74,4 +78,27 @@ public class BackUserController {
         return ResponseModel.sucess("",backRoleUrlService.getAllUseModule());
     }
 
+    @ApiOperation("分页查询行为日志列表")
+    @ApiImplicitParams({})
+    @GetMapping("/getOpLogByNameAndPage")
+    public ResponseModel getOpLogByNameAndPage(@ModelAttribute UserInfoForToken userInfo, @RequestParam int pageNum, @RequestParam int pageSize, @RequestParam(required = false) String name){
+        return ResponseModel.sucess("",opLogService.getOpLogByNameAndPage(pageNum,pageSize,name));
+    }
+
+
+    @ApiOperation(value = "根据id删除行为日志", notes = "")
+    @ApiImplicitParams({})
+    @GetMapping("/deleteOpLog")
+    public ResponseModel deleteOpLog(@ModelAttribute UserInfoForToken userInfo, @RequestParam String opId){
+        opLogService.deleteOplog(opId);
+        return ResponseModel.sucessWithEmptyData("");
+    }
+
+    @ApiOperation(value = "添加状态", notes = "")
+    @ApiImplicitParams({})
+    @PostMapping("/saveStatus")
+    public ResponseModel saveStatus(@ModelAttribute UserInfoForToken userInfo, @RequestBody Status status){
+        backUserService.saveStatus(status);
+        return ResponseModel.sucessWithEmptyData("");
+    }
 }

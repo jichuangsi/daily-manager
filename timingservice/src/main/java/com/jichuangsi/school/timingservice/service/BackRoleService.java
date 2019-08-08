@@ -30,10 +30,13 @@ public class BackRoleService {
     @Transactional(rollbackFor = Exception.class)
     public void saveRole(UserInfoForToken userInfo, Role role){
         roleRepository.save(role);
-        OpLog opLog=new OpLog();
-        opLog.setOperatorId(userInfo.getUserId());
-        String action="操作角色：".concat(role.getRolename());
-        opLog.setOpAction(action);
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"添加","添加角色");
+        opLogRepository.save(opLog);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void updateRole(UserInfoForToken userInfo, Role role){
+        roleRepository.save(role);
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"修改","修改角色");
         opLogRepository.save(opLog);
     }
 
@@ -48,10 +51,7 @@ public class BackRoleService {
         if(backUserRepository.countByRoleId(id)>0){
             throw new BackUserException(ResultCode.ROLE_BACKUSER_EXIST);
         }
-        OpLog opLog=new OpLog();
-        opLog.setOperatorId(userInfo.getUserId());
-        String action="删除了一个角色";
-        opLog.setOpAction(action);
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"删除","删除角色");
         opLogRepository.save(opLog);
         roleRepository.deleteById(id);
     }

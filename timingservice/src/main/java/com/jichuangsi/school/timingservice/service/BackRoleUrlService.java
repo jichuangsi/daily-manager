@@ -72,10 +72,7 @@ public class BackRoleUrlService {
     //批量添加角色对应的url
     public void batchInsertUrlRelation(UserInfoForToken userInfo, List<UrlRelation> urlRelation){
         urlRelationRepository.saveAll(urlRelation);
-        OpLog opLog=new OpLog();
-        opLog.setOperatorId(userInfo.getUserId());
-        String action="分配权限";
-        opLog.setOpAction(action);
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"添加","分配权限");
         opLogRepository.save(opLog);
 
     }
@@ -83,10 +80,7 @@ public class BackRoleUrlService {
     @Transactional(rollbackFor = Exception.class)
     public void batchDeleteRoleUrl(UserInfoForToken userInfo, List<UrlRelation>  urlRelationId){
         urlRelationRepository.deleteInBatch(urlRelationId);
-        OpLog opLog=new OpLog();
-        opLog.setOperatorId(userInfo.getUserId());
-        String action="移除权限";
-        opLog.setOpAction(action);
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"删除","移除权限");
         opLogRepository.save(opLog);
     }
 
