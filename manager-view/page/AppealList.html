@@ -15,6 +15,7 @@
 		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 		<script type="text/javascript" src="../js/xadmin.js"></script>
 		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
 		<script type="text/javascript" src="../js/page/AppealList.js"></script>
 	</head>
 	<style type="text/css">
@@ -28,6 +29,11 @@
 		
 		.toast-success {
 			background-color: #04A3FF !important;
+		}
+		
+		#info {
+			display: none;
+			margin-top: 10px;
 		}
 	</style>
 
@@ -47,7 +53,7 @@
 									<input type="text" name="userName" placeholder="姓名" autocomplete="off" class="layui-input">
 								</div>
 								<div class="layui-input-inline">
-									<select name="statusId" lay-verify="required" id="setStatus">
+									<select name="statusId" lay-verify="required" lay-filter="setStatus">
 										<option value="-1">审核状态</option>
 										<option value="1">已审核</option>
 										<option value="2">待审核</option>
@@ -65,6 +71,27 @@
 			<span class="layui-btn-sm layui-btn">同意</span>
 			<span class="layui-btn-sm layui-btn">驳回</span>
 		</script>
+		<script type="text/html" id="details">
+			<span class="layui-btn-sm layui-btn">查看详情</span>
+		</script>
+		<script>
+			function dept() {
+				index = layer.open({
+					type: 1,
+					area: ['500px', '300px'],
+					anim: 2,
+					title: '申诉详情',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content: $('#info')
+				});
+			}
+		</script>
 	</body>
+	<div id="info" class="layui-fluid">
+		<div class="layui-fluid" id="img">
+			
+		</div>
+	</div>
 
 </html>

@@ -5,15 +5,14 @@ layui.use(['form', 'table', 'laydate'], function() {
 	$('.time').each(function() {
 		laydate.render({
 			elem: this,
-			type: 'time',
-			format: 'HH:mmH点m分'
+			type: 'time'
 		});
 	})
 	table.render({
 		elem: '#demo',
-		method: "get",
+		method: "post",
 		async: false,
-		url: '../json/date.json',
+		url: httpUrl() + '/rule/getrulelist',
 		cols: [
 			[{
 					field: 'id',
@@ -21,105 +20,47 @@ layui.use(['form', 'table', 'laydate'], function() {
 					type: 'numbers'
 				},
 				{
-					field: 'name',
+					field: 'stuas',
 					title: '名称',
+					align: 'center',
+					templet: function(d) {
+						if(d.stuas == 1) {
+							return "上班打卡"
+						} else if(d.stuas == 2) {
+							return "下班打卡"
+						}
+					}
+				},
+				{
+					field: 'longitudeLatitude',
+					title: '经纬度',
 					align: 'center'
 				},
 				{
-					field: 'start',
+					field: 'wifiName',
+					title: 'wifi名称',
+					align: 'center'
+				},
+				{
+					field: 'wucha',
+					title: '偏差(m)',
+					align: 'center'
+				},
+				{
+					field: 'time',
 					title: '时间',
-					align: 'center'
-				}
-			]
-		],
-		page: false,
-		parseData: function(res) {
-			var arr, code, total;
-			if(res.code == "0010") {
-				code = 0;
-				arr = res.data.list;
-				total = arr.length;
-			}
-			return {
-				"code": 0,
-				"msg": res.msg,
-				"count": total,
-				"data": arr
-			};
-		}
-	});
-	$(document).on('click', '.Supplier', function() {
-		reduceSupplier(this);
-	});
-	$(document).on('click', '#add', function() {
-		setSupplier();
-		$('.time').each(function() {
-			laydate.render({
-				elem: '.time',
-				type: 'time',
-				format: 'HH:mmH点m分',
-				zIndex: 99999999
-			});
-		})
-	});
-	var number = 1;
-
-	function setSupplier() {
-		var divContent = "";
-		number++
-		divContent += '<div class="layui-form-item" dataid1="' + number + '">';
-		divContent += '<div class="layui-inline">';
-		divContent += '<label class="layui-form-label">名称：</label>';
-		divContent += '<div class="layui-input-inline widths">';
-		divContent += '<input type="text" name="address" class="layui-input">';
-		divContent += '</div>';
-		divContent += '<label class="layui-form-mid">时间：</label>';
-		divContent += '<div class="layui-input-inline" >';
-		divContent += '<input type="text" name="address" class="layui-input time" placeholder="选择时间">';
-		divContent += '</div>';
-		divContent += '<div class="layui-form-mid layui-word-aux"><i class="layui-icon layui-icon-close add Supplier"></i> </div>';
-		divContent += '</div>';
-		divContent += '</div>';
-		$('#card').append(divContent);
-	}
-
-	function reduceSupplier(obj) {
-		console.log(obj)
-		var div = $(obj.parentNode.parentNode.parentNode).attr('dataid1')
-		console.log(div)
-		var str = $('#card').find('.layui-form-item').length;
-		for(var i = 0; i < str; i++) {
-			if($('#card').find('.layui-form-item').eq(i).attr('dataid1') == div) {
-				console.log(456)
-				$('#card').find('.layui-form-item').eq(i).remove()
-			}
-
-		}
-	}
-	table.render({
-		elem: '#today',
-		method: "get",
-		async: false,
-		url: '../json/date.json',
-		cols: [
-			[{
-					field: 'id',
-					title: '序号',
-					type: 'numbers'
-				},
-				{
-					field: 'name',
-					title: '名称',
-					align: 'center'
-				},
-				{
-					field: 'start',
-					title: '时间',
-					align: 'center'
+					align: 'center',
+					templet: function(d) {
+						if(d.time != 0) {
+							return new Date(+new Date(d.time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+						} else {
+							return "-"
+						}
+					}
 				},
 				{
 					field: 'deptdescribe',
-					title: '修改',
+					title: '操作',
 					align: 'center',
 					toolbar: '#operation'
 				}
@@ -130,8 +71,10 @@ layui.use(['form', 'table', 'laydate'], function() {
 			var arr, code, total;
 			if(res.code == "0010") {
 				code = 0;
-				arr = res.data.list;
+				arr = res.data;
 				total = arr.length;
+			} else if(res.code == '0031') {
+				code = 0031
 			}
 			return {
 				"code": 0,
@@ -141,4 +84,247 @@ layui.use(['form', 'table', 'laydate'], function() {
 			};
 		}
 	});
+	table.on('row(demo)', function(data) {
+		var param = data.data;
+		getWifiTemplate()
+		//修改今天的规则 
+		var longitudeLatitude = param.longitudeLatitude;
+		var zb = longitudeLatitude.split(',')
+		form.val('Mwifi', {
+			MwifiName: param.wifiName,
+			Mwucha: param.wucha,
+			Mlat: zb[1],
+			Mlng: zb[0]
+		})
+	});
+	//修改今天规则
+	function MRules() {
+		if(param.stuas == -1) {
+			setMsg('请选择上下班', 2)
+			return false;
+		}
+		var longitudeLatitude = param.Mlng + ',' + param.Mlat;
+		var data = {
+			time: param.MtimeString,
+			wifiName: param.MwifiName,
+			longitudeLatitude: longitudeLatitude,
+			stuas: param.Mstuas,
+			wucha: param.Mwucha
+		}
+		var dataList = [];
+		dataList.push(data);
+		$.ajax({
+			type: "post",
+			url: httpUrl() + "/rule/insertrule",
+			async: false,
+			headers: {
+				'accessToken': getToken()
+			},
+			contentType: 'application/json',
+			data: JSON.stringify(dataList),
+			success: function(res) {
+				if(res.code == '0010') {
+					table.reload('demo');
+					layui.notice.success("提示信息:修改成功!");
+				} else if(res.code == '0031') {
+					layui.notice.info("提示信息：权限不足");
+				} else {
+					layui.notice.error("提示信息:修改失败!");
+				}
+			},
+			error: function(res) {
+				setMsg(res.msg, 2)
+			}
+		})
+		return false;
+	}
+
+	function getWifiTemplate() {
+		$.ajax({
+			type: "post",
+			url: httpUrl() + "/rule/getrulefatherlist",
+			async: false,
+			headers: {
+				'accessToken': getToken()
+			},
+			success: function(res) {
+				if(res.code == '0010') {
+					var arr = res.data;
+					var longitudeLatitude;
+					var list;
+					if(arr.length > 0) {
+						list = arr[0];
+					}
+					longitudeLatitude = list.longitudeLatitude;
+					var zb = longitudeLatitude.split(',')
+					form.val('wifi', {
+						wifiName: list.wifiName,
+						wucha: list.wucha,
+						lat: zb[1],
+						lng: zb[0]
+					});
+				}
+			},
+			error: function(res) {
+				setMsg(res.msg, 2)
+			}
+		})
+	}
+	/*添加今日的规则*/
+	form.on('submit(add)', function(data) {
+		var param = data.field;
+		console.log(param)
+		if(param.stuas == -1) {
+			setMsg('请选择上下班', 2)
+			return false;
+		}
+		var longitudeLatitude = param.lng + ',' + param.lat;
+		var data = {
+			time: param.timeString,
+			wifiName: param.wifiName,
+			longitudeLatitude: longitudeLatitude,
+			stuas: param.stuas,
+			wucha: param.wucha
+		}
+		$.ajax({
+			type: "post",
+			url: httpUrl() + "/rule/insertrule",
+			async: false,
+			headers: {
+				'accessToken': getToken()
+			},
+			contentType: 'application/json',
+			data: JSON.stringify(data),
+			success: function(res) {
+				if(res.code == '0010') {
+					table.reload('demo');
+					layer.close(index);
+					layui.notice.success("提示信息:添加成功!");
+				} else if(res.code == '0031') {
+					layui.notice.info("提示信息：权限不足");
+				} else {
+					layer.close(index);
+					layui.notice.error("提示信息:添加失败!");
+				}
+			},
+			error: function(res) {
+				setMsg(res.msg, 2)
+			}
+		})
+		return false;
+	});
+
+	table.render({
+		elem: '#today',
+		method: "post",
+		async: false,
+		url: httpUrl() + '/rule/getrulefatherlist',
+		cols: [
+			[{
+					field: 'id',
+					title: '序号',
+					type: 'numbers'
+				},
+				{
+					field: 'stuas',
+					title: '名称',
+					align: 'center',
+					templet: function(d) {
+						if(d.stuas == 1) {
+							return "上班打卡"
+						} else if(d.stuas == 2) {
+							return "下班打卡"
+						}
+					}
+				},
+				{
+					field: 'longitudeLatitude',
+					title: '经纬度',
+					align: 'center'
+				},
+				{
+					field: 'wifiName',
+					title: 'wifi名称',
+					align: 'center'
+				},
+				{
+					field: 'wucha',
+					title: '偏差(m)',
+					align: 'center'
+				},
+				{
+					field: 'time',
+					title: '时间',
+					align: 'center',
+					templet: function(d) {
+						if(d.time != 0) {
+							return new Date(+new Date(d.time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+						} else {
+							return "-"
+						}
+					}
+				},
+				{
+					field: 'deptdescribe',
+					title: '操作',
+					align: 'center',
+					toolbar: '#del'
+				}
+			]
+		],
+		page: false,
+		parseData: function(res) {
+			var arr, code, total;
+			if(res.code == "0010") {
+				code = 0;
+				arr = res.data;
+				total = arr.length;
+			} else if(res.code == '0031') {
+				code = 0031
+			}
+			return {
+				"code": code,
+				"msg": res.msg,
+				"count": total,
+				"data": arr
+			};
+		}
+	});
+	table.on('row(today)', function(data) {
+		var param = data.data;
+		$(document).on('click', '#delRules', function() {
+			DelRules(param.id)
+		});
+	});
+	/*删除模板规则*/
+	function DelRules(id) {
+		layer.confirm('确认要删除吗？', function(index) {
+			$.ajax({
+				type: "post",
+				url: httpUrl() + "/rule/delrule?ruleFatherId=" + id,
+				async: false,
+				headers: {
+					'content-type': 'application/x-www-form-urlencoded',
+					'accessToken': getToken()
+				},
+				success: function(res) {
+					if(res.code == '0010') {
+						table.reload('today');
+						layer.close(index);
+						layui.notice.success("提示信息:删除成功!");
+					} else if(res.code == '0031') {
+						layer.close(index);
+						layui.notice.info("提示信息：权限不足");
+					} else {
+						layer.close(index);
+						layui.notice.error("提示信息:删除失败啦!");
+					}
+				},
+				error: function(res) {
+					setMsg(res.msg, 2)
+				}
+			})
+		})
+
+	}
 })

@@ -67,7 +67,7 @@
 									<input type="text" name="staffName" placeholder="姓名" autocomplete="off" class="layui-input">
 								</div>
 								<div class="layui-input-inline">
-									<select name="statusId" lay-verify="required"  id="setStatus">
+									<select name="statusId" id="setStatus">
 										<option value="-1">请选择状态</option>
 										<option value="">在职</option>
 										<option value="">请假</option>
@@ -132,7 +132,7 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">员工状态：</label>
 				<div class="layui-input-inline">
-					<input type="hidden" name="staffId" />
+					<input type="hidden" name="wechat" />
 					<select name="statusId" lay-verify="required" lay-filter="status" id="status">
 						<option value="-1">请选择状态</option>
 						<option value="">在职</option>
@@ -154,7 +154,7 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">调整部门：</label>
 				<div class="layui-input-inline">
-					<input type="hidden" name="staffId" />
+					<input type="hidden" name="wechat" />
 					<select name="deptId" lay-verify="required" lay-filter="Dept" id="dept">
 						<option value="-1">请选择部门</option>
 					</select>
@@ -173,7 +173,7 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">调整职位：</label>
 				<div class="layui-input-inline">
-					<input type="hidden" name="staffId" />
+					<input type="hidden" name="wechat" />
 					<select name="roleId" lay-verify="required" lay-filter="role" id="role">
 						<option value="-1">请选择职位</option>
 					</select>

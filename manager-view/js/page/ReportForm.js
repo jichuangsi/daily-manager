@@ -2,11 +2,20 @@ layui.use(['form', 'table', 'laydate'], function() {
 	var form = layui.form,
 		table = layui.table,
 		laydate = layui.laydate;
+	var date = new Date();
+	date.setMonth(date.getMonth() - 1);
+	var dateStart = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+	var dateEnd = date.getFullYear() + "-" + (date.getMonth() + 2) + "-" + date.getDate();
 	table.render({
 		elem: '#demo',
-		method: "get",
+		method: "post",
 		async: false,
-		url: '../json/data.json',
+		id: 'idTest',
+		url: httpUrl() + '/kq/getBB',
+		header: {
+			'content-type': 'application/x-www-form-urlencoded',
+			'accessToken': getToken()
+		},
 		cols: [
 			[{
 					field: 'id',
@@ -14,27 +23,29 @@ layui.use(['form', 'table', 'laydate'], function() {
 					type: 'numbers'
 				},
 				{
-					field: 'name',
+					field: 'peopleName',
 					title: '姓名',
-					align: 'center',
-					edit: 'text'
+					align: 'center'
 				},
 				{
 					field: 'department',
 					title: '部门',
-					align: 'center',
-					edit: 'text'
+					align: 'center'
 				},
 				{
-					field: 'zc',
+					field: 'jurisdiction',
+					title: '职位',
+					align: 'center'
+				},
+
+				{
+					field: 'kq',
 					title: '考勤次数',
 					align: 'center',
-					edit: 'text'
 				}, {
-					field: 'bzc',
+					field: 'qq',
 					title: '缺勤次数',
-					align: 'center',
-					edit: 'text'
+					align: 'center'
 				}
 			]
 		],
@@ -46,19 +57,51 @@ layui.use(['form', 'table', 'laydate'], function() {
 			var total;
 			if(res.code == "0010") {
 				code = 0;
-				arr = res.data.list;
+				arr = res.data;
 				total = arr.length;
 			}
 			return {
-				"code": 0,
+				"code": code,
 				"msg": res.msg,
 				"count": total,
 				"data": arr
 			};
+		},
+		where: {
+			timeStart: dateStart,
+			timeEnd: dateEnd,
+			name: ''
 		}
 	});
 	laydate.render({
 		elem: '#test',
 		range: '~'
+	});
+	form.on('submit(sreach)', function(data) {
+		var param = data.field;
+		console.log(param.date)
+		var date = param.date.split('~');
+		if(param.date == '') {
+			var date = new Date();
+			date.setMonth(date.getMonth() - 1);
+			var dateStart = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+			var dateEnd = date.getFullYear() + "-" + (date.getMonth() + 2) + "-" + date.getDate();
+		} else {
+			var dateStart = date[0];
+			var dateEnd = date[1];
+		}
+		//默认获取一个月前的
+		table.reload('idTest', {
+			url: httpUrl() + '/kq/getBB',
+			header: {
+				'content-type': 'application/x-www-form-urlencoded',
+				'accessToken': getToken()
+			},
+			where: {
+				timeStart: dateStart,
+				timeEnd: dateEnd,
+				name: param.name
+			}
+		});
 	});
 })

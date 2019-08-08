@@ -15,6 +15,7 @@
 		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 		<script type="text/javascript" src="../js/xadmin.js"></script>
 		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js" ></script>
 		<script type="text/javascript" src="../js/page/OvertimeApplication.js"></script>
 	</head>
 	<style type="text/css">
@@ -47,7 +48,7 @@
 									<input type="text" name="userName" placeholder="姓名" autocomplete="off" class="layui-input">
 								</div>
 								<div class="layui-input-inline">
-									<select name="statusId" lay-verify="required" id="setStatus">
+									<select name="statusId" lay-verify="required" lay-filter="setStatus">
 										<option value="-1">审核状态</option>
 										<option value="1">已审核</option>
 										<option value="2">待审核</option>

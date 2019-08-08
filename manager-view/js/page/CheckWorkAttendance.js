@@ -3,9 +3,9 @@ layui.use(['form', 'table'], function() {
 		table = layui.table;
 	table.render({
 		elem: '#demo',
-		method: "get",
+		method: "post",
 		async: false,
-		url: '../json/data.json',
+		url: httpUrl() + '/kq/getTDBB',
 		cols: [
 			[{
 					field: 'id',
@@ -13,55 +13,60 @@ layui.use(['form', 'table'], function() {
 					type: 'numbers'
 				},
 				{
-					field: 'name',
+					field: 'peopleName',
 					title: '姓名',
 					align: 'center'
 				},
 				{
 					field: 'department',
 					title: '部门',
-					align: 'center',
-					edit: 'text'
+					align: 'center'
 				},
 				{
-					field: 'role',
+					field: 'jurisdiction',
 					title: '职位',
-					align: 'center',
-					edit: 'text'
-				}, {
-					field: 'startStatus',
+					align: 'center'
+				},
+				{
+					field: 'stuas',
 					title: '考勤',
 					align: 'center',
-					edit: 'text'
+					templet:function(d){
+						if(d.stuas==1){
+							return "上班打卡"
+						}else if(d.stuas==2){
+							return "下班打卡"
+						}
+					}
 				}, {
-					field: 'start',
+					field: 'time',
 					title: '打卡时间',
 					align: 'center',
-					edit: 'text'
+					templet: function(d) {
+						if(d.time != 0) {
+							return new Date(+new Date(d.time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+						} else {
+							return "-"
+						}
+					}
 				},
 				{
-					field: 'end',
-					title: '下班打卡时间',
-					align: 'center',
-					edit: 'text'
-				}, {
-					field: 'workStatus',
+					field: 'stuas2',
 					title: '状态',
 					align: 'center',
-					edit: 'text',
-					toolbar: '#colorStatus'
+					toolbar:'#colorStatus'
 				}
 			]
 		],
-		toolbar: '#operation',
 		page: false,
+		toolbar: '#operation',
 		parseData: function(res) {
 			var arr;
 			var code;
 			var total;
 			if(res.code == "0010") {
 				code = 0;
-				arr = res.data.list;
+				arr = res.data;
 				total = arr.length;
 			}
 			return {

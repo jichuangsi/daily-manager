@@ -1,6 +1,7 @@
 layui.use(['form', 'table'], function() {
 	var form = layui.form,
 		table = layui.table;
+		/*当天*/
 	table.render({
 		elem: '#demo',
 		method: "get",
@@ -46,9 +47,11 @@ layui.use(['form', 'table'], function() {
 				code = 0;
 				arr = res.data;
 				total = arr.length;
+			} else if(res.code == '0031') {
+				code = 0031
 			}
 			return {
-				"code": 0,
+				"code": code,
 				"msg": res.msg,
 				"count": total,
 				"data": arr
@@ -70,6 +73,8 @@ layui.use(['form', 'table'], function() {
 				if(res.code == '0010') {
 					table.reload('demo');
 					layui.notice.success("提示信息:成功!");
+				} else if(res.code == '0031') {
+					layui.notice.info("提示信息：权限不足");
 				} else {
 					layui.notice.error("提示信息:添加失败啦!");
 				}
@@ -94,7 +99,6 @@ layui.use(['form', 'table'], function() {
 	//删除部门
 	function DelDepartment(deptId) {
 		layer.confirm('确认要删除吗？', function(index) {
-			console.log(deptId)
 			$.ajax({
 				type: "get",
 				url: httpUrl() + "/backdepartment/deleteDepartment/" + deptId,
@@ -107,6 +111,9 @@ layui.use(['form', 'table'], function() {
 						table.reload('demo');
 						layer.close(index);
 						layui.notice.success("提示信息:删除成功!");
+					} else if(res.code == '0031') {
+						layer.close(index);
+						layui.notice.info("提示信息：权限不足");
 					} else {
 						table.reload('demo');
 						layer.close(index);
@@ -137,6 +144,9 @@ layui.use(['form', 'table'], function() {
 					table.reload('demo');
 					layer.close(index);
 					layui.notice.success("提示信息:成功!");
+				} else if(res.code == '0031') {
+					layer.close(index);
+					layui.notice.info("提示信息：权限不足");
 				} else {
 					layer.close(index);
 					layui.notice.error("提示信息:修改失败!");
@@ -189,9 +199,11 @@ layui.use(['form', 'table'], function() {
 				code = 0;
 				arr = res.data;
 				total = arr.length;
+			} else if(res.code == '0031') {
+				code = 0031
 			}
 			return {
-				"code": 0,
+				"code": code,
 				"msg": res.msg,
 				"count": total,
 				"data": arr
@@ -213,7 +225,9 @@ layui.use(['form', 'table'], function() {
 				if(res.code == '0010') {
 					table.reload('role');
 					layui.notice.success("提示信息:成功!");
-
+				} else if(res.code == '0031') {
+					layer.close(index);
+					layui.notice.info("提示信息：权限不足");
 				} else {
 					table.reload('role');
 					layui.notice.error("提示信息:失败啦!");
@@ -250,6 +264,9 @@ layui.use(['form', 'table'], function() {
 						table.reload('role');
 						layer.close(index);
 						layui.notice.success("提示信息:删除成功!");
+					} else if(res.code == '0031') {
+						layer.close(index);
+						layui.notice.info("提示信息：权限不足");
 					} else {
 						table.reload('role');
 						layer.close(index);
@@ -279,6 +296,9 @@ layui.use(['form', 'table'], function() {
 					table.reload('role');
 					layer.close(index);
 					layui.notice.success("提示信息:成功!");
+				} else if(res.code == '0031') {
+					layer.close(index);
+					layui.notice.info("提示信息：权限不足");
 				} else {
 					layer.close(index);
 					layui.notice.error("提示信息:修改失败!");

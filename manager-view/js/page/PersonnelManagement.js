@@ -62,9 +62,11 @@ layui.use(['form', 'table'], function() {
 				code = 0;
 				arr = res.data.content;
 				total = res.data.numberOfElements;
+			} else if(res.code == '0031') {
+				code=0031
 			}
 			return {
-				"code": 0,
+				"code": code,
 				"msg": res.msg,
 				"count": total,
 				"data": arr
@@ -124,13 +126,13 @@ layui.use(['form', 'table'], function() {
 	table.on('row(demo)', function(data) {
 		var param = data.data;
 		form.val('test', {
-			'staffId': param.id
+			'wechat': param.wechat
 		});
 		form.val('testDept', {
-			'staffId': param.id
+			'wechat': param.wechat
 		});
 		form.val('testRole', {
-			'staffId': param.id
+			'wechat': param.wechat
 		});
 	});
 	form.on('submit(updataDept)', function(data) {
@@ -141,7 +143,7 @@ layui.use(['form', 'table'], function() {
 		} else {
 			$.ajax({
 				type: "get",
-				url: httpUrl() + "/backstaff/updateStaff?statusId=" + param.statusId + "&staffId=" + param.staffId,
+				url: httpUrl() + "/backstaff/updateStaff?statusId=" + param.statusId + "&wechat=" + param.wechat,
 				async: false,
 				headers: {
 					'accessToken': getToken()
@@ -151,6 +153,9 @@ layui.use(['form', 'table'], function() {
 						table.reload('idTest');
 						layui.notice.success("提示信息:修改成功!");
 						layer.close(index);
+					} else if(res.code == '0031') {
+						layer.close(index);
+						layui.notice.info("提示信息：权限不足");
 					} else {
 						console.log(res.msg)
 						layer.close(index);
@@ -201,7 +206,7 @@ layui.use(['form', 'table'], function() {
 		} else {
 			$.ajax({
 				type: "get",
-				url: httpUrl() + "/backstaff/updateStaffDept?deptId=" + param.deptId + "&staffId=" + param.staffId,
+				url: httpUrl() + "/backstaff/updateStaffDept?deptId=" + param.deptId + "&wechat=" + param.wechat,
 				async: false,
 				headers: {
 					'accessToken': getToken()
@@ -261,7 +266,7 @@ layui.use(['form', 'table'], function() {
 		} else {
 			$.ajax({
 				type: "get",
-				url: httpUrl() + "/backstaff/updateStaffRole?roleId=" + param.roleId + "&staffId=" + param.staffId,
+				url: httpUrl() + "/backstaff/updateStaffRole?roleId=" + param.roleId + "&wechat=" + param.wechat,
 				async: false,
 				headers: {
 					'accessToken': getToken()
@@ -272,6 +277,9 @@ layui.use(['form', 'table'], function() {
 						layer.close(index);
 						layui.notice.success("提示信息:修改成功!");
 
+					} else if(res.code == '0031') {
+						layer.close(index);
+						layui.notice.info("提示信息：权限不足");
 					} else {
 						console.log(res.msg)
 						layer.close(index);

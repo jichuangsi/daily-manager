@@ -15,6 +15,7 @@
 		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 		<script type="text/javascript" src="../js/xadmin.js"></script>
 		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js" ></script>
 		<script type="text/javascript" src="../js/page/CheckWorkAttendance.js"></script>
 	</head>
 	<style type="text/css">
@@ -48,11 +49,11 @@
 			<div>正常打卡时间:上午8：30</div>
 		</script>
 		<script type="text/html" id="colorStatus">
-			{{# if(d.workStatus=='正常'){ }}
+			{{# if(d.stuas2=='0'){ }}
 			<div style="color: #00FF00;">正常</div>
-			{{# }else if(d.workStatus=='考勤异常'){ }}
+			{{# }else if(d.stuas2=='1'){ }}
 			<div style="color:#FFFF00;">考勤异常</div>
-			{{# }else if(d.workStatus=='缺勤'){ }}
+			{{# }else if(d.stuas2=='2'){ }}
 			<div style="color: #FF0000;">缺勤</div>
 			{{# } }}
 		</script>

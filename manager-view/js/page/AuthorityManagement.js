@@ -8,7 +8,6 @@ layui.use(['form', 'table', 'tree', 'util'], function() {
 		urlList = [];
 	getSort();
 	getURL();
-	getRole();
 	setTree();
 	var URLTree, RoleTree;
 
@@ -183,6 +182,9 @@ layui.use(['form', 'table', 'tree', 'util'], function() {
 		if(data.value != '-1') {
 			tableId = data.value;
 			getRoleUrl(tableId);
+			getSort();
+			getURL();
+			setTree();
 			roleTree();
 		}
 		$(document).on('click', '#del', function() {
@@ -200,16 +202,26 @@ layui.use(['form', 'table', 'tree', 'util'], function() {
 		if(checkedData.length == 0) {
 			layui.notice.warning("提示信息:请选择相关权限");
 		} else {
-			var children=[];
-			for(var i=0;i<checkedData.length;i++){
-				children.push(checkedData[i].children[0])
+			var children = [];
+			for(var i = 0; i < checkedData.length; i++) {
+				children.push(checkedData[i].children)
 			}
-			var list = [];
-			console.log(tableId + "+" + children)
-			for(var i = 0; i < children.length; i++) {
+			var list = [],
+				arrList = [];
+			var arr;
+			for(var j = 0; j < children.length; j++) {
+				arr = children[j]
+				if(arr) {
+					for(var i = 0; i < arr.length; i++) {
+						arrList.push(arr[i]);
+					}
+				}
+			}
+			console.log(arrList);
+			for(var i = 0; i < arrList.length; i++) {
 				list.push({
 					rid: tableId,
-					uid: children[i].id
+					uid: arrList[i].id
 				})
 			}
 			var urlRelations = {
@@ -244,16 +256,27 @@ layui.use(['form', 'table', 'tree', 'util'], function() {
 		console.log(checkedData.length)
 		if(checkedData.length == 0) {
 			layui.notice.warning("提示信息:请选择相关权限");
+			return;
 		} else {
-			var children=[];
-			for(var i=0;i<checkedData.length;i++){
-				children.push(checkedData[i].children[0])
+			var children = [];
+			for(var i = 0; i < checkedData.length; i++) {
+				children.push(checkedData[i].children)
 			}
-			console.log(checkedData)
-			var list = [];
-			for(var i = 0; i < children.length; i++) {
+			var list = [],
+				arrList = [];
+			var arr;
+			for(var j = 0; j < children.length; j++) {
+				arr = children[j]
+				if(arr) {
+					for(var i = 0; i < arr.length; i++) {
+						arrList.push(arr[i]);
+					}
+				}
+			}
+			console.log(arrList);
+			for(var i = 0; i < arrList.length; i++) {
 				list.push({
-					id: children[i].relationId
+					id: arrList[i].relationId
 				})
 			}
 			var urlRelations = {

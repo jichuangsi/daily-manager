@@ -15,6 +15,7 @@
 		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 		<script type="text/javascript" src="../js/xadmin.js"></script>
 		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js" ></script>
 		<script type="text/javascript" src="../js/page/SystemLog.js"></script>
 	</head>
 		
@@ -31,7 +32,7 @@
 						<div class="layui-row">
 							<form class="layui-form layui-col-md12">
 								<div class="layui-input-inline">
-									<input type="text" name="userName" placeholder="姓名" autocomplete="off" class="layui-input">
+									<input type="text" name="name" placeholder="执行者" autocomplete="off" class="layui-input">
 								</div>
 								<div class="layui-btn layui-btn layui-btn-normal" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></div>
 							</form>
@@ -42,7 +43,7 @@
 			</div>
 		</div>
 		<script type="text/html" id="operation">
-			<span class="layui-btn-sm layui-btn layui-btn-danger">删除</span>
+			<span class="layui-btn-sm layui-btn layui-btn-danger" id="delLog">删除</span>
 		</script>
 	</body>
 

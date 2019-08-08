@@ -15,19 +15,31 @@
 		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 		<script type="text/javascript" src="../js/xadmin.js"></script>
 		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
 		<script type="text/javascript" src="../js/page/CardingRules.js"></script>
 	</head>
 	<style>
+		.add {
+			font-size: 30px;
+		}
+		.toast-success {
+			background-color: #04A3FF !important;
+		}
+		.add:hover {
+			cursor: pointer;
+		}
+		
 		.widths {
 			width: 300px;
 		}
 		
-		.add {
-			font-size: 30px;
+		#addRules {
+			display: none;
+			margin-top: 10px;
 		}
-		
-		.add:hover {
-			cursor: pointer;
+		#modifyRules{
+			display: none;
+			margin-top: 10px;
 		}
 	</style>
 
@@ -38,67 +50,158 @@
 		</div>
 		<div class="x-body">
 			<div class="layui-row">
-				<fieldset class="layui-elem-field layui-col-md5">
-					<legend>打卡规则：</legend>
+				<fieldset class="layui-elem-field ">
+					<legend>规则模板：</legend>
 					<div class="layui-field-box">
-						<form class="layui-form" autocomplete="off">
-							<div class="layui-form-item">
-								<div class="layui-inline">
-									<label class="layui-form-label">名称：</label>
-									<div class="layui-input-inline widths">
-										<input type="text" name="price_min" autocomplete="off" class="layui-input">
-									</div>
-									<div class="layui-form-mid">时间：</div>
-									<div class="layui-input-inline">
-										<input type="text" name="price_max" autocomplete="off" class="layui-input time" placeholder="选择时间">
-									</div>
-								</div>
-							</div>
-							<div class="layui-row" id="card">
-								<div class="layui-form-item" value="1">
-									<div class="layui-inline">
-										<label class="layui-form-label">名称：</label>
-										<div class="layui-input-inline widths">
-											<input type="text" name="price_min" class="layui-input">
-										</div>
-										<div class="layui-form-mid">时间：</div>
-										<div class="layui-input-inline">
-											<input type="text" name="price_max" autocomplete="off" class="layui-input time" placeholder="选择时间">
-										</div>
-										<div class="layui-form-mid layui-word-aux"><i class="layui-icon layui-icon-add-circle-fine add" id="add"></i> </div>
-									</div>
-								</div>
-							</div>
+						<table id="today" lay-filter="today"></table>
+					</div>
+					<script type="text/html" id="operation">
+						<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="update()">修改</span>
+						<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="dept()">添加</span>
 
-							<div class="layui-form-item">
-								<div class="layui-input-block">
-									<button class="layui-btn layui-btn-normal" lay-submit lay-filter="add" type="submit">立即提交</button>
-									<button type="reset" class="layui-btn layui-btn-primary">重置</button>
-								</div>
-							</div>
-						</form>
+					</script>
+					<script type="text/html" id="del">
+						<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal">启用</span>
+						<span class="layui-btn-sm layui-btn layui-btn layui-btn-danger" id="delRules">删除</span>
+					</script>
+				</fieldset>
+				<fieldset class="layui-elem-field ">
+					<legend>当天列表：</legend>
+					<div class="layui-field-box">
+						<table id="demo" lay-filter="demo"></table>
 					</div>
 				</fieldset>
-				<div class="layui-col-md5 layui-col-md-offset1">
-					<fieldset class="layui-elem-field ">
-						<legend>规则列表：</legend>
-						<div class="layui-field-box">
-							<table id="demo" lay-filter="demo"></table>
-						</div>
-					</fieldset>
-					<fieldset class="layui-elem-field ">
-						<legend>当天规则列表：</legend>
-						<div class="layui-field-box">
-							<table id="today" lay-filter="today"></table>
-						</div>
-						<script type="text/html" id="operation">
-							<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="dept()">修改</span>
-						</script>
-					</fieldset>
-				</div>
-
 			</div>
 		</div>
+		<script>
+			function dept() {
+				index = layer.open({
+					type: 1,
+					area: ['500px', '400px'],
+					anim: 2,
+					title: '添加今日规则',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content: $('#addRules')
+				});
+			}
+			function update(){
+				index = layer.open({
+					type: 1,
+					area: ['500px', '400px'],
+					anim: 2,
+					title: '修改今日规则',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content: $('#modifyRules')
+				});
+			}
+		</script>
 	</body>
+	<div id="addRules" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="wifi">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">上下班：</label>
+					<div class="layui-input-inline widths">
+						<select name="stuas" lay-verify="required">
+							<option value="-1">请选择</option>
+							<option value="1">上班</option>
+							<option value="2">下班</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">时间：</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="timeString" autocomplete="off" class="layui-input time" placeholder="选择时间" lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">有效经纬度</label>
+					<div class="layui-input-inline" style="width: 150px;">
+						<input type="text" name="lng" class="layui-input" lay-verify="required">
+					</div>
+					<div class="layui-form-mid">-</div>
+					<div class="layui-input-inline" style="width: 150px;">
+						<input type="text" name="lat" class="layui-input" lay-verify="required">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">偏差数(m)：</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="wucha" class="layui-input widths" autocomplete="off" lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">wifi名称：</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="wifiName" class="layui-input widths" autocomplete="off" lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn layui-btn-normal" lay-submit lay-filter="add" type="submit">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div id="modifyRules" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="Mwifi">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">上下班：</label>
+					<div class="layui-input-inline widths">
+						<select name="stuas" lay-verify="required">
+							<option value="-1">请选择</option>
+							<option value="1">上班</option>
+							<option value="2">下班</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">时间：</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="timeString" autocomplete="off" class="layui-input time" placeholder="选择时间" lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">有效经纬度</label>
+					<div class="layui-input-inline" style="width: 150px;">
+						<input type="text" name="Mlng" class="layui-input" lay-verify="required">
+					</div>
+					<div class="layui-form-mid">-</div>
+					<div class="layui-input-inline" style="width: 150px;">
+						<input type="text" name="Mlat" class="layui-input" lay-verify="required">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">偏差数(m)：</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="Mwucha" class="layui-input widths" autocomplete="off" lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">wifi名称：</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="MwifiName" class="layui-input widths" autocomplete="off" lay-verify="required">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn layui-btn-normal" lay-submit lay-filter="MRules" type="submit">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
 
 </html>
