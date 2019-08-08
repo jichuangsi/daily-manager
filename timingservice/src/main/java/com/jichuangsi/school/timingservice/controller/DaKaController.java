@@ -1,10 +1,12 @@
 package com.jichuangsi.school.timingservice.controller;
 
 import com.jichuangsi.school.timingservice.constant.ResultCode;
+import com.jichuangsi.school.timingservice.entity.Department;
 import com.jichuangsi.school.timingservice.entity.People;
 import com.jichuangsi.school.timingservice.entity.Record;
 import com.jichuangsi.school.timingservice.entity.Rule;
 import com.jichuangsi.school.timingservice.model.*;
+import com.jichuangsi.school.timingservice.repository.IDepartmentRepository;
 import com.jichuangsi.school.timingservice.service.PeopleService;
 import com.jichuangsi.school.timingservice.service.RecordService;
 import com.jichuangsi.school.timingservice.service.RuleService;
@@ -24,6 +26,9 @@ import java.util.List;
 @CrossOrigin
 @Api("考情相关的api")
 public class DaKaController {
+    @Resource
+    private IDepartmentRepository iDepartmentRepository;
+
     @Resource
     private RecordService recordService;
 
@@ -252,7 +257,9 @@ public class DaKaController {
                     int qq=ruleForTime.size()-allByOpenIdAndStuas.size();
                     rModel.setQq(qq);
                     rModel.setKq(allByOpenIdAndStuas.size());
-                    rModel.setDepartment(people.getDepartment());
+
+                    Department byid = iDepartmentRepository.findByid(people.getDepartment());
+                    rModel.setDepartment(byid.getDeptname());
                     rModel.setJurisdiction(people.getJurisdiction());
                     rModel.setPeopleName(people.getPeopleName());
                     models.add(rModel);
@@ -274,7 +281,8 @@ public class DaKaController {
                     int qq=ruleForTime.size()-allByOpenIdAndStuas.size();
                     rModel.setQq(qq);
                     rModel.setKq(allByOpenIdAndStuas.size());
-                    rModel.setDepartment(people.getDepartment());
+                    Department byid = iDepartmentRepository.findByid(people.getDepartment());
+                    rModel.setDepartment(byid.getDeptname());
                     rModel.setJurisdiction(people.getJurisdiction());
                     rModel.setPeopleName(people.getPeopleName());
                     models.add(rModel);
@@ -305,7 +313,10 @@ public class DaKaController {
                         rModel.setStuas(rule.getStuas());
                         rModel.setStuas2("0");
                         rModel.setTime(rule.getTime());
-                        rModel.setDepartment(people.getDepartment());
+
+
+                        Department byid = iDepartmentRepository.findByid(people.getDepartment());
+                        rModel.setDepartment(byid.getDeptname());
                         rModel.setJurisdiction(people.getJurisdiction());
                         rModel.setPeopleName(people.getPeopleName());
                         models.add(rModel);
@@ -325,7 +336,8 @@ public class DaKaController {
                             rModel.setStuas(rule.getStuas());
                             rModel.setStuas2("1");
                             rModel.setTime(rule.getTime());
-                            rModel.setDepartment(people.getDepartment());
+                            Department byid = iDepartmentRepository.findByid(people.getDepartment());
+                            rModel.setDepartment(byid.getDeptname());
                             rModel.setJurisdiction(people.getJurisdiction());
                             rModel.setPeopleName(people.getPeopleName());
                             models.add(rModel);
@@ -334,7 +346,8 @@ public class DaKaController {
                             rModel.setStuas(rule.getStuas());
                             rModel.setStuas2("0");
                             rModel.setTime(rule.getTime());
-                            rModel.setDepartment(people.getDepartment());
+                            Department byid = iDepartmentRepository.findByid(people.getDepartment());
+                            rModel.setDepartment(byid.getDeptname());
                             rModel.setJurisdiction(people.getJurisdiction());
                             rModel.setPeopleName(people.getPeopleName());
                             models.add(rModel);
