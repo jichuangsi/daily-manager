@@ -16,6 +16,6 @@ public class CommonWebMvcConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 添加一个拦截器，连接以/admin为前缀的 url路径
-        registry.addInterceptor(tokenCheckInterceptor()).addPathPatterns("/back*/**");
+        registry.addInterceptor(tokenCheckInterceptor()).addPathPatterns("/**/**");
     }
 }

@@ -121,8 +121,11 @@ public class BackRoleUrlService {
     public List<UrlMapping> getUrlByRoleId(String roleId){return urlRelationMapper.getStaticPageAndRoleUrlByRoleId(roleId);}
 
     //查询后台权限
-    public boolean checkauthorityByUser(UserInfoForToken userInfo, String url){
+    public boolean checkauthorityByUser(UserInfoForToken userInfo, String url)throws BackUserException {
         BackUser user=backUserRepository.findByid(userInfo.getUserId());
+        if(null==user){
+            throw new BackUserException(ResultCode.ACCOUNT_NOTEXIST_MSG);
+        }
         if(user.getRoleName().equals("M")){
             return  true;
         }

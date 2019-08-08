@@ -7,6 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.jichuangsi.school.timingservice.constant.ResultCode;
+import com.jichuangsi.school.timingservice.exception.BackUserException;
 import com.jichuangsi.school.timingservice.model.ResponseModel;
 import com.jichuangsi.school.timingservice.model.UserInfoForToken;
 import com.jichuangsi.school.timingservice.service.BackRoleUrlService;
@@ -51,6 +52,10 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
         }
         try {
             String accessToken=request.getHeader("accessToken");
+            String openid=request.getParameter("openId");
+            if(openid!=null){
+                return true;
+            }
             if (request.getMethod().equals("OPTIONS")) {
                 return true;
             }
@@ -71,6 +76,11 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
         }catch (JWTVerificationException e){
             logger.error("token检验不通过：" + e.getMessage());
             returnJson(response,request,ResultCode.TOKEN_CHECK_ERR,ResultCode.TOKEN_CHECK_ERR_MSG);
+            //return false;
+        }catch (BackUserException e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+            returnJson(response,request,ResultCode.SYS_ERROR,e.getMessage());
             //return false;
         }catch (Exception e) {
             e.printStackTrace();
