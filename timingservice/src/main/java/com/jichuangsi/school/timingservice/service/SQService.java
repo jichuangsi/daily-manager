@@ -26,4 +26,8 @@ public interface SQService {
     List<SQFlie> getUnapprovedSQForName(String openId);
 
     List<SQFlie> getapprovedSQForName(String openId);
+
+    List<SQFlie> getAllsq();
+
+    List<SQFlie> getSQ2(String openId);
 }

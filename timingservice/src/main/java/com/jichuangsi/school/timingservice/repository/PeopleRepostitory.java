@@ -13,7 +13,7 @@ import java.util.List;
 public interface PeopleRepostitory extends JpaRepository<People,String>{
     People findFirstByPeopleName(String name);
 
-    People findAllByOpenId(String openId);
+    People findOneByOpenId(String openId);
 
     List<People> findByPeopleNameLike(String name);
 

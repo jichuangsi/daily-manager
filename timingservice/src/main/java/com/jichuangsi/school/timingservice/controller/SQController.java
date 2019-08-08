@@ -11,6 +11,7 @@ import com.jichuangsi.school.timingservice.repository.IDepartmentRepository;
 import com.jichuangsi.school.timingservice.service.PeopleService;
 import com.jichuangsi.school.timingservice.service.SQService;
 import com.jichuangsi.school.timingservice.utils.Byte2File;
+import com.jichuangsi.school.timingservice.utils.ListUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
@@ -89,87 +90,15 @@ public class SQController {
         odel.setCode(ResultCode.SUCESS);
         return odel;
     }
-    @ApiOperation(value = "查看全部未审批申诉记录", notes = "")
+    @ApiOperation(value = "查看审批申诉记录", notes = "")
     @PostMapping("/getAllUnapprovedSQ")
-    public ResponseModel<List<SQFlieModel2>> SQAllUnapproved(@RequestParam @Nullable String name)  {
-                if (name==null||name.equalsIgnoreCase("")){
-            List<SQFlie> file = sqService.getAllUnapproved();
-            List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
-            ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
-            for (SQFlie sqFlie:file
-                    ) {
-                SQFlieModel2 sqFlieModel2 = new SQFlieModel2();
-
-                People servicePeople = peopleService.findPeople(sqFlie.getOpenId());
-                Department byid = iDepartmentRepository.findByid(servicePeople.getDepartment());
-                servicePeople.setDepartment(byid.getDeptname());
-                sqFlieModel2.setPeople(servicePeople);
-                sqFlieModel2.setSqFlie(sqFlie);
-                sqFlieModel2s.add(sqFlieModel2);
-            }
-
-            odel.setData(sqFlieModel2s);
-            odel.setCode(ResultCode.SUCESS);
-            return odel;
-                } else{
-                    List<People> allPeople = peopleService.findAllPeople(name);
-
-                    List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
-                    for (People people:allPeople
-                            ) {
-                        List<SQFlie> file =sqService.getUnapprovedSQForName(people.getOpenId());
-                        for (SQFlie sqFlie:file
-                                ) {
-                            SQFlieModel2 sqFlieModel2 = new SQFlieModel2();
-
-                            People servicePeople = peopleService.findPeople(sqFlie.getOpenId());
-                            Department byid = iDepartmentRepository.findByid(servicePeople.getDepartment());
-                            servicePeople.setDepartment(byid.getDeptname());
-                            sqFlieModel2.setPeople(servicePeople);
-                            sqFlieModel2.setSqFlie(sqFlie);
-                            sqFlieModel2s.add(sqFlieModel2);
-                        }
-
-                    }
-                    ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
-                    odel.setData(sqFlieModel2s);
-                    odel.setCode(ResultCode.SUCESS);
-                    return odel;
-        }
-    }
-
-
-    @ApiOperation(value = "查看全部已审批申诉记录", notes = "")
-    @PostMapping("/getAllapprovedSQForName")
-    public ResponseModel<List<SQFlieModel2>> SQAllapprovedforname(@RequestParam @Nullable String name)  {
-        if (name==null||name.equalsIgnoreCase("")){
-            List<SQFlie> file = sqService.getAllapproved();
-            List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
-            ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
-            for (SQFlie sqFlie:file
-                    ) {
-                SQFlieModel2 sqFlieModel2 = new SQFlieModel2();
-
-                People servicePeople = peopleService.findPeople(sqFlie.getOpenId());
-                Department byid = iDepartmentRepository.findByid(servicePeople.getDepartment());
-                servicePeople.setDepartment(byid.getDeptname());
-                sqFlieModel2.setPeople(servicePeople);
-
-                sqFlieModel2.setSqFlie(sqFlie);
-                sqFlieModel2s.add(sqFlieModel2);
-            }
-
-            odel.setData(sqFlieModel2s);
-            odel.setCode(ResultCode.SUCESS);
-            return odel;
-        }else {
-            List<People> allPeople = peopleService.findAllPeople(name);
-
-            List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
-            for (People people:allPeople
-                    ) {
-                List<SQFlie> file =sqService.getapprovedSQForName(people.getOpenId());
-                for (SQFlie sqFlie:file
+    public ResponseModel<List<SQFlieModel2>> SQAllUnapproved(@RequestParam @Nullable String name,@RequestParam @Nullable String sttt,@RequestParam int pageSize,@RequestParam int pageNum) {
+        if (sttt.equalsIgnoreCase("1")) {
+            if (name == null || name.equalsIgnoreCase("")) {
+                List<SQFlie> file = sqService.getAllUnapproved();
+                List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
+                ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
+                for (SQFlie sqFlie : file
                         ) {
                     SQFlieModel2 sqFlieModel2 = new SQFlieModel2();
 
@@ -181,11 +110,144 @@ public class SQController {
                     sqFlieModel2s.add(sqFlieModel2);
                 }
 
+                List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
+                odel.setPageNum(pageNum);
+                odel.setPageSize(pageSize);
+                odel.setData(pager);
+                odel.setCode(ResultCode.SUCESS);
+                return odel;
+            } else {
+                List<People> allPeople = peopleService.findAllPeople(name);
+
+                List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
+                for (People people : allPeople
+                        ) {
+                    List<SQFlie> file = sqService.getUnapprovedSQForName(people.getOpenId());
+                    for (SQFlie sqFlie : file
+                            ) {
+                        SQFlieModel2 sqFlieModel2 = new SQFlieModel2();
+
+                        People servicePeople = peopleService.findPeople(sqFlie.getOpenId());
+                        Department byid = iDepartmentRepository.findByid(servicePeople.getDepartment());
+                        servicePeople.setDepartment(byid.getDeptname());
+                        sqFlieModel2.setPeople(servicePeople);
+                        sqFlieModel2.setSqFlie(sqFlie);
+                        sqFlieModel2s.add(sqFlieModel2);
+                    }
+
+                }
+                ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
+                List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
+                odel.setPageNum(pageNum);
+                odel.setPageSize(pageSize);
+                odel.setData(pager);
+                odel.setCode(ResultCode.SUCESS);
+                return odel;
             }
-            ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
-            odel.setData(sqFlieModel2s);
-            odel.setCode(ResultCode.SUCESS);
-            return odel;
+        } else if (sttt.equalsIgnoreCase("2")) {
+            if (name == null || name.equalsIgnoreCase("")) {
+                List<SQFlie> file = sqService.getAllapproved();
+                List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
+                ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
+                for (SQFlie sqFlie : file
+                        ) {
+                    SQFlieModel2 sqFlieModel2 = new SQFlieModel2();
+
+                    People servicePeople = peopleService.findPeople(sqFlie.getOpenId());
+                    Department byid = iDepartmentRepository.findByid(servicePeople.getDepartment());
+                    servicePeople.setDepartment(byid.getDeptname());
+                    sqFlieModel2.setPeople(servicePeople);
+
+                    sqFlieModel2.setSqFlie(sqFlie);
+                    sqFlieModel2s.add(sqFlieModel2);
+                }
+                List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
+                odel.setPageNum(pageNum);
+                odel.setPageSize(pageSize);
+                odel.setData(pager);
+                odel.setCode(ResultCode.SUCESS);
+                return odel;
+            } else {
+                List<People> allPeople = peopleService.findAllPeople(name);
+
+                List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
+                for (People people : allPeople
+                        ) {
+                    List<SQFlie> file = sqService.getapprovedSQForName(people.getOpenId());
+                    for (SQFlie sqFlie : file
+                            ) {
+                        SQFlieModel2 sqFlieModel2 = new SQFlieModel2();
+
+                        People servicePeople = peopleService.findPeople(sqFlie.getOpenId());
+                        Department byid = iDepartmentRepository.findByid(servicePeople.getDepartment());
+                        servicePeople.setDepartment(byid.getDeptname());
+                        sqFlieModel2.setPeople(servicePeople);
+                        sqFlieModel2.setSqFlie(sqFlie);
+                        sqFlieModel2s.add(sqFlieModel2);
+                    }
+
+                }
+                ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
+                List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
+                odel.setPageNum(pageNum);
+                odel.setPageSize(pageSize);
+                odel.setData(pager);
+                odel.setCode(ResultCode.SUCESS);
+                return odel;
+            }
+        } else {
+            if (name == null || name.equalsIgnoreCase("")) {
+                List<SQFlie> file = sqService.getAllsq();
+                List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
+                ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
+                for (SQFlie sqFlie : file
+                        ) {
+                    SQFlieModel2 sqFlieModel2 = new SQFlieModel2();
+
+                    People servicePeople = peopleService.findPeople(sqFlie.getOpenId());
+                    Department byid = iDepartmentRepository.findByid(servicePeople.getDepartment());
+                    servicePeople.setDepartment(byid.getDeptname());
+                    sqFlieModel2.setPeople(servicePeople);
+                    sqFlieModel2.setSqFlie(sqFlie);
+                    sqFlieModel2s.add(sqFlieModel2);
+                }
+
+                List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
+                odel.setPageNum(pageNum);
+                odel.setPageSize(pageSize);
+                odel.setData(pager);
+                odel.setCode(ResultCode.SUCESS);
+                return odel;
+            }else {
+                List<People> allPeople = peopleService.findAllPeople(name);
+
+                List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
+                for (People people : allPeople
+                        ) {
+                    List<SQFlie> file = sqService.getSQ2(people.getOpenId());
+                    for (SQFlie sqFlie : file
+                            ) {
+                        SQFlieModel2 sqFlieModel2 = new SQFlieModel2();
+
+                        People servicePeople = peopleService.findPeople(sqFlie.getOpenId());
+                        Department byid = iDepartmentRepository.findByid(servicePeople.getDepartment());
+                        servicePeople.setDepartment(byid.getDeptname());
+                        sqFlieModel2.setPeople(servicePeople);
+                        sqFlieModel2.setSqFlie(sqFlie);
+                        sqFlieModel2s.add(sqFlieModel2);
+                    }
+
+                }
+                ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
+                List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
+                odel.setPageNum(pageNum);
+                odel.setPageSize(pageSize);
+                odel.setData(pager);
+                odel.setCode(ResultCode.SUCESS);
+                return odel;
+            }
         }
+
     }
 }
+

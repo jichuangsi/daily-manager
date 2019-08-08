@@ -85,12 +85,14 @@ public class DaKaController {
             sb.append(s);
             w="w";
 
-            String[] LL=lL.split(",");
-            String[] ll=longitudeLatitude.split(",");
-            double wd=Double.parseDouble(LL[0]);
-            double jd=Double.parseDouble(LL[1]);
-            double gwd=Double.parseDouble(ll[0]);
-            double gjd=Double.parseDouble(ll[1]);
+           if (!longitudeLatitude.equalsIgnoreCase(",")){
+               String[] LL=lL.split(",");
+               String[] ll=longitudeLatitude.split(",");
+               double wd=Double.parseDouble(LL[0]);
+               double jd=Double.parseDouble(LL[1]);
+               double gwd=Double.parseDouble(ll[0]);
+               double gjd=Double.parseDouble(ll[1]);
+
             if((gwd>=(wd-Double.parseDouble(rule.getWucha())*0.00001)&&gwd<=(wd+Double.parseDouble(rule.getWucha())*0.00001))&&gjd>=(jd-Double.parseDouble(rule.getWucha())*0.00001)&&gjd<=(jd+Double.parseDouble(rule.getWucha())*0.00001)){
                 if (rule.getStuas().equalsIgnoreCase("1")&&rule.getTime()<=System.currentTimeMillis()){
                     c="c";
@@ -105,6 +107,10 @@ public class DaKaController {
                     sb.append(s3);
                     stuas="3";
                 }
+            }else {
+                d="d";
+                stuas="1";
+            }
             }else {
                 String s1=" 定位不对" ;
                 sb.append(s1);

@@ -6,6 +6,8 @@ import com.jichuangsi.school.timingservice.entity.People;
 import com.jichuangsi.school.timingservice.model.ResponseModel;
 import com.jichuangsi.school.timingservice.service.OLService;
 import com.jichuangsi.school.timingservice.service.PeopleService;
+import com.jichuangsi.school.timingservice.utils.ListUtils;
+import com.sun.istack.internal.Nullable;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +67,7 @@ public class OLController {
     }
     @ApiOperation(value = "根据名字未审核加班请假列表", notes = "")
     @PostMapping("/getolrecord1name")
-    public ResponseModel<List<Overtimeleave>> getOLList1name(@RequestParam  String name){
+    public ResponseModel<List<Overtimeleave>> getOLList1name(@RequestParam @Nullable String name, @RequestParam int pageSize, @RequestParam int pageNum){
         List<People> allPeople = peopleService.findAllPeople(name);
         List<Overtimeleave> overtimeleaves = new ArrayList<>();
         for (People people:allPeople
@@ -78,14 +80,14 @@ public class OLController {
         }
         ResponseModel<List<Overtimeleave>> listResponseModel = new ResponseModel<>();
 
-        listResponseModel.setData(overtimeleaves);
+        listResponseModel.setData(ListUtils.Pager(pageSize,pageNum,overtimeleaves));
         listResponseModel.setCode(ResultCode.SUCESS);
         return listResponseModel ;
     }
 
     @ApiOperation(value = "根据名字已审核查加班请假列表", notes = "")
     @PostMapping("/getolrecord2name")
-    public ResponseModel<List<Overtimeleave>> getOLList2name(@RequestParam  String name){
+    public ResponseModel<List<Overtimeleave>> getOLList2name(@RequestParam @Nullable String name,@RequestParam int pageSize,@RequestParam int pageNum){
         List<People> allPeople = peopleService.findAllPeople(name);
         List<Overtimeleave> overtimeleaves = new ArrayList<>();
         for (People people:allPeople
@@ -98,8 +100,9 @@ public class OLController {
         }
         ResponseModel<List<Overtimeleave>> listResponseModel = new ResponseModel<>();
 
-        listResponseModel.setData(overtimeleaves);
+        listResponseModel.setData(ListUtils.Pager(pageSize,pageNum,overtimeleaves));
         listResponseModel.setCode(ResultCode.SUCESS);
+
         return listResponseModel ;
     }
 }

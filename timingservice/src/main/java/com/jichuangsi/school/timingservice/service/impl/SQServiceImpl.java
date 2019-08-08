@@ -78,4 +78,14 @@ public class SQServiceImpl implements SQService{
     public List<SQFlie> getapprovedSQForName(String openId) {
         return sqRepostitory.findAllByOpenIdAndStuasOrStuas(openId,"1","2");
     }
+
+    @Override
+    public List<SQFlie> getAllsq() {
+        return sqRepostitory.findAll();
+    }
+
+    @Override
+    public List<SQFlie> getSQ2(String openId) {
+        return sqRepostitory.findAllByOpenId(openId);
+    }
 }

@@ -53,9 +53,10 @@ public class RuleController {
     public ResponseModel<String> updateRule(@RequestBody RuleModel2 rule){
         try{
             Rule rule1 = new Rule();
+            rule1.setId(Integer.parseInt(rule.getId()));
             rule1.setLongitudeLatitude(rule.getLongitudeLatitude());
             rule1.setStuas(rule.getStuas());
-            rule1.setTime(TimeUtils.gettime(rule.getTime()));
+            rule1.setTime(TimeUtils.gettime(rule.getTime())+TimeUtils.todayMorning());
             rule1.setWucha(rule.getWucha());
             rule1.setWifiName(rule.getWifiName());
             ruleService.updateRule(rule1);
@@ -71,7 +72,7 @@ public class RuleController {
             Rule rule1 = new Rule();
             rule1.setLongitudeLatitude(rule.getLongitudeLatitude());
             rule1.setStuas(rule.getStuas());
-            rule1.setTime(TimeUtils.gettime(rule.getTime()));
+            rule1.setTime(TimeUtils.gettime(rule.getTime())+TimeUtils.todayMorning());
             rule1.setWucha(rule.getWucha());
             rule1.setWifiName(rule.getWifiName());
             ruleService.insertRule(rule1);

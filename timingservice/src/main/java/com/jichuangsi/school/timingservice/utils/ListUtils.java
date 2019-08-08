@@ -15,9 +15,9 @@ public class ListUtils {
      * @param list  需要分页的集合
      * @return
      */
-    public static List<Object> Pager(int pageSize, int pageIndex, List<Object> list){
+    public static List Pager(int pageSize, int pageIndex, List list){
         //使用list 中的sublist方法分页
-        List<Object> dataList = null;
+        List dataList = null;
           // 每页显示多少条记录
  
         int currentPage; //当前第几页数据

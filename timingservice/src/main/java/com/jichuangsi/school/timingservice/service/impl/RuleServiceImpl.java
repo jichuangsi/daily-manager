@@ -72,7 +72,8 @@ public class RuleServiceImpl implements RuleService {
 
     @Override
     public void updateRule(Rule rule) {
-        ruleRepostitory.updateRule(rule.getWucha(),rule.getId(),rule.getTime(),rule.getStuas(),rule.getLongitudeLatitude(),rule.getWifiName() );
+//        ruleRepostitory.updateRule(rule.getWucha(),rule.getId(),rule.getTime(),rule.getStuas(),rule.getLongitudeLatitude(),rule.getWifiName() );
+        ruleRepostitory.save(rule);
     }
 
     @Override

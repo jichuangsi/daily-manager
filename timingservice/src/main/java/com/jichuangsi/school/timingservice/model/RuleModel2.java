@@ -2,11 +2,20 @@ package com.jichuangsi.school.timingservice.model;
 
 public class RuleModel2 {
 
+    private String id;
     private String time;
     private String wifiName;
     private String longitudeLatitude;
     private String wucha;
     private String stuas;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getTime() {
         return time;

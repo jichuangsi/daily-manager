@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-@Transactional
 public class PeopleServiceImpl implements PeopleService {
 
     @Resource
@@ -19,12 +18,12 @@ public class PeopleServiceImpl implements PeopleService {
 
     @Override
     public String findPeopleName(String openId) {
-        return  peopleRepostitory.findAllByOpenId(openId).getPeopleName();
+        return  peopleRepostitory.findOneByOpenId(openId).getPeopleName();
     }
 
     @Override
     public People findPeople(String openId) {
-        return peopleRepostitory.findAllByOpenId(openId);
+        return peopleRepostitory.findOneByOpenId(openId);
     }
 
     @Override
