@@ -57,18 +57,18 @@ layui.use(['form', 'table'], function() {
 		parseData: function(res) {
 			var arr;
 			var code;
-			var total;
+			var totalElements;
 			if(res.code == "0010") {
 				code = 0;
 				arr = res.data.content;
-				total = res.data.numberOfElements;
+				totalElements = res.data.totalElements;
 			} else if(res.code == '0031') {
 				code=0031
 			}
 			return {
 				"code": code,
 				"msg": res.msg,
-				"count": total,
+				"count": totalElements,
 				"data": arr
 			};
 		},

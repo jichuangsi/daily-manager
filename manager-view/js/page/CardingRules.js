@@ -66,6 +66,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 				}
 			]
 		],
+		toolbar: '#operation2',
 		page: false,
 		parseData: function(res) {
 			var arr, code, total;
@@ -91,44 +92,47 @@ layui.use(['form', 'table', 'laydate'], function() {
 		var longitudeLatitude = param.longitudeLatitude;
 		var zb = longitudeLatitude.split(',')
 		form.val('Mwifi', {
+			Mid:param.id,
 			MwifiName: param.wifiName,
 			Mwucha: param.wucha,
 			Mlat: zb[1],
 			Mlng: zb[0]
 		})
 	});
-	//修改今天规则
-	function MRules() {
+	form.on('submit(MRules)', function(data) {
+		var param =data.field;
 		if(param.stuas == -1) {
 			setMsg('请选择上下班', 2)
 			return false;
 		}
 		var longitudeLatitude = param.Mlng + ',' + param.Mlat;
 		var data = {
+			id:param.Mid,
 			time: param.MtimeString,
 			wifiName: param.MwifiName,
 			longitudeLatitude: longitudeLatitude,
 			stuas: param.Mstuas,
 			wucha: param.Mwucha
 		}
-		var dataList = [];
-		dataList.push(data);
 		$.ajax({
 			type: "post",
-			url: httpUrl() + "/rule/insertrule",
+			url: httpUrl() + "/rule/updaterule",
 			async: false,
 			headers: {
 				'accessToken': getToken()
 			},
 			contentType: 'application/json',
-			data: JSON.stringify(dataList),
+			data: JSON.stringify(data),
 			success: function(res) {
 				if(res.code == '0010') {
 					table.reload('demo');
+					layer.close(index);
 					layui.notice.success("提示信息:修改成功!");
 				} else if(res.code == '0031') {
+					layer.close(index);
 					layui.notice.info("提示信息：权限不足");
 				} else {
+					layer.close(index);
 					layui.notice.error("提示信息:修改失败!");
 				}
 			},
@@ -137,8 +141,15 @@ layui.use(['form', 'table', 'laydate'], function() {
 			}
 		})
 		return false;
+	})
+	//修改今天规则
+	init()
+	function init(){
+		var lat=$('input[name=lat]').val()
+		if(lat==null){
+			getWifiTemplate()
+		}
 	}
-
 	function getWifiTemplate() {
 		$.ajax({
 			type: "post",
@@ -151,6 +162,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 				if(res.code == '0010') {
 					var arr = res.data;
 					var longitudeLatitude;
+					console.log(arr)
 					var list;
 					if(arr.length > 0) {
 						list = arr[0];
@@ -213,7 +225,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 		})
 		return false;
 	});
-
+	//模板规则
 	table.render({
 		elem: '#today',
 		method: "post",
@@ -293,9 +305,46 @@ layui.use(['form', 'table', 'laydate'], function() {
 	table.on('row(today)', function(data) {
 		var param = data.data;
 		$(document).on('click', '#delRules', function() {
-			DelRules(param.id)
+			DelRules(param.id);
+		});
+		$(document).on('click', '#Start', function() {
+			console.log(param)
+			StartTemplate(param);
 		});
 	});
+	/*启动模板*/
+	function StartTemplate(param) {
+		layer.confirm('确认要启用改模板吗？', function(index) {
+			$.ajax({
+				type: "post",
+				url: httpUrl() + "/rule/rulefatherstopandstart",
+				async: false,
+				headers: {
+					'accessToken': getToken()
+				},
+				contentType: 'application/json',
+				data: JSON.stringify(param),
+				success: function(res) {
+					if(res.code == '0010') {
+
+						layer.close(index);
+						table.reload('demo');
+						layui.notice.success("提示信息:启用成功!");
+
+					} else if(res.code == '0031') {
+						layer.close(index);
+						layui.notice.info("提示信息：权限不足");
+					} else {
+						layer.close(index);
+						layui.notice.error("提示信息:启用失败!");
+					}
+				},
+				error: function(res) {
+					setMsg(res.msg, 2)
+				}
+			})
+		})
+	}
 	/*删除模板规则*/
 	function DelRules(id) {
 		layer.confirm('确认要删除吗？', function(index) {

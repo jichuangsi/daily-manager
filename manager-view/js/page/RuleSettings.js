@@ -70,7 +70,6 @@ layui.use(['form', 'table', 'laydate'], function() {
 	//提交规则
 	form.on('submit(add)', function(data) {
 		var param = data.field;
-		console.log(param)
 		if(param.statusId == -1) {
 			setMsg('请选择上下班', 2)
 			return false;

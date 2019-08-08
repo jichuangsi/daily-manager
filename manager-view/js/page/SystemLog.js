@@ -4,6 +4,7 @@ layui.use(['form', 'table'], function() {
 	table.render({
 		elem: '#demo',
 		method: "get",
+		id:'idTest',
 		async: false,
 		url: httpUrl() + '/backuser/getOpLogByNameAndPage',
 		headers: {

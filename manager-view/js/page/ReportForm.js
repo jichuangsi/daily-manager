@@ -71,7 +71,11 @@ layui.use(['form', 'table', 'laydate'], function() {
 			timeStart: dateStart,
 			timeEnd: dateEnd,
 			name: ''
-		}
+		},
+		request: {
+			pageName: 'pageNum',
+			limitName: "pageSize"
+		},
 	});
 	laydate.render({
 		elem: '#test',

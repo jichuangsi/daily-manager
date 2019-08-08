@@ -4,6 +4,7 @@ layui.use(['form', 'table'], function() {
 	table.render({
 		elem: '#demo',
 		method: "post",
+		id:'idTest',
 		async: false,
 		url: httpUrl() + '/kq/getTDBB',
 		cols: [
@@ -31,10 +32,10 @@ layui.use(['form', 'table'], function() {
 					field: 'stuas',
 					title: '考勤',
 					align: 'center',
-					templet:function(d){
-						if(d.stuas==1){
+					templet: function(d) {
+						if(d.stuas == 1) {
 							return "上班打卡"
-						}else if(d.stuas==2){
+						} else if(d.stuas == 2) {
 							return "下班打卡"
 						}
 					}
@@ -54,7 +55,7 @@ layui.use(['form', 'table'], function() {
 					field: 'stuas2',
 					title: '状态',
 					align: 'center',
-					toolbar:'#colorStatus'
+					toolbar: '#colorStatus'
 				}
 			]
 		],
@@ -75,7 +76,22 @@ layui.use(['form', 'table'], function() {
 				"count": total,
 				"data": arr
 			};
+		},
+		request: {
+			pageName: 'pageNum',
+			limitName: "pageSize"
 		}
-
 	});
+	form.on('submit(sreach)', function(data) {
+		var param = data.field;
+		table.reload('idTest', {
+			url: httpUrl() + '/kq/getTDBB',
+			header: {
+				'accessToken': getToken()
+			},
+			where: {
+				name: param.name
+			}
+		});
+	})
 })
