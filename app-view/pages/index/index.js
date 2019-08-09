@@ -23,15 +23,18 @@ Page({
     departmenttext:'',
     positiontext:'',
     positionstate:0,
+    cdstate:false,
     clickstate:false,
     Obtaintext:'请点击获取当前位置',
     remindstate:false,
     rankstate:false,
     wzstate:false,
+    wzstate1:false,
     wfstate:false,
     loginstate:false,
     departmentstate:false,
     positionstate:false,
+    dakastate:false,
     bmlist:[],
     zwlist:[],
     dklist:[],
@@ -84,6 +87,13 @@ Page({
       positionstate: !this.data.positionstate
     })
   },
+  AppealgoId:function(e){
+    let id = e.currentTarget.dataset.id
+    clearInterval(this.data.timer)
+    wx.navigateTo({
+      url: `../Appeal/Appeal?id=${id}`
+    })
+  },
   Appealgo: function (){
     this.setData({
       remindstate:false
@@ -97,6 +107,7 @@ Page({
     console.log(this.data.Obtaintext)
     let self = this
     let data = new Date()
+    let year = data.getFullYear()
     let month = (data.getMonth()+1)>=10?(data.getMonth()+1):'0'+(data.getMonth()+1)
     let day = data.getDate()>=10?data.getDate():'0'+data.getDate()
     let week = data.getDay()
@@ -104,7 +115,7 @@ Page({
     let m = data.getMinutes()>=10?data.getMinutes():'0'+data.getMinutes()
     let s = data.getSeconds()>=10?data.getSeconds():'0'+data.getSeconds()
     self.setData({
-      date:month+'月'+day+'日',
+      date:year + '年' +month+'月'+day+'日',
       time : h+':'+m+':'+s
     })
     switch (week){
@@ -187,25 +198,37 @@ Page({
           clickstate : true
         })
         wx.getLocation({
-          type: 'wgs84',
+          type: 'gcj02',
+          altitude:true,
           success (res) {
             console.log(res)
             self.setData({
                 Obtaintext : '定位成功...',
                 clickstate : false,
-                wzstate:true,
+                wzstate: true,
+                wzstate1: false,
                 latitude: res.latitude,
                 longitude: res.longitude
             })
+            wx.setStorage({
+              key: 'wz',
+              data: {
+                latitude: res.latitude,
+                longitude: res.longitude,
+                time: Date.parse(new Date())
+              },
+            })
+            
           },
           fail(err){
               self.setData({
                 Obtaintext : '请点击获取当前位置',
-                clickstate : false
+                clickstate : false,
+                wzstate1:true
               })
             }
           })
-        self.wf()
+        // self.wf()
       },
       wf: function (){
         // wx.stopWifi({
@@ -225,6 +248,13 @@ Page({
                     wifiName: res.wifi.SSID,
                     wfstate:true
                   })
+                wx.setStorage({
+                  key: 'wf',
+                  data: {
+                    wifiName: res.wifi.SSID,
+                    time: Date.parse(new Date())
+                  },
+                })
                   console.log(self.data.wifiName)
               },
               fail(err){
@@ -253,50 +283,96 @@ Page({
         console.log(this.data.longitude+','+this.data.latitude)
         let self = this
         let newtime = Date.parse(new Date())
-        console.log(newtime)
-        if(!self.data.wfstate&&!self.data.wzstate){
+        if (self.data.wifiName == '' && self.data.latitude == ''){
+          self.wf()
           wx.showToast({
-                   title:"请定位或连接指定WIFI",
-                   icon: 'none',//图标，支持"success"、"loading" 
-                   duration: 2000,//提示的延迟时间，单位毫秒，默认：1500 
-                 })
-        }else{
-          wx.request({
-            url: app.data.API +'/kq/daka', //仅为示例，并非真实的接口地址
-            method: 'POST',
-            data: {
-              wifiName: self.data.wifiName,
-              longitudeLatitude: self.data.longitude+','+self.data.latitude,
-              openId:self.data.openId
-            },
-            header: {
-              'content-type': 'application/x-www-form-urlencoded' // 默认值
-            },
-            success (res) {
-              console.log(res.data.msg)
-              if(res.data.data[0] == '0'){
-                wx.showToast({
-                  title: "成功",
-                  icon: 'success',//图标，支持"success"、"loading" 
-                  duration: 1500,//提示的延迟时间，单位毫秒，默认：1500 
-                })
-                self.getrule()
-              } else{
-                self.setData({
-                  remindstate : true,
-                  ruleId:id,
-                  msg:res.data.msg
-                })
-                console.log(self.data.msg)
-              }
-            }
+            title: "获取wifi名字成功，请打卡",
+            icon: 'success',//图标，支持"success"、"loading" 
+            duration: 2000,//提示的延迟时间，单位毫秒，默认：1500 
           })
+        }else{
+          // !self.data.wfstate && !self.data.wzstate &&
+          if (!self.data.dakastate) {
+            wx.showToast({
+              title: "请定位或连接指定WIFI",
+              icon: 'none',//图标，支持"success"、"loading" 
+              duration: 2000,//提示的延迟时间，单位毫秒，默认：1500 
+            })
+          } else {
+            self.setData({
+              dakastate: false
+            })
+            wx.request({
+              url: app.data.API + '/kq/daka', //仅为示例，并非真实的接口地址
+              method: 'POST',
+              data: {
+                ruleId: id,
+                wifiName: self.data.wifiName,
+                longitudeLatitude: self.data.longitude + ',' + self.data.latitude,
+                openId: self.data.openId
+              },
+              header: {
+                'content-type': 'application/x-www-form-urlencoded' // 默认值
+              },
+              success(res) {
+                console.log(res)
+
+                if (res.data.code == '0050') {
+                  self.setData({
+                    dakastate: true
+                  })
+
+                  wx.showToast({
+                    title: "打卡失败",
+                    icon: 'none',//图标，支持"success"、"loading" 
+                    duration: 2500,//提示的延迟时间，单位毫秒，默认：1500 
+                  })
+                }
+                if (res.data.data[0] == '0' || res.data.data[0] == '2' || res.data.data[0] == '3') {
+                  wx.showToast({
+                    title: "成功",
+                    icon: 'success',//图标，支持"success"、"loading" 
+                    duration: 1500,//提示的延迟时间，单位毫秒，默认：1500 
+                  })
+                  self.setData({
+                    ruleId: id,
+                  })
+                  self.getrule()
+                  if (res.data.data[0] == '2') {
+                    self.setData({
+                      cdstate: true
+                    })
+                  }
+                } else {
+                  self.setData({
+                    remindstate: true,
+                    ruleId: id,
+                    msg: res.data.msg,
+                    dakastate: true
+                  })
+                }
+              },
+              fail(err) {
+                self.setData({
+                  dakastate: true
+                })
+              }
+            })
+          }
         }
       },
       remindstateout: function (){
         this.setData({
           remindstate : false
         })
+      },
+      cdstateout: function () {
+        this.setData({
+          cdstate: false
+        })
+      },
+      cdclcik:function(){
+
       },
       rankcilck: function (){
         this.setData({
@@ -313,7 +389,6 @@ Page({
       },
   login(){
     let self = this
-    console.log(11111)
     wx.login({
       success(res) {
           console.log(res)
@@ -329,19 +404,14 @@ Page({
               self.setData({
                 openId : res.data.data.openid,
               })
-              wx.setStorage({
-                key: 'userid',
-                data: {
-                   id:res.data.data.openid
-                },
-              })
+              
               self.getrule()
               wx.request({
                 url: app.data.API +`/staff/loginStaff/${res.data.data.openid}`,
                 header: {
                   'content-type': 'application/json' // 默认值
                 },
-                success(res){
+                success(res) {
                   console.log(res)
                     self.setData({
                       bmlist : res.data.data.departmentList,
@@ -359,6 +429,13 @@ Page({
                   if(res.data.data.resultCode == 1){
                     self.setData({
                       loginstate : true
+                    })
+                  } else if (res.data.data.resultCode == 2){
+                    wx.setStorage({
+                      key: 'userid',
+                      data: {
+                        id: self.data.openId
+                      },
                     })
                   }
                 }
@@ -408,6 +485,12 @@ Page({
       success(res){
         console.log(res)
         if(res.data.code == "0010"){
+          wx.setStorage({
+            key: 'userid',
+            data: {
+              id: self.data.openId
+            },
+          })
         self.setData({
           loginstate:false
         })
@@ -439,14 +522,18 @@ Page({
       },
       success(res){
         console.log(res)
-        let arr = res.data.data
-        for(let i = 0; i<arr.length;i++){
-          arr[i].sj = self.timestampToTime(arr[i].time)
+        if(res.data.code =='0010'){
+          let arr = res.data.data
+          for (let i = 0; i < arr.length; i++) {
+            arr[i].sj = self.timestampToTime(arr[i].time)
+          }
+          self.setData({
+            dklist: arr,
+            dakastate:true
+          })
+          console.log(self.data.dklist)
         }
-        self.setData({
-          dklist:arr
-        })
-        console.log(self.data.dklist)
+
       }
     })
   },
@@ -464,16 +551,46 @@ Page({
     let self = this
     self.getdata()
     self.gettime()
-
     wx.getStorage({
       key: 'userid',
       success: function (res) {
         self.setData({
           openId: res.data.id
         })
+        self.getrule()
       },
       fail(err) {
         self.login()
+      }
+    })
+    wx.getStorage({
+      key: 'wz',
+      success: function (res) {
+        console.log(Date.parse(new Date()) - res.data.time)
+        if (Date.parse(new Date()) - res.data.time <= 900000) {
+          self.setData({
+            Obtaintext: '定位成功...',
+            latitude: res.data.latitude,
+            longitude: res.data.longitude
+          })
+        }
+      },
+      fail(err) {
+      }
+    })
+    wx.getStorage({
+      key: 'wf',
+      success: function (res) {
+        if (Date.parse(new Date()) - res.data.time <= 900000) {
+          self.setData({
+            wifiName: res.data.wifiName
+          })
+        }else{
+          self.wf()
+        }
+      },
+      fail(err) {
+        self.wf()
       }
     })
   },

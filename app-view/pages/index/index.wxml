@@ -12,7 +12,7 @@
             <view>考勤规则：根据定位和连接指定WIFI打卡</view>
           </view>
       </view>
-      <view class="Obtain">
+      <view class="{{wzstate1?'Obtain red':'Obtain'}}">
         <view>
           {{Obtaintext}}
         </view>
@@ -31,17 +31,26 @@
         <view class="clock_box" wx:for="{{dklist}}">
           <view class="clock_left">
             <view wx:if="{{item.stuas == 1}}"><image src="../../static/images/zao.png" /></view>
-            <view wx:if="{{item.stuas == 2}}"><image src="../../static/images/zao.png" /></view>
+            <view wx:if="{{item.stuas == 2}}"><image src="../../static/images/wan.png" /></view>
             <view>
               <span wx:if="{{item.stuas == 1}}">上班</span>
               <span wx:if="{{item.stuas == 2}}">下班</span>
               <span>{{item.sj}}</span>
             </view>
           </view>
+          <view class="clock_right clock_red" data-id = "{{item.id}}" bindtap="AppealgoId" wx:if="{{item.stuas2 == 3}}">
+            早退
+          </view>
+          <view class="clock_right clock_Appeal" data-id = "{{item.id}}" bindtap="AppealgoId" wx:if="{{item.stuas2 == 2||item.stuas2 == 3}}">
+            申诉
+          </view>
           <view class="clock_right" data-id = "{{item.id}}" bindtap="clock"  wx:if="{{item.stuas2 == 1}}">
             打卡
           </view>
-          <view class="clock_right hui" wx:if="{{item.stuas2 == 0}}">
+          <view class="clock_right" data-id = "{{item.id}}" bindtap="clock"  wx:if="{{item.stuas2 == 3}}">
+            再打卡
+          </view>
+          <view class="clock_right hui" wx:if="{{item.stuas2 == 0||item.stuas2 == 2}}">
             已打卡
           </view>
         </view>
@@ -58,6 +67,14 @@
             <view class="left_btn" bindtap="Appealgo">去申诉</view>
             <view class="right_btn" bindtap="remindstateout">重新考勤</view>
           </view>
+        </view>
+      </view>
+      <view class="remind" wx:if="{{cdstate}}">
+        <view class="remindbox">
+          <view class="none" bindtap="cdstateout">x</view>
+          <image src="../../static/images/z.png" alt="" />
+          <view class="text">您已迟到，下次记得早一点。</view>
+          <view class='btn blue' bindtap='Appealgo'>申诉</view>
         </view>
       </view>
       <view class="remind" wx:if="{{loginstate}}">
@@ -107,7 +124,7 @@
       <view class="ranklist" wx:if="{{rankstate}}">
         <view>
           <span>名次</span>
-          <span>员工名字</span>
+          <span class="text_i">员工名字</span>
           <span>打卡时间</span>
         </view>
         <view wx:for="{{ranklist}}">
@@ -118,7 +135,7 @@
           <em wx:if="{{index > 2}}">{{index+1}}</em>
           </span>
           <span>
-            <image :src="item.userimg" alt="" />
+            <!-- <image :src="item.userimg" alt="" /> -->
             {{item.people.peopleName}}
           </span>
           <span>{{item.time}}</span>

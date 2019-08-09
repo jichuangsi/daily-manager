@@ -64,6 +64,9 @@ page {
   color: #666666;
   flex: 1;
 }
+.red view:first-child{
+  color: rgba(255, 63, 63, 0.8);
+}
 .Obtain view:last-child{
   color: #03A3FF;
   /* width: 90px; */
@@ -138,6 +141,17 @@ page {
 .clock .clock_box .clock_right:active {
   background-color: #B8B8B8;
 }
+.clock .clock_box .clock_Appeal{
+  margin-right: 10rpx;
+}
+.clock .clock_box .clock_red{
+  width: 100rpx;
+  margin-right: 10rpx;
+  color: red;
+  /* padding: 16rpx 50rpx; */
+  background-color: #fff;
+  border: 1px solid red;
+}
 .clock .clock_box .hui {
   background-color: #B8B8B8;
 }
@@ -189,6 +203,17 @@ page {
   justify-content: space-between;
   padding: 0px 66rpx;
   box-sizing: border-box;
+}
+.remind .remindbox .blue {
+  width: 80%;
+  display: block;
+  margin: 0 auto;
+  color: #fff;
+  line-height: 100rpx;
+  text-align: center;
+  background-color: #03A3FF;
+  letter-spacing: 2px;
+  border-radius: 8rpx;
 }
 .remind .remindbox .left_btn {
   width: 220rpx;
@@ -336,6 +361,7 @@ page {
 .ranklist view span:nth-child(2){
   flex: 1;
   text-indent: 20rpx;
+  /* text-align: center; */
 }
 .ranklist view span:nth-child(2) image{
   width: 64rpx;

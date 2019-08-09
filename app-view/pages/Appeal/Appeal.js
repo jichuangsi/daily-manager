@@ -1,5 +1,6 @@
 //logs.js
 
+const app = getApp()
 Page({
   data: {
     num:0,
@@ -94,6 +95,11 @@ Page({
               icon: 'success',//图标，支持"success"、"loading" 
               duration: 1500,//提示的延迟时间，单位毫秒，默认：1500 
             })
+            setTimeout(function(){
+              wx.redirectTo({
+                url: '../index/index'
+              })
+            },1000)
           for(let i = 0; i<arr.length;i++){
             self.savefile(arr[i],res.data.uuid)
           }

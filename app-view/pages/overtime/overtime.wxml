@@ -11,7 +11,7 @@
     </picker>
       <view class="Reason">
         <h3>加班原因:</h3>
-        <textarea placeholder="请输入加班原因..." bindinput="textnum" value='text'></textarea>
+        <textarea placeholder="请输入加班原因..." bindinput="textnum" value="{{text}}"></textarea>
         <view class="fr"><span>{{num}}</span>/140字</view>
       </view>
     <view class="btn" bindtap='btn'>

@@ -1,5 +1,6 @@
 //logs.js
 
+const app = getApp()
 Page({
     data: {
       openId:1,
@@ -36,12 +37,7 @@ Page({
               self.setData({
                 openId: res.data.data.openid,
               })
-              wx.setStorage({
-                key: 'userid',
-                data: {
-                  id: res.data.data.openid
-                },
-              })
+              self.getdata()
               wx.request({
                 url: app.data.API +`/staff/loginStaff/${res.data.data.openid}`,
                 header: {
@@ -65,6 +61,13 @@ Page({
                   if (res.data.data.resultCode == 1) {
                     self.setData({
                       loginstate: true
+                    })
+                  } else if (res.data.data.resultCode == 2) {
+                    wx.setStorage({
+                      key: 'userid',
+                      data: {
+                        id: self.data.openId
+                      },
                     })
                   }
                 }
@@ -99,6 +102,12 @@ Page({
       success(res) {
         console.log(res)
         if (res.data.code == "0010") {
+          wx.setStorage({
+            key: 'userid',
+            data: {
+              id: self.data.openId
+            },
+          })
           self.setData({
             loginstate: false
           })
@@ -213,6 +222,7 @@ Page({
             let arr = res.data.data
             for (let i = 0; i < arr.length; i++) {
               arr[i].time = self.timestampToTime(arr[i].time)
+              arr[i].check = false
             }
             self.setData({
               navList: arr
@@ -235,6 +245,7 @@ Page({
             let arr = res.data.data
             for (let i = 0; i < arr.length; i++) {
               arr[i].time = self.timestampToTime(arr[i].time)
+              arr[i].check = false
             }
             self.setData({
               list: arr
@@ -255,13 +266,13 @@ Page({
   },
     onLoad: function () {
       let self = this
-      self.getdata()
       wx.getStorage({
         key: 'userid',
         success: function (res) {
           self.setData({
-            openId: res.data.id
+            openId:res.data.id
           })
+          self.getdata()
         },
         fail(err) {
           self.login()

@@ -1,3 +1,5 @@
+
+const app = getApp()
 Page({
   data: {
     StartTime: '17:30',
@@ -37,12 +39,6 @@ Page({
               self.setData({
                 openId : res.data.data.openid,
               })
-              wx.setStorage({
-                key: 'userid',
-                data: {
-                   id:res.data.data.openid
-                },
-              })
               wx.request({
                 url: app.data.API +`/staff/loginStaff/${res.data.data.openid}`,
                 header: {
@@ -66,6 +62,13 @@ Page({
                   if(res.data.data.resultCode == 1){
                     self.setData({
                       loginstate : true
+                    })
+                  } else if (res.data.data.resultCode == 2) {
+                    wx.setStorage({
+                      key: 'userid',
+                      data: {
+                        id: self.data.openId
+                      },
                     })
                   }
                 }
@@ -100,6 +103,12 @@ Page({
       success(res) {
         console.log(res)
         if (res.data.code == "0010") {
+          wx.setStorage({
+            key: 'userid',
+            data: {
+              id: self.data.openId
+            },
+          })
           self.setData({
             loginstate: false
           })
@@ -240,12 +249,16 @@ Page({
           })
           if (res.data.code == '0010') {
             self.setData({
-              text: ''
+              text: '',
+              num:0
             })
             wx.showToast({
               title: "成功",
               icon: 'success',//图标，支持"success"、"loading" 
               duration: 1500,//提示的延迟时间，单位毫秒，默认：1500 
+            })
+            wx.redirectTo({
+              url: '../index/index'
             })
           } else {
             wx.showToast({

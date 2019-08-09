@@ -1,3 +1,5 @@
+
+const app = getApp()
 Page({
     data: {
         StartTime: '17:30',
@@ -64,12 +66,16 @@ Page({
             })
             if (res.data.code == '0010') {
               self.setData({
-                text: ''
+                text: '',
+                num: 0
               })
               wx.showToast({
                 title: "成功",
                 icon: 'success',//图标，支持"success"、"loading" 
                 duration: 1500,//提示的延迟时间，单位毫秒，默认：1500 
+              })
+              wx.navigateTo({
+                url: '../index/index'
               })
             } else {
               wx.showToast({
@@ -88,7 +94,7 @@ Page({
         key: 'userid',
         success: function (res) {
           self.setData({
-            openId: res.data.id
+            openId:res.data.id
           })
         },
       })
