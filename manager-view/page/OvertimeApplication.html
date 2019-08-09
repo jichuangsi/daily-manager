@@ -15,7 +15,7 @@
 		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 		<script type="text/javascript" src="../js/xadmin.js"></script>
 		<script type="text/javascript" src="../js/util.js"></script>
-		<script type="text/javascript" src="../js/Configuration.js" ></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
 		<script type="text/javascript" src="../js/page/OvertimeApplication.js"></script>
 	</head>
 	<style type="text/css">
@@ -40,18 +40,19 @@
 		<div class="x-body">
 			<div class="layui-row">
 				<fieldset class="layui-elem-field">
-					<legend>加班申请列表</legend>
+					<legend>申请列表</legend>
 					<div class="layui-field-box">
 						<div class="layui-row">
 							<form class="layui-form layui-col-md12">
 								<div class="layui-input-inline">
-									<input type="text" name="userName" placeholder="姓名" autocomplete="off" class="layui-input">
+									<input type="text" name="name" placeholder="姓名" autocomplete="off" class="layui-input">
 								</div>
 								<div class="layui-input-inline">
-									<select name="statusId" lay-verify="required" lay-filter="setStatus">
+									<select name="status" lay-verify="required" lay-filter="status">
 										<option value="-1">审核状态</option>
+										<option value="0">待审核</option>
 										<option value="1">已审核</option>
-										<option value="2">待审核</option>
+										<!--<option value="2">驳回</option>-->
 									</select>
 								</div>
 								<div class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></div>
@@ -62,10 +63,12 @@
 				</fieldset>
 			</div>
 		</div>
-		<script type="text/html" id="operation">
-			<span class="layui-btn-sm layui-btn">同意</span>
-			<span class="layui-btn-sm layui-btn">驳回</span>
-		</script>
+		<!--<script type="text/html" id="operation">
+			{{# if(d.overtimeleave.stuas2==1 &&d.overtimeleave.stuas2=2){ }}
+			{{# } else if(d.overtimeleave.stuas2==0){ }}
+			<span class="layui-btn-sm layui-btn" id="Agree">同意</span>
+			<span class="layui-btn-sm layui-btn" id="Reject">驳回</span> {{# } }}		
+		</script>-->
 	</body>
 
 </html>

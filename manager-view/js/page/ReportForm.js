@@ -6,16 +6,18 @@ layui.use(['form', 'table', 'laydate'], function() {
 	date.setMonth(date.getMonth() - 1);
 	var dateStart = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 	var dateEnd = date.getFullYear() + "-" + (date.getMonth() + 2) + "-" + date.getDate();
+	console.log(getToken())
 	table.render({
 		elem: '#demo',
 		method: "post",
 		async: false,
-		id: 'idTest',
 		url: httpUrl() + '/kq/getBB',
-		header: {
+		id: 'idTest',
+		headers: {
 			'content-type': 'application/x-www-form-urlencoded',
 			'accessToken': getToken()
 		},
+		id: 'idTest',
 		cols: [
 			[{
 					field: 'id',
@@ -50,7 +52,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 			]
 		],
 		toolbar: '#operation',
-		page: false,
+		page: true,
 		parseData: function(res) {
 			var arr;
 			var code;
@@ -75,7 +77,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 		request: {
 			pageName: 'pageNum',
 			limitName: "pageSize"
-		},
+		}
 	});
 	laydate.render({
 		elem: '#test',

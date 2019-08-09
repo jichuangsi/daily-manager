@@ -101,10 +101,45 @@ layui.use(['form', 'table', 'laydate'], function() {
 			Mlat: zb[1],
 			Mlng: zb[0]
 		})
+		$(document).on('click', '#delTodayRules', function() {
+			DelTodayRules(param.id);
+		});
 	});
+	//删除当天的模板
+	function DelTodayRules(id) {
+		layer.confirm('确认要删除吗？', function(index) {
+			$.ajax({
+				type: "post",
+				url: httpUrl() + "/rule/delrule2?ruleid=" + id,
+				async: false,
+				headers: {
+					'content-type': 'application/x-www-form-urlencoded',
+					'accessToken': getToken()
+				},
+				success: function(res) {
+					if(res.code == '0010') {
+						table.reload('demo');
+						layer.close(index);
+						layui.notice.success("提示信息:删除成功!");
+					} else if(res.code == '0031') {
+						layer.close(index);
+						layui.notice.info("提示信息：权限不足");
+					} else {
+						layer.close(index);
+						table.reload('demo');
+						layui.notice.error("提示信息:删除失败啦!");
+					}
+				},
+				error: function(res) {
+					setMsg(res.msg, 2)
+				}
+			})
+		})
+
+	}
 	form.on('submit(MRules)', function(data) {
 		var param = data.field;
-		if(param.stuas == -1) {
+		if(param.Mstuas == -1) {
 			setMsg('请选择上下班', 2)
 			return false;
 		}
@@ -289,7 +324,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 							var afterHour = total - day * 24 * 60 * 60 - hour * 60 * 60;
 							var min = parseInt(afterHour / 60);
 							var afterMin = total - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60;
-							return hour + '点' + min + "分" + afterHour+"秒"
+							return hour + '点' + min + "分" + afterMin + "秒"
 						} else {
 							return "-"
 						}
@@ -329,15 +364,15 @@ layui.use(['form', 'table', 'laydate'], function() {
 		});
 		$(document).on('click', '#Start', function() {
 			param.qiting = 1
-			StartTemplate("确认要启用该模板吗",param);
+			StartTemplate("确认要启用该模板吗", param);
 		});
 		$(document).on('click', '#end', function() {
 			param.qiting = 2;
-			StartTemplate('确认要停用该模板吗',param);
+			StartTemplate('确认要停用该模板吗', param);
 		});
 	});
 	/*启动模板*/
-	function StartTemplate(msg,param) {
+	function StartTemplate(msg, param) {
 		layer.confirm(msg, function(index) {
 			$.ajax({
 				type: "post",

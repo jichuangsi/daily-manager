@@ -58,6 +58,7 @@
 					<script type="text/html" id="operation">
 						<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="update()">修改</span>
 						<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="dept()">添加</span>
+						<span class="layui-btn-sm layui-btn layui-btn layui-btn-danger" id="delTodayRules">删除</span>
 					</script>
 					<script type="text/html" id="operation2">
 						<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="dept()">添加</span>
@@ -121,7 +122,7 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">时间：</label>
 				<div class="layui-input-block widths">
-					<input type="text" name="timeString" autocomplete="off" class="layui-input time" placeholder="选择时间" lay-verify="required">
+					<input type="text" name="timeString"readonly="readonly" autocomplete="off" class="layui-input time" placeholder="选择时间" lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
