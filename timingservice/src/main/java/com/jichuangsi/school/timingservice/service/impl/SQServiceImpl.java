@@ -88,4 +88,9 @@ public class SQServiceImpl implements SQService{
     public List<SQFlie> getSQ2(String openId) {
         return sqRepostitory.findAllByOpenId(openId);
     }
+
+    @Override
+    public void SSSH(SQFlie sqFlie) {
+        sqRepostitory.save(sqFlie);
+    }
 }

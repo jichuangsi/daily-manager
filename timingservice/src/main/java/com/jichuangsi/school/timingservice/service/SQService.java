@@ -30,4 +30,6 @@ public interface SQService {
     List<SQFlie> getAllsq();
 
     List<SQFlie> getSQ2(String openId);
+
+    void SSSH(SQFlie sqFlie);
 }

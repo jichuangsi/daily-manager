@@ -78,6 +78,16 @@ public class RuleController {
             return ResponseModel.fail("", ResultCode.PARAM_ERR);
         }
     }
+    @ApiOperation(value = "删除今日规则", notes = "")
+    @PostMapping("/delrule2")
+    public ResponseModel<String> delRule2(@RequestParam String ruleid){
+        try{
+            ruleService.delRule2(ruleid);
+            return ResponseModel.sucess("",ResultCode.SUCESS);
+        }catch (Exception e){
+            return ResponseModel.fail("", ResultCode.PARAM_ERR);
+        }
+    }
 
     @ApiOperation(value = "删除模板规则", notes = "")
     @PostMapping("/delrule")

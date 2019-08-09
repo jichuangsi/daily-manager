@@ -15,4 +15,6 @@ public interface PeopleService {
     List<People> findAllPeople(String name);
 
     List<People> findAll();
+
+    List<People> findForD(String d);
 }

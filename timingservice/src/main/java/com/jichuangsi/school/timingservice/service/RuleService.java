@@ -39,4 +39,6 @@ public interface RuleService {
     Rule insertRule(Rule rule);
 
     void ruleFatherStopAndStart(RuleFather ruleFather);
+
+    void delRule2(String ruleid);
 }

@@ -28,4 +28,5 @@ public interface PeopleRepostitory extends JpaRepository<People,String>{
     int updateJSQXforOPENID(String jurisdiction, String wechat);
 
 
+    List<People> findAllByDepartment(String d);
 }

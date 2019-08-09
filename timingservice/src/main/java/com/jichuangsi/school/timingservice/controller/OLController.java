@@ -41,6 +41,15 @@ public class OLController {
         return stringResponseModel;
     }
 
+    @ApiOperation(value = "加班请假审核", notes = "")
+    @PostMapping("/olsh")
+    public ResponseModel<String> AOLSH(@RequestBody Overtimeleave overtimeleave) {
+        olService.AOLSH(overtimeleave);
+        ResponseModel<String> stringResponseModel = new ResponseModel<>();
+        stringResponseModel.setMsg("ok");
+        stringResponseModel.setCode(ResultCode.SUCESS);
+        return stringResponseModel;
+    }
     @ApiOperation(value = "根据openid查加班请假列表", notes = "")
     @PostMapping("/getolrecord")
     public ResponseModel<List<Overtimeleave>> getOLList(@RequestParam String openId) {
@@ -73,7 +82,7 @@ public class OLController {
                 }
 
                 listResponseModel.setData(ListUtils.Pager(pageSize, pageNum, overtimeleaveModels));
-                listResponseModel.setPageSize(pageSize);
+                listResponseModel.setPageSize(overtimeleaveModels.size());
                 listResponseModel.setPageNum(pageNum);
                 listResponseModel.setCode(ResultCode.SUCESS);
                 return listResponseModel;
@@ -98,7 +107,7 @@ public class OLController {
                     }
                 }
                 listResponseModel.setData(ListUtils.Pager(pageSize, pageNum, overtimeleaveModels));
-                listResponseModel.setPageSize(pageSize);
+                listResponseModel.setPageSize(overtimeleaveModels.size());
                 listResponseModel.setPageNum(pageNum);
                 listResponseModel.setCode(ResultCode.SUCESS);
                 return listResponseModel;
@@ -122,7 +131,7 @@ public class OLController {
                 }
 
                 listResponseModel.setData(overtimeleaveModels);
-                listResponseModel.setPageSize(pageSize);
+                listResponseModel.setPageSize(overtimeleaveModels.size());
                 listResponseModel.setPageNum(pageNum);
                 listResponseModel.setCode(ResultCode.SUCESS);
                 return listResponseModel;
@@ -147,7 +156,7 @@ public class OLController {
                     }
                 }
                 listResponseModel.setData(ListUtils.Pager(pageSize, pageNum, overtimeleaveModels));
-                listResponseModel.setPageSize(pageSize);
+                listResponseModel.setPageSize(overtimeleaveModels.size());
                 listResponseModel.setPageNum(pageNum);
                 listResponseModel.setCode(ResultCode.SUCESS);
                 return listResponseModel;
@@ -171,7 +180,7 @@ public class OLController {
                     }
 
                     listResponseModel.setData(ListUtils.Pager(pageSize, pageNum, overtimeleaveModels));
-                    listResponseModel.setPageSize(pageSize);
+                    listResponseModel.setPageSize(overtimeleaveModels.size());
                     listResponseModel.setPageNum(pageNum);
                     listResponseModel.setCode(ResultCode.SUCESS);
 
@@ -197,7 +206,7 @@ public class OLController {
                         }
                     }
                     listResponseModel.setData(ListUtils.Pager(pageSize,pageNum,overtimeleaveModels));
-                    listResponseModel.setPageSize(pageSize);
+                    listResponseModel.setPageSize(overtimeleaveModels.size());
                     listResponseModel.setPageNum(pageNum);
                     listResponseModel.setCode(ResultCode.SUCESS);
                     return listResponseModel ;

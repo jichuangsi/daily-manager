@@ -35,4 +35,11 @@ public class PeopleServiceImpl implements PeopleService {
     public List<People> findAll() {
         return peopleRepostitory.findAll();
     }
+
+    @Override
+    public List<People> findForD(String d) {
+        return peopleRepostitory.findAllByDepartment(d);
+    }
+
+
 }

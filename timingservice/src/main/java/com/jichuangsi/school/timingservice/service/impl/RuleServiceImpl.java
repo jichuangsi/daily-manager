@@ -112,5 +112,11 @@ public class RuleServiceImpl implements RuleService {
         rfRepostitory.save(ruleFather);
     }
 
+    @Override
+    public void delRule2(String ruleid) {
+        Integer i=Integer.parseInt(ruleid);
+        ruleRepostitory.deleteById(i);
+    }
+
 
 }

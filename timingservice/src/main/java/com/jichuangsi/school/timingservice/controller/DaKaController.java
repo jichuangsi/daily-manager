@@ -302,52 +302,18 @@ public class DaKaController {
 
     @ApiOperation(value = "今日报表", notes = "")
     @PostMapping("/getTDBB")
-    public ResponseModel<List<ReportFormModel2>> getTDBB(){
-        try{
-            List<People> peopleList = peopleService.findAll();
-            List<ReportFormModel2> models = new ArrayList<>();
-            for ( People people:peopleList
-                    ) {
-
-                List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndStuas(people.getOpenId());
-
-                List<Rule> rulelistForTime = ruleService.getRulelistForTime();
-                if (allByOpenIdAndStuas.size()==rulelistForTime.size()){
-                    for (Rule rule :rulelistForTime
-                         ) {
-                        ReportFormModel2 rModel = new ReportFormModel2();
-                        rModel.setStuas(rule.getStuas());
-                        rModel.setStuas2("0");
-                        rModel.setTime(rule.getTime());
-
-
-                        Department byid = iDepartmentRepository.findByid(people.getDepartment());
-                        rModel.setDepartment(byid.getDeptname());
-                        rModel.setJurisdiction(people.getJurisdiction());
-                        rModel.setPeopleName(people.getPeopleName());
-                        models.add(rModel);
-                    }
-                }else {
-                    for (Rule rule:rulelistForTime
-                         ) {
-                        int i=0;
-                        for (Record record :allByOpenIdAndStuas
-                             ) {
-                            if (rule.getTime()==record.getTime()){
-                                    i++;
-                            }
-                        }
-                        if (i==0){
-                            ReportFormModel2 rModel = new ReportFormModel2();
-                            rModel.setStuas(rule.getStuas());
-                            rModel.setStuas2("1");
-                            rModel.setTime(rule.getTime());
-                            Department byid = iDepartmentRepository.findByid(people.getDepartment());
-                            rModel.setDepartment(byid.getDeptname());
-                            rModel.setJurisdiction(people.getJurisdiction());
-                            rModel.setPeopleName(people.getPeopleName());
-                            models.add(rModel);
-                        } else {
+    public ResponseModel<List<ReportFormModel2>> getTDBB(@RequestParam @Nullable String dpid, @RequestParam @Nullable String jpid,@RequestParam int pageSize ,@RequestParam @Nullable int pageNum){
+        if (jpid.equalsIgnoreCase("123456")||jpid.equalsIgnoreCase("40282b816c2878a9016c287b79470002")) {
+            try {
+                List<People> peopleList = peopleService.findAll();
+                List<ReportFormModel2> models = new ArrayList<>();
+                for (People people : peopleList
+                        ) {
+                    List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndStuas(people.getOpenId());
+                    List<Rule> rulelistForTime = ruleService.getRulelistForTime();
+                    if (allByOpenIdAndStuas.size() == rulelistForTime.size()) {
+                        for (Rule rule : rulelistForTime
+                                ) {
                             ReportFormModel2 rModel = new ReportFormModel2();
                             rModel.setStuas(rule.getStuas());
                             rModel.setStuas2("0");
@@ -358,16 +324,175 @@ public class DaKaController {
                             rModel.setPeopleName(people.getPeopleName());
                             models.add(rModel);
                         }
+                    } else {
+                        for (Rule rule : rulelistForTime
+                                ) {
+                            int i = 0;
+                            for (Record record : allByOpenIdAndStuas
+                                    ) {
+                                if (rule.getTime() == record.getTime()) {
+                                    i++;
+                                }
+                            }
+                            if (i == 0) {
+                                ReportFormModel2 rModel = new ReportFormModel2();
+                                rModel.setStuas(rule.getStuas());
+                                rModel.setStuas2("1");
+                                rModel.setTime(rule.getTime());
+                                Department byid = iDepartmentRepository.findByid(people.getDepartment());
+                                rModel.setDepartment(byid.getDeptname());
+                                rModel.setJurisdiction(people.getJurisdiction());
+                                rModel.setPeopleName(people.getPeopleName());
+                                models.add(rModel);
+                            } else {
+                                ReportFormModel2 rModel = new ReportFormModel2();
+                                rModel.setStuas(rule.getStuas());
+                                rModel.setStuas2("0");
+                                rModel.setTime(rule.getTime());
+                                Department byid = iDepartmentRepository.findByid(people.getDepartment());
+                                rModel.setDepartment(byid.getDeptname());
+                                rModel.setJurisdiction(people.getJurisdiction());
+                                rModel.setPeopleName(people.getPeopleName());
+                                models.add(rModel);
+                            }
+                        }
                     }
-                }
 //                rModel.setDepartment(people.getDepartment());
 //                rModel.setJurisdiction(people.getJurisdiction());
 //                rModel.setPeopleName(people.getPeopleName());
 //                models.add(rModel);
+                }
+                return ResponseModel.sucess("", models);
+            } catch (Exception e) {
+                return ResponseModel.fail("", ResultCode.SYS_ERROR);
             }
-            return ResponseModel.sucess("",models);
-        }catch (Exception e){
-            return ResponseModel.fail("",ResultCode.SYS_ERROR);
+        } else if (jpid.equalsIgnoreCase("40282b816c45f723016c46081cc70006")){
+            try {
+                String s="40282b816c45f723016c46081cc70006";
+                List<People> peopleList = peopleService.findForD(dpid);
+                List<ReportFormModel2> models = new ArrayList<>();
+                for (People people : peopleList
+                        ) {
+                    List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndStuas(people.getOpenId());
+                    List<Rule> rulelistForTime = ruleService.getRulelistForTime();
+                    if (allByOpenIdAndStuas.size() == rulelistForTime.size()) {
+                        for (Rule rule : rulelistForTime
+                                ) {
+                            ReportFormModel2 rModel = new ReportFormModel2();
+                            rModel.setStuas(rule.getStuas());
+                            rModel.setStuas2("0");
+                            rModel.setTime(rule.getTime());
+                            Department byid = iDepartmentRepository.findByid(people.getDepartment());
+                            rModel.setDepartment(byid.getDeptname());
+                            rModel.setJurisdiction(people.getJurisdiction());
+                            rModel.setPeopleName(people.getPeopleName());
+                            models.add(rModel);
+                        }
+                    } else {
+                        for (Rule rule : rulelistForTime
+                                ) {
+                            int i = 0;
+                            for (Record record : allByOpenIdAndStuas
+                                    ) {
+                                if (rule.getTime() == record.getTime()) {
+                                    i++;
+                                }
+                            }
+                            if (i == 0) {
+                                ReportFormModel2 rModel = new ReportFormModel2();
+                                rModel.setStuas(rule.getStuas());
+                                rModel.setStuas2("1");
+                                rModel.setTime(rule.getTime());
+                                Department byid = iDepartmentRepository.findByid(people.getDepartment());
+                                rModel.setDepartment(byid.getDeptname());
+                                rModel.setJurisdiction(people.getJurisdiction());
+                                rModel.setPeopleName(people.getPeopleName());
+                                models.add(rModel);
+                            } else {
+                                ReportFormModel2 rModel = new ReportFormModel2();
+                                rModel.setStuas(rule.getStuas());
+                                rModel.setStuas2("0");
+                                rModel.setTime(rule.getTime());
+                                Department byid = iDepartmentRepository.findByid(people.getDepartment());
+                                rModel.setDepartment(byid.getDeptname());
+                                rModel.setJurisdiction(people.getJurisdiction());
+                                rModel.setPeopleName(people.getPeopleName());
+                                models.add(rModel);
+                            }
+                        }
+                    }
+//                rModel.setDepartment(people.getDepartment());
+//                rModel.setJurisdiction(people.getJurisdiction());
+//                rModel.setPeopleName(people.getPeopleName());
+//                models.add(rModel);
+                }
+                return ResponseModel.sucess("", models);
+            } catch (Exception e) {
+                return ResponseModel.fail("", ResultCode.SYS_ERROR);
+            }
+        }else {
+            try {
+                List<People> peopleList = peopleService.findAll();
+                List<ReportFormModel2> models = new ArrayList<>();
+                for (People people : peopleList
+                        ) {
+                    List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndStuas(people.getOpenId());
+                    List<Rule> rulelistForTime = ruleService.getRulelistForTime();
+                    if (allByOpenIdAndStuas.size() == rulelistForTime.size()) {
+                        for (Rule rule : rulelistForTime
+                                ) {
+                            ReportFormModel2 rModel = new ReportFormModel2();
+                            rModel.setStuas(rule.getStuas());
+                            rModel.setStuas2("0");
+                            rModel.setTime(rule.getTime());
+                            Department byid = iDepartmentRepository.findByid(people.getDepartment());
+                            rModel.setDepartment(byid.getDeptname());
+                            rModel.setJurisdiction(people.getJurisdiction());
+                            rModel.setPeopleName(people.getPeopleName());
+                            models.add(rModel);
+                        }
+                    } else {
+                        for (Rule rule : rulelistForTime
+                                ) {
+                            int i = 0;
+                            for (Record record : allByOpenIdAndStuas
+                                    ) {
+                                if (rule.getTime() == record.getTime()) {
+                                    i++;
+                                }
+                            }
+                            if (i == 0) {
+                                ReportFormModel2 rModel = new ReportFormModel2();
+                                rModel.setStuas(rule.getStuas());
+                                rModel.setStuas2("1");
+                                rModel.setTime(rule.getTime());
+                                Department byid = iDepartmentRepository.findByid(people.getDepartment());
+                                rModel.setDepartment(byid.getDeptname());
+                                rModel.setJurisdiction(people.getJurisdiction());
+                                rModel.setPeopleName(people.getPeopleName());
+                                models.add(rModel);
+                            } else {
+                                ReportFormModel2 rModel = new ReportFormModel2();
+                                rModel.setStuas(rule.getStuas());
+                                rModel.setStuas2("0");
+                                rModel.setTime(rule.getTime());
+                                Department byid = iDepartmentRepository.findByid(people.getDepartment());
+                                rModel.setDepartment(byid.getDeptname());
+                                rModel.setJurisdiction(people.getJurisdiction());
+                                rModel.setPeopleName(people.getPeopleName());
+                                models.add(rModel);
+                            }
+                        }
+                    }
+//                rModel.setDepartment(people.getDepartment());
+//                rModel.setJurisdiction(people.getJurisdiction());
+//                rModel.setPeopleName(people.getPeopleName());
+//                models.add(rModel);
+                }
+                return ResponseModel.sucess("", models);
+            } catch (Exception e) {
+                return ResponseModel.fail("", ResultCode.SYS_ERROR);
+            }
         }
     }
 }

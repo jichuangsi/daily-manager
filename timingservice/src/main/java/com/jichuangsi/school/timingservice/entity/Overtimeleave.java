@@ -15,7 +15,7 @@ public class Overtimeleave {
     private String ruleId;
     private long time;
     private String stuas;
-    private String stuas2="1";
+    private String stuas2="0";
     private String msg;
     private long start;
     private long end;

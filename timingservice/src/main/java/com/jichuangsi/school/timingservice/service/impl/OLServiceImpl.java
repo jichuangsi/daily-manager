@@ -20,6 +20,10 @@ public class OLServiceImpl implements OLService {
         long nowTime =System.currentTimeMillis();
         olRepostitory.insertRecord(openId,stuas,msg,start,end,nowTime,"0");
     }
+    public void AOLSH(Overtimeleave overtimeleave) {
+
+        olRepostitory.save(overtimeleave);
+    }
 
     @Override
     public List<Overtimeleave> getOLList(String openId) {

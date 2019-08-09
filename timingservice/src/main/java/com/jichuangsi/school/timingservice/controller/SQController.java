@@ -56,6 +56,7 @@ public class SQController {
         stringResponseModel.setData(uuid);
         return stringResponseModel;
     }
+
     @ApiOperation(value = "申诉附件入口", notes = "")
     @PostMapping("/savefile")
     public ResponseModel<String> saveFile(@RequestParam MultipartFile file,@RequestParam String uuid) throws IOException {
@@ -64,6 +65,16 @@ public class SQController {
         stringResponseModel.setCode(ResultCode.SUCESS);
         return stringResponseModel;
     }
+    @ApiOperation(value = "申诉审核", notes = "")
+    @PostMapping("/sssh")
+    public ResponseModel<String> SSSH(@RequestBody SQFlie sqFlie){
+        sqService.SSSH(sqFlie);
+        ResponseModel<String> stringResponseModel = new ResponseModel<>();
+        stringResponseModel.setMsg("ok");
+        stringResponseModel.setCode(ResultCode.SUCESS);
+        return stringResponseModel;
+    }
+
 
     @ApiOperation(value = "根据uuid查图片", notes = "")
     @PostMapping("/getimg")
@@ -112,7 +123,7 @@ public class SQController {
 
                 List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
                 odel.setPageNum(pageNum);
-                odel.setPageSize(pageSize);
+                odel.setPageSize(sqFlieModel2s.size());
                 odel.setData(pager);
                 odel.setCode(ResultCode.SUCESS);
                 return odel;
@@ -139,7 +150,7 @@ public class SQController {
                 ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
                 List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
                 odel.setPageNum(pageNum);
-                odel.setPageSize(pageSize);
+                odel.setPageSize(sqFlieModel2s.size());
                 odel.setData(pager);
                 odel.setCode(ResultCode.SUCESS);
                 return odel;
@@ -163,7 +174,7 @@ public class SQController {
                 }
                 List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
                 odel.setPageNum(pageNum);
-                odel.setPageSize(pageSize);
+                odel.setPageSize(sqFlieModel2s.size());
                 odel.setData(pager);
                 odel.setCode(ResultCode.SUCESS);
                 return odel;
@@ -190,7 +201,7 @@ public class SQController {
                 ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
                 List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
                 odel.setPageNum(pageNum);
-                odel.setPageSize(pageSize);
+                odel.setPageSize(sqFlieModel2s.size());
                 odel.setData(pager);
                 odel.setCode(ResultCode.SUCESS);
                 return odel;
@@ -214,7 +225,7 @@ public class SQController {
 
                 List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
                 odel.setPageNum(pageNum);
-                odel.setPageSize(pageSize);
+                odel.setPageSize(sqFlieModel2s.size());
                 odel.setData(pager);
                 odel.setCode(ResultCode.SUCESS);
                 return odel;
@@ -241,7 +252,7 @@ public class SQController {
                 ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
                 List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
                 odel.setPageNum(pageNum);
-                odel.setPageSize(pageSize);
+                odel.setPageSize(sqFlieModel2s.size());
                 odel.setData(pager);
                 odel.setCode(ResultCode.SUCESS);
                 return odel;

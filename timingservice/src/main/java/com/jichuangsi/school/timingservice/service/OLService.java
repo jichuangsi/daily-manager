@@ -20,4 +20,6 @@ public interface OLService {
     List<Overtimeleave> getAll();
 
     List<Overtimeleave> getAllOL(String openId);
+
+    void AOLSH(Overtimeleave overtimeleave);
 }
