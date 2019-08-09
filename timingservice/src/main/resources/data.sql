@@ -14,25 +14,6 @@ Date: 2019-08-08 19:40:16
 */
 
 SET FOREIGN_KEY_CHECKS=0;
-
--- ----------------------------
--- Table structure for department
--- ----------------------------
-DROP TABLE IF EXISTS `department`;
-CREATE TABLE `department` (
-  `id` varchar(255) NOT NULL,
-  `deptdescribe` varchar(255) DEFAULT NULL,
-  `deptname` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of department
--- ----------------------------
-INSERT INTO `department` VALUES ('40282b816c45c47b016c45db4b680000', '工程相关事宜', '工程部');
-INSERT INTO `department` VALUES ('40282b816c280feb016c284408600000', '管理财务', '财务部');
-
-
 -- ----------------------------
 -- Table structure for resource_staticpage
 -- ----------------------------
@@ -58,23 +39,6 @@ INSERT INTO `resource_staticpage` VALUES ('59332b816c42363c016c423579786341', '4
 INSERT INTO `resource_staticpage` VALUES ('59332b816c42363c016c423579723697', '40282b816c280feb016c284408600004', '40282b816c42363c016c423703170009');
 INSERT INTO `resource_staticpage` VALUES ('59332b816c42363c016c423579712397', '40282b816c280feb016c284408600004', '40282b816c42363c016c423703170010');
 INSERT INTO `resource_staticpage` VALUES ('59332b816c42363c016c423579746975', '40282b816c280feb016c284408600004', '40282b816c42363c016c423703170011');
-
--- ----------------------------
--- Table structure for role
--- ----------------------------
-DROP TABLE IF EXISTS `role`;
-CREATE TABLE `role` (
-  `id` varchar(255) NOT NULL,
-  `rolename` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of role
--- ----------------------------
-INSERT INTO `role` VALUES ('40282b816c427657016c4282d71f0005', '员工');
-INSERT INTO `role` VALUES ('40282b816c2878a9016c287b79470002', '院长');
-INSERT INTO `role` VALUES ('40282b816c45f723016c46081cc70006', '部长');
 
 -- ----------------------------
 -- Table structure for roleurl
