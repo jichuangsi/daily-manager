@@ -46,63 +46,69 @@ public class OLController {
         return listResponseModel ;
     }
 
-    @ApiOperation(value = "未审核加班请假列表", notes = "")
+    @ApiOperation(value = "加班请假列表", notes = "")
     @PostMapping("/getolrecord1")
-    public ResponseModel<List<Overtimeleave>> getOLList1(){
-        ResponseModel<List<Overtimeleave>> listResponseModel = new ResponseModel<>();
-        List<Overtimeleave> olList = olService.getOLList1();
-        listResponseModel.setData(olList);
-        listResponseModel.setCode(ResultCode.SUCESS);
-        return listResponseModel ;
-    }
+    public ResponseModel<List<Overtimeleave>> getOLList1(@RequestParam @Nullable String sttt,@RequestParam @Nullable String name ,@RequestParam int pageSize,@RequestParam int pageNum){
+        if (sttt.equalsIgnoreCase("1")){
+            if (name==null||name.equalsIgnoreCase("")){
+                ResponseModel<List<Overtimeleave>> listResponseModel = new ResponseModel<>();
+                List<Overtimeleave> olList = olService.getOLList1();
+                for (Overtimeleave overtimeleave:olList){
+                    
+                }
+                listResponseModel.setData(olList);
+                listResponseModel.setCode(ResultCode.SUCESS);
+                return listResponseModel ;
+            }else {
+                List<People> allPeople = peopleService.findAllPeople(name);
+                List<Overtimeleave> overtimeleaves = new ArrayList<>();
+                for (People people:allPeople
+                        ) {
+                    List<Overtimeleave> olForOpenId2 = olService.getOLForOpenId1(people.getOpenId());
+                    for (Overtimeleave overtimeleave:olForOpenId2
+                            ) {
+                        overtimeleaves.add(overtimeleave);
+                    }
+                }
+                ResponseModel<List<Overtimeleave>> listResponseModel = new ResponseModel<>();
 
-    @ApiOperation(value = "已审核查加班请假列表", notes = "")
-    @PostMapping("/getolrecord2")
-    public ResponseModel<List<Overtimeleave>> getOLList2(){
-        ResponseModel<List<Overtimeleave>> listResponseModel = new ResponseModel<>();
-        List<Overtimeleave> olList = olService.getOLList2();
-        listResponseModel.setData(olList);
-        listResponseModel.setCode(ResultCode.SUCESS);
-        return listResponseModel ;
-    }
-    @ApiOperation(value = "根据名字未审核加班请假列表", notes = "")
-    @PostMapping("/getolrecord1name")
-    public ResponseModel<List<Overtimeleave>> getOLList1name(@RequestParam @Nullable String name, @RequestParam int pageSize, @RequestParam int pageNum){
-        List<People> allPeople = peopleService.findAllPeople(name);
-        List<Overtimeleave> overtimeleaves = new ArrayList<>();
-        for (People people:allPeople
-                ) {
-            List<Overtimeleave> olForOpenId2 = olService.getOLForOpenId1(people.getOpenId());
-            for (Overtimeleave overtimeleave:olForOpenId2
-                    ) {
-                overtimeleaves.add(overtimeleave);
+                listResponseModel.setData(ListUtils.Pager(pageSize,pageNum,overtimeleaves));
+                listResponseModel.setCode(ResultCode.SUCESS);
+                return listResponseModel ;
+            }
+        }else if (sttt.equalsIgnoreCase("2")){
+            if (name==null||name.equalsIgnoreCase("")){
+                ResponseModel<List<Overtimeleave>> listResponseModel = new ResponseModel<>();
+                List<Overtimeleave> olList = olService.getOLList2();
+                listResponseModel.setData(olList);
+                listResponseModel.setCode(ResultCode.SUCESS);
+                return listResponseModel ;
+            }else {
+                List<People> allPeople = peopleService.findAllPeople(name);
+                List<Overtimeleave> overtimeleaves = new ArrayList<>();
+                for (People people:allPeople
+                        ) {
+                    List<Overtimeleave> olForOpenId2 = olService.getOLForOpenId2(people.getOpenId());
+                    for (Overtimeleave overtimeleave:olForOpenId2
+                            ) {
+                        overtimeleaves.add(overtimeleave);
+                    }
+                }
+                ResponseModel<List<Overtimeleave>> listResponseModel = new ResponseModel<>();
+
+                listResponseModel.setData(ListUtils.Pager(pageSize,pageNum,overtimeleaves));
+                listResponseModel.setCode(ResultCode.SUCESS);
+
+                return listResponseModel ;
+            }
+        }else {
+            if (name==null||name.equalsIgnoreCase("")){
+                return null;
+            }else {
+                return null;
             }
         }
-        ResponseModel<List<Overtimeleave>> listResponseModel = new ResponseModel<>();
-
-        listResponseModel.setData(ListUtils.Pager(pageSize,pageNum,overtimeleaves));
-        listResponseModel.setCode(ResultCode.SUCESS);
-        return listResponseModel ;
     }
 
-    @ApiOperation(value = "根据名字已审核查加班请假列表", notes = "")
-    @PostMapping("/getolrecord2name")
-    public ResponseModel<List<Overtimeleave>> getOLList2name(@RequestParam @Nullable String name,@RequestParam int pageSize,@RequestParam int pageNum){
-        List<People> allPeople = peopleService.findAllPeople(name);
-        List<Overtimeleave> overtimeleaves = new ArrayList<>();
-        for (People people:allPeople
-                ) {
-            List<Overtimeleave> olForOpenId2 = olService.getOLForOpenId2(people.getOpenId());
-            for (Overtimeleave overtimeleave:olForOpenId2
-                 ) {
-                overtimeleaves.add(overtimeleave);
-            }
-        }
-        ResponseModel<List<Overtimeleave>> listResponseModel = new ResponseModel<>();
 
-        listResponseModel.setData(ListUtils.Pager(pageSize,pageNum,overtimeleaves));
-        listResponseModel.setCode(ResultCode.SUCESS);
-
-        return listResponseModel ;
-    }
 }

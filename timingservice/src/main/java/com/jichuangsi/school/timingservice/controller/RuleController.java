@@ -24,14 +24,11 @@ public class RuleController {
 //@RequestParam String timeString,@RequestParam String wifiName,@RequestParam String longitudeLatitude,@RequestParam String stuas,@RequestParam String wucha
     @ApiOperation(value = "设置规则", notes = "")
     @PostMapping("/ruleset")
-    public ResponseModel<String> ruleSet(@RequestBody List<RuleModel2> rules){
+    public ResponseModel<String> ruleSet(@RequestBody RuleModel2 rules){
 
-        ruleService.cleanFather();
-        for (RuleModel2 r2 :rules
-             ) {
-            long time = TimeUtils.gettime(r2.getTime());
-            ruleService.insertRule(time,r2.getWifiName(),r2.getLongitudeLatitude(),r2.getStuas(),r2.getWucha());
-        }
+            long time = TimeUtils.gettime(rules.getTime());
+            ruleService.insertRule(time,rules.getWifiName(),rules.getLongitudeLatitude(),rules.getStuas(),rules.getWucha());
+
         ResponseModel<String> stringResponseModel = new ResponseModel<>();
         stringResponseModel.setMsg("ok");
         return stringResponseModel;
