@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
+
 public class SQServiceImpl implements SQService{
 
     @Resource

@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-@Transactional
 public class OLServiceImpl implements OLService {
     @Resource
     private OLRepostitory olRepostitory;
@@ -45,5 +44,15 @@ public class OLServiceImpl implements OLService {
     @Override
     public List<Overtimeleave> getOLForOpenId2(String openId) {
         return olRepostitory.findAllByOpenIdAndStuas2OrStuas2(openId,"1","2");
+    }
+
+    @Override
+    public List<Overtimeleave> getAll() {
+        return olRepostitory.findAll();
+    }
+
+    @Override
+    public List<Overtimeleave> getAllOL(String openId) {
+        return olRepostitory.findAllByOpenId(openId);
     }
 }

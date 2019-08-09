@@ -16,4 +16,8 @@ public interface OLService {
     List<Overtimeleave> getOLForOpenId1(String openId);
 
     List<Overtimeleave> getOLForOpenId2(String openId);
+
+    List<Overtimeleave> getAll();
+
+    List<Overtimeleave> getAllOL(String openId);
 }

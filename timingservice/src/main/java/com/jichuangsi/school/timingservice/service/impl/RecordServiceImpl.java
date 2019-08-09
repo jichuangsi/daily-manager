@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-@Transactional
+
 public class RecordServiceImpl implements RecordService {
 
     @Resource
