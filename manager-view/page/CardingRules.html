@@ -63,7 +63,11 @@
 						<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="dept()">添加</span>
 					</script>
 					<script type="text/html" id="del">
+						{{# if(d.qiting==1){ }}
+						<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" id="end">停用</span>
+						{{# }else if(d.qiting==2){  }}
 						<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" id="Start">启用</span>
+						{{# }}}	
 						<span class="layui-btn-sm layui-btn layui-btn layui-btn-danger" id="delRules">删除</span>
 					</script>
 				</fieldset>

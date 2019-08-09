@@ -283,13 +283,13 @@ layui.use(['form', 'table', 'laydate'], function() {
 							var s1 = date1.getTime(),
 								s2 = date2.getTime();
 							var total = (s2 - s1) / 1000;
-							var day = parseInt(total / (24 * 60 * 60)); 
-							var afterDay = total - day * 24 * 60 * 60; 
-							var hour = parseInt(afterDay / (60 * 60)); 
-							var afterHour = total - day * 24 * 60 * 60 - hour * 60 * 60; 
-							var min = parseInt(afterHour / 60); 
+							var day = parseInt(total / (24 * 60 * 60));
+							var afterDay = total - day * 24 * 60 * 60;
+							var hour = parseInt(afterDay / (60 * 60));
+							var afterHour = total - day * 24 * 60 * 60 - hour * 60 * 60;
+							var min = parseInt(afterHour / 60);
 							var afterMin = total - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60;
-							return hour + ':' + min + ":" + afterHour
+							return hour + '点' + min + "分" + afterHour+"秒"
 						} else {
 							return "-"
 						}
@@ -328,13 +328,17 @@ layui.use(['form', 'table', 'laydate'], function() {
 			DelRules(param.id);
 		});
 		$(document).on('click', '#Start', function() {
-			console.log(param)
-			StartTemplate(param);
+			param.qiting = 1
+			StartTemplate("确认要启用该模板吗",param);
+		});
+		$(document).on('click', '#end', function() {
+			param.qiting = 2;
+			StartTemplate('确认要停用该模板吗',param);
 		});
 	});
 	/*启动模板*/
-	function StartTemplate(param) {
-		layer.confirm('确认要启用改模板吗？', function(index) {
+	function StartTemplate(msg,param) {
+		layer.confirm(msg, function(index) {
 			$.ajax({
 				type: "post",
 				url: httpUrl() + "/rule/rulefatherstopandstart",
@@ -346,17 +350,16 @@ layui.use(['form', 'table', 'laydate'], function() {
 				data: JSON.stringify(param),
 				success: function(res) {
 					if(res.code == '0010') {
-
 						layer.close(index);
-						table.reload('demo');
-						layui.notice.success("提示信息:启用成功!");
-
+						layui.notice.success("提示信息:成功!");
+						table.reload('today');
 					} else if(res.code == '0031') {
 						layer.close(index);
 						layui.notice.info("提示信息：权限不足");
 					} else {
 						layer.close(index);
-						layui.notice.error("提示信息:启用失败!");
+						layui.notice.error("提示信息:失败!");
+						table.reload('today');
 					}
 				},
 				error: function(res) {
