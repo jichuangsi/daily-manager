@@ -82,8 +82,6 @@ layui.use(['form', 'table', 'laydate'], function() {
 			stuas: param.stuas,
 			wucha: param.wucha
 		}
-		var dataList = [];
-		dataList.push(data);
 		$.ajax({
 			type: "post",
 			url: httpUrl() + "/rule/ruleset",
@@ -92,7 +90,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 				'accessToken': getToken()
 			},
 			contentType: 'application/json',
-			data: JSON.stringify(dataList),
+			data: JSON.stringify(data),
 			success: function(res) {
 				if(res.code == '0010') {
 					layui.notice.success("提示信息:添加成功!");

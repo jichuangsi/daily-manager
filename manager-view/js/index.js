@@ -99,6 +99,10 @@ layui.use(['form', 'element'], function() {
 			content += '</ul>';
 			content += "</li>";
 		}
+		if(content==''){
+			$('.left-nav').css('left;','-221px');
+			$('.page-content').css('left','0px')
+		}
 		$('#nav').append(content);
 
 		var tab = {

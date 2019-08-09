@@ -13,6 +13,9 @@ layui.use(['form', 'table', 'laydate'], function() {
 		method: "post",
 		async: false,
 		url: httpUrl() + '/rule/getrulelist',
+		headers: {
+			'accessToken': getToken()
+		},
 		cols: [
 			[{
 					field: 'id',
@@ -52,7 +55,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 					align: 'center',
 					templet: function(d) {
 						if(d.time != 0) {
-							return new Date(+new Date(d.time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+							return new Date(+new Date(d.time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '');
 						} else {
 							return "-"
 						}
@@ -92,7 +95,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 		var longitudeLatitude = param.longitudeLatitude;
 		var zb = longitudeLatitude.split(',')
 		form.val('Mwifi', {
-			Mid:param.id,
+			Mid: param.id,
 			MwifiName: param.wifiName,
 			Mwucha: param.wucha,
 			Mlat: zb[1],
@@ -100,14 +103,14 @@ layui.use(['form', 'table', 'laydate'], function() {
 		})
 	});
 	form.on('submit(MRules)', function(data) {
-		var param =data.field;
+		var param = data.field;
 		if(param.stuas == -1) {
 			setMsg('请选择上下班', 2)
 			return false;
 		}
 		var longitudeLatitude = param.Mlng + ',' + param.Mlat;
 		var data = {
-			id:param.Mid,
+			id: param.Mid,
 			time: param.MtimeString,
 			wifiName: param.MwifiName,
 			longitudeLatitude: longitudeLatitude,
@@ -144,12 +147,14 @@ layui.use(['form', 'table', 'laydate'], function() {
 	})
 	//修改今天规则
 	init()
-	function init(){
-		var lat=$('input[name=lat]').val()
-		if(lat==null){
+
+	function init() {
+		var lat = $('input[name=lat]').val()
+		if(lat == null) {
 			getWifiTemplate()
 		}
 	}
+
 	function getWifiTemplate() {
 		$.ajax({
 			type: "post",
@@ -231,6 +236,9 @@ layui.use(['form', 'table', 'laydate'], function() {
 		method: "post",
 		async: false,
 		url: httpUrl() + '/rule/getrulefatherlist',
+		headers: {
+			'accessToken': getToken()
+		},
 		cols: [
 			[{
 					field: 'id',
@@ -270,7 +278,18 @@ layui.use(['form', 'table', 'laydate'], function() {
 					align: 'center',
 					templet: function(d) {
 						if(d.time != 0) {
-							return new Date(+new Date(d.time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+							var date1 = new Date('1970-01-01 08:00:00')
+							var date2 = new Date(new Date(+new Date(d.time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ''))
+							var s1 = date1.getTime(),
+								s2 = date2.getTime();
+							var total = (s2 - s1) / 1000;
+							var day = parseInt(total / (24 * 60 * 60)); 
+							var afterDay = total - day * 24 * 60 * 60; 
+							var hour = parseInt(afterDay / (60 * 60)); 
+							var afterHour = total - day * 24 * 60 * 60 - hour * 60 * 60; 
+							var min = parseInt(afterHour / 60); 
+							var afterMin = total - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60;
+							return hour + ':' + min + ":" + afterHour
 						} else {
 							return "-"
 						}
@@ -304,6 +323,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 	});
 	table.on('row(today)', function(data) {
 		var param = data.data;
+
 		$(document).on('click', '#delRules', function() {
 			DelRules(param.id);
 		});

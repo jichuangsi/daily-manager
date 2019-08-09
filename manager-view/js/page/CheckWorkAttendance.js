@@ -1,12 +1,22 @@
 layui.use(['form', 'table'], function() {
 	var form = layui.form,
 		table = layui.table;
+	//获取登陆者的信息
+	function getUser() {
+		var user =JSON.parse(sessionStorage.getItem('userInfo'))
+		var id=user.id;//登陆的id
+		var roleId=user.roleId;//登陆的角色
+		var roleId=user.roleId;//登陆者部门
+	}
 	table.render({
 		elem: '#demo',
 		method: "post",
-		id:'idTest',
+		id: 'idTest',
 		async: false,
 		url: httpUrl() + '/kq/getTDBB',
+		headers: {
+			'accessToken': getToken()
+		},
 		cols: [
 			[{
 					field: 'id',
@@ -60,7 +70,6 @@ layui.use(['form', 'table'], function() {
 			]
 		],
 		page: false,
-		toolbar: '#operation',
 		parseData: function(res) {
 			var arr;
 			var code;
@@ -82,6 +91,7 @@ layui.use(['form', 'table'], function() {
 			limitName: "pageSize"
 		}
 	});
+
 	form.on('submit(sreach)', function(data) {
 		var param = data.field;
 		table.reload('idTest', {

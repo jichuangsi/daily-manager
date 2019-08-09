@@ -4,29 +4,29 @@ layui.use(['form', 'table'], function() {
 	var url = httpUrl() + '/ol/getolrecord1'
 	form.on('select(setStatus)', function(data) {
 		var param = data.value;
-		if(param != '-1') {
-			if(param == 1) {
-				table.reload('idTest', {
-					url: httpUrl() + '/ol/getolrecord2',
-					where: {
-						'userName': ''
-					}
-				});
-			} else if(param == 2) {
-				table.reload('idTest', {
-					url: httpUrl() + '/ol/getolrecord1',
-					where: {
-						'userName': ''
-					}
-				});
-			}
+		if(param.statusId==-1){
+			param.statusId='';
 		}
+		table.reload('idTest', {
+			url: httpUrl() + '/ol/getolrecord1',
+			header: {
+				'accessToken': getToken()
+			},
+			where: {
+				sttt:param.statusId,
+				name: param.name
+			}
+		});
 	});
 	table.render({
 		elem: '#demo',
 		method: "post",
 		async: false,
-		url: url,
+		url: httpUrl() + '/ol/getolrecord1',
+		id:'idTest',
+		headers: {
+			'accessToken': getToken()
+		},
 		cols: [
 			[{
 					field: 'id',
@@ -34,7 +34,7 @@ layui.use(['form', 'table'], function() {
 					type: 'numbers'
 				},
 				{
-					field: 'name',
+					field: 'peopleName',
 					title: '姓名',
 					align: 'center'
 				},
@@ -44,48 +44,65 @@ layui.use(['form', 'table'], function() {
 					align: 'center'
 				},
 				{
-					field: 'role',
+					field: 'jurisdiction',
 					title: '岗位',
 					align: 'center'
 				}, {
-					field: 'msg',
+					field: 'd.overtimeleave.msg',
 					title: '申请原因',
-					align: 'center'
+					align: 'center',
+					templet: '<div>{{d.overtimeleave?d.overtimeleave.msg:""}}</div>'
 				}, {
-					field: 'start',
+					field: 'd.overtimeleave.start',
 					title: '申请时间',
 					align: 'center',
 					templet: function(d) {
-						if(d.start != 0) {
-							return new Date(+new Date(d.start) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+						if(d.overtimeleave.start != 0) {
+							return new Date(+new Date(d.overtimeleave.start) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
 						} else {
 							return "-"
 						}
 					}
 				}, {
-					field: 'time',
+					field: 'd.overtimeleave.time',
 					title: '加班时间',
 					align: 'center',
 					templet: function(d) {
-						if(d.time != 0) {
-							return new Date(+new Date(d.time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+						if(d.overtimeleave.time != 0) {
+							return new Date(+new Date(d.overtimeleave.time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
 						} else {
 							return "-"
 						}
 					}
 				},
 				{
-					field: 'stuas',
-					title: '状态',
+					field: 'd.overtimeleave.stuas',
+					title: '申请类型',
 					align: 'center',
 					templet: function(d) {
-						if(d.stuas == 1) {
-							return "待审核"
-						} else if(d.stuas == 2) {
-							return "已审核"
+						if(d.overtimeleave.stuas == 1) {
+							return "请假申请"
+						} else if(d.overtimeleave.stuas == 2) {
+							return "加班申请"
 						}
 					}
 				}, {
+					field: 'd.overtimeleave.stuas',
+					title: '状态',
+					align: 'center',
+					templet: function(d) {
+						if(d.overtimeleave.stuas2 == 0) {
+							return "未审批"
+						} else if(d.overtimeleave.stuas2 == 1) {
+							return "已同意"
+						} else if(d.overtimeleave.stuas2 == 2) {
+							return "驳回"
+						}
+					}
+				},
+
+				{
+
 					field: 'schooldel',
 					title: '操作',
 					align: 'center',
@@ -93,7 +110,7 @@ layui.use(['form', 'table'], function() {
 				}
 			]
 		],
-		page: false,
+		page: true,
 		parseData: function(res) {
 			var arr;
 			var code;
@@ -109,6 +126,14 @@ layui.use(['form', 'table'], function() {
 				"count": total,
 				"data": arr
 			};
+		},
+		where: {
+			sttt: '',
+			name: ''
+		},
+		request: {
+			pageName: 'pageNum',
+			limitName: "pageSize"
 		}
 	});
 	table.on('row(demo)', function(data) {
