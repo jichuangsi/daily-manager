@@ -109,4 +109,12 @@ public class BackUserService {
     public void saveStatus(com.jichuangsi.school.timingservice.entity.Status status){
         statusRepository.save(status);
     }
+
+    public BackUser findBackUserByWechat(String wechat){
+        return backUserRepository.findByWechat(wechat);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void saveBackUser(BackUser backUser){
+        backUserRepository.save(backUser);
+    }
 }

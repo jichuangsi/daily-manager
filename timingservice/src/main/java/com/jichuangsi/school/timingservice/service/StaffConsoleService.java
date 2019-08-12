@@ -97,6 +97,11 @@ public class StaffConsoleService {
     @Transactional(rollbackFor = Exception.class)
     public void updateDeptById(UserInfoForToken userInfo, String deptId, String wechat){
         staffMapper.updateDepartmentById(wechat,deptId);
+        Department department=departmentRepository.findByid(deptId);
+        BackUser backUser=backUserService.findBackUserByWechat(wechat);
+        backUser.setDeptId(department.getId());
+        backUser.setDeptName(department.getDeptname());
+        backUserService.saveBackUser(backUser);
         OpLog opLog=new OpLog(userInfo.getUserNum(),"修改","修改员工部门");
         //lai
         peopleRepostitory.updateDPMTforOPENID(deptId,wechat);
@@ -106,6 +111,11 @@ public class StaffConsoleService {
     @Transactional(rollbackFor = Exception.class)
     public void updateRoleById(UserInfoForToken userInfo, String roleId, String wechat){
         staffMapper.updateRoleById(wechat,roleId);
+        Role role=roleRepository.findByid(roleId);
+        BackUser backUser=backUserService.findBackUserByWechat(wechat);
+        backUser.setRoleId(role.getId());
+        backUser.setRoleName(role.getRolename());
+        backUserService.saveBackUser(backUser);
         OpLog opLog=new OpLog(userInfo.getUserNum(),"修改","修改员工角色信息");
         //lai
         peopleRepostitory.updateJSQXforOPENID(roleId,wechat);

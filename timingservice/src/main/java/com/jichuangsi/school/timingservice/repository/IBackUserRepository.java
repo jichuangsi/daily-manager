@@ -7,6 +7,7 @@ public interface IBackUserRepository extends JpaRepository<BackUser,String> {
     BackUser findByAccountAndPwdAndStatus(String account, String pwd, String status);
     int countByAccount(String account);
     BackUser findByid(String id);
+    BackUser findByWechat(String id);
     int countByDeptId(String deptId);
     int countByRoleId(String roleId);
 }
