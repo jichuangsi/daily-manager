@@ -4,10 +4,12 @@ layui.use(['form', 'table'], function() {
 	//获取登陆者的信息
 	function getUser() {
 		var user =JSON.parse(sessionStorage.getItem('userInfo'))
-		var id=user.id;//登陆的id
-		var roleId=user.roleId;//登陆的角色
-		var roleId=user.roleId;//登陆者部门
+		if(user.roleName=="M"){
+			user.wechat='';	
+		}
+		return user;
 	}
+	getUser();
 	table.render({
 		elem: '#demo',
 		method: "post",
@@ -69,7 +71,7 @@ layui.use(['form', 'table'], function() {
 				}
 			]
 		],
-		page: false,
+		page: true,
 		parseData: function(res) {
 			var arr;
 			var code;
@@ -89,6 +91,10 @@ layui.use(['form', 'table'], function() {
 		request: {
 			pageName: 'pageNum',
 			limitName: "pageSize"
+		},where:{
+			dpid:getUser().deptId,
+			jpid:getUser().roleId,
+			openid:getUser().wechat
 		}
 	});
 

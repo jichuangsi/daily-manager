@@ -260,7 +260,7 @@ layui.use(['form', 'table'], function() {
 	}
 	form.on('submit(modifyRole)', function(data) {
 		var param = data.field;
-		if(param.deptId == -1) {
+		if(param.roleId == -1) {
 			setMsg('请选择需要调整的职位', 2);
 			return false;
 		} else {
@@ -296,10 +296,8 @@ layui.use(['form', 'table'], function() {
 		var name, value;
 		var str = location.href; //取得整个地址栏
 		var num = str.indexOf("//")
-		console.log(str)
 		str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
 		var arr = str.split("/"); //各个参数放到数组里
-		console.log(arr)
 		return arr[1];
 	}
 })

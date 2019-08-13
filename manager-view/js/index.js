@@ -87,7 +87,7 @@ layui.use(['form', 'element'], function() {
 			content += '</a>';
 			content += '<ul class="sub-menu">';
 			for(var j = 0; j < Urldata.length; j++) {
-				if(Modular[i].id = Urldata[j].modelId) {
+				if(Modular[i].id == Urldata[j].modelId) {
 					content += '<li>';
 					content += '<a _href="page/' + Urldata[j].staticPageUrl + '">';
 					content += '<i class="iconfont">&#xe6a7;</i>';
@@ -100,8 +100,8 @@ layui.use(['form', 'element'], function() {
 			content += "</li>";
 		}
 		if(content==''){
-			$('.left-nav').css('left;','-221px');
-			$('.page-content').css('left','0px')
+			$('.left-nav').addClass('jq');
+			$('.page-content').addClass('cq')
 		}
 		$('#nav').append(content);
 
@@ -115,7 +115,6 @@ layui.use(['form', 'element'], function() {
 			},
 			tabDelete: function(othis) {
 				element.tabDelete('xbs_tab', '44');
-
 				othis.addClass('layui-btn-disabled');
 			},
 			tabChange: function(id) {

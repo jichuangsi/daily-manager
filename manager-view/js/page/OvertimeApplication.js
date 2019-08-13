@@ -4,7 +4,6 @@ layui.use(['form', 'table'], function() {
 	var url = httpUrl() + '/ol/getolrecord1'
 	form.on('submit(sreach)', function(data) {
 		var param = data.field;
-		console.log(param)
 		if(param.status == -1) {
 			param.status = '';
 		}
@@ -130,7 +129,7 @@ layui.use(['form', 'table'], function() {
 				}
 				code = 0;
 				arr = res.data;
-				total = arr.length;
+				total = res.pageSize;
 				
 			}
 			return {

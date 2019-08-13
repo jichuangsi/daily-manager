@@ -6,7 +6,6 @@ layui.use(['form', 'table', 'laydate'], function() {
 	date.setMonth(date.getMonth() - 1);
 	var dateStart = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 	var dateEnd = date.getFullYear() + "-" + (date.getMonth() + 2) + "-" + date.getDate();
-	console.log(getToken())
 	table.render({
 		elem: '#demo',
 		method: "post",
@@ -65,7 +64,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 			return {
 				"code": code,
 				"msg": res.msg,
-				"count": total,
+				"count": res.pageSize,
 				"data": arr
 			};
 		},
@@ -85,7 +84,6 @@ layui.use(['form', 'table', 'laydate'], function() {
 	});
 	form.on('submit(sreach)', function(data) {
 		var param = data.field;
-		console.log(param.date)
 		var date = param.date.split('~');
 		if(param.date == '') {
 			var date = new Date();

@@ -97,6 +97,9 @@ layui.use(['form', 'table'], function() {
 		request: {
 			pageName: 'pageNum',
 			limitName: "pageSize"
+		},where:{
+			name:'',
+			sttt:''
 		}
 	});
 	table.on('row(demo)', function(data) {
@@ -104,11 +107,11 @@ layui.use(['form', 'table'], function() {
 		setImg(param.sqFlie.uuid);
 
 		$(document).on('click', '#Agree', function() {
-			param.stuas2 = '1'; //
+			param.sqFlie.id = '1'; //
 			AuditApplications("确认要同意该申请吗", param);
 		});
 		$(document).on('click', '#Reject', function() {
-			param.stuas2 = '2'; //不同意
+			param.sqFlie.id = '2'; //不同意
 			AuditApplications('确认要驳回该申请吗', param);
 		});
 	});
@@ -156,11 +159,21 @@ layui.use(['form', 'table'], function() {
 			},
 			success: function(res) {
 				if(res.code == '0010') {
+					$("#img").empty();
 					var data = res.data;
-					//获取数据生成图片
-					var content = '<img src="data:image/jpeg;base64,' + data + '" />';
-					$("#img").append(content);
-				} else {}
+					var content = ''
+					if(data.length!=0) {
+						for(var i=0;i<data.length;i++){
+							content += '<img src="data:image/jpeg;base64,' + data[i] + '" />';
+						}
+						//获取数据生成图片
+					} else {
+						content += '<h1>暂无图片</h1>'
+					}
+					$("#img").html(content);
+				} else {
+
+				}
 			},
 			error: function(res) {
 				setMsg(res.msg, 2)

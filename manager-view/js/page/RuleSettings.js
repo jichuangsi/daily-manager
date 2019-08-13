@@ -61,9 +61,6 @@ layui.use(['form', 'table', 'laydate'], function() {
 						wucha: list.wucha
 					});
 				}
-			},
-			error: function(res) {
-				setMsg(res.msg, 2)
 			}
 		})
 	}
@@ -99,9 +96,6 @@ layui.use(['form', 'table', 'laydate'], function() {
 				} else {
 					layui.notice.error("提示信息:添加失败!");
 				}
-			},
-			error: function(res) {
-				setMsg(res.msg, 2)
 			}
 		})
 	});

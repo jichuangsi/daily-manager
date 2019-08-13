@@ -35,6 +35,15 @@
 			display: none;
 			margin-top: 10px;
 		}
+		#img .h3{
+			line-height: 300px;
+			text-align: center;
+		}
+		#img img{
+			margin-left: 45px;
+			width: 45%;
+			height: 45%;
+		}
 	</style>
 
 	<body>
@@ -72,15 +81,15 @@
 			<span class="layui-btn-sm layui-btn">驳回</span>
 		</script>
 		<script type="text/html" id="details">
-			<span class="layui-btn-sm layui-btn">查看详情</span>
+			<span class="layui-btn-sm layui-btn" onclick="dept()">查看详情</span>
 		</script>
 		<script>
 			function dept() {
 				index = layer.open({
 					type: 1,
-					area: ['500px', '300px'],
+					area: ['80%', '80%'],
 					anim: 2,
-					title: '申诉详情',
+					title: '申诉详情(图片)',
 					maxmin: true,
 					shadeClose: true, //点击遮罩关闭
 					content: $('#info')
