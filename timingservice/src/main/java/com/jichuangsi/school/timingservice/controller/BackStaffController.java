@@ -1,6 +1,7 @@
 package com.jichuangsi.school.timingservice.controller;
 
 import com.jichuangsi.school.timingservice.entity.Staff;
+import com.jichuangsi.school.timingservice.exception.BackUserException;
 import com.jichuangsi.school.timingservice.model.ResponseModel;
 import com.jichuangsi.school.timingservice.model.UserInfoForToken;
 import com.jichuangsi.school.timingservice.service.StaffConsoleService;
@@ -24,7 +25,12 @@ public class BackStaffController {
     @ApiImplicitParams({})
     @GetMapping("/getStaffListByPage")
     public ResponseModel<Page<Staff>> getStaffListByPage(@ModelAttribute UserInfoForToken userInfo, @RequestParam(required = false)String statusId, @RequestParam(required = false)String staffName, @RequestParam int pageNum, @RequestParam int pageSize){
-        return ResponseModel.sucess("",staffConsoleService.getStaffListByPage(pageNum,pageSize,staffName,statusId));
+        try {
+            return ResponseModel.sucess("",staffConsoleService.getStaffListByPage(userInfo,pageNum,pageSize,staffName,statusId));
+        }catch (BackUserException e){
+            return ResponseModel.fail("",e.getMessage());
+        }
+
     }
 
     @ApiOperation("查询状态列表")

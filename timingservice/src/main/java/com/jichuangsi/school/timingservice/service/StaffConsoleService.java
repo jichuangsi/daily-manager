@@ -64,7 +64,8 @@ public class StaffConsoleService {
     }
 
     //按条件分页查询url
-    public Page<Staff> getStaffListByPage(int pageNum, int pageSize, String staffName, String statusId){
+    public Page<Staff> getStaffListByPage(UserInfoForToken userInfo,int pageNum, int pageSize, String staffName, String statusId)throws BackUserException{
+        BackUser user=backUserService.getBackUserById(userInfo.getUserId());
         pageNum=pageNum-1;
         Pageable pageable=new PageRequest(pageNum,pageSize);
         Page<Staff> page=staffRepository.findAll((Root<Staff> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)->{
@@ -76,6 +77,17 @@ public class StaffConsoleService {
             if(staffName!=null && staffName!=""){
                 predicateList.add(criteriaBuilder.like(root.get("name"),"%"+staffName+"%"));
             }
+            if (user!=null){
+                //user.getRoleName().equals("M") || user.getRoleName().equals("院长") || user.getRoleName().equals("副院长")
+                if (user.getRoleName().equals("部长")){
+                    Department department=departmentRepository.findByid(user.getDeptId());
+                    predicateList.add(criteriaBuilder.equal(root.get("department"),department));
+                }
+                if (user.getRoleName().equals("员工")){
+                    predicateList.add(criteriaBuilder.equal(root.get("wechat"),user.getWechat()));
+                }
+            }
+
             return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
         },pageable);
         return page;
