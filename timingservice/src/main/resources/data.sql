@@ -163,6 +163,7 @@ CREATE TABLE `static_page` (
 -- ----------------------------
 -- Records of static_page
 -- ----------------------------
+
 INSERT INTO `static_page` VALUES ('40282b816c42363c016c423703170001', '考勤列表', 'CheckWorkAttendance.html ');
 INSERT INTO `static_page` VALUES ('40282b816c42363c016c423703170002', '部门角色', 'DepartmentRole.html');
 INSERT INTO `static_page` VALUES ('40282b816c42363c016c423703170003', '人员管理', 'PersonnelManagement.html');
