@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/daily-manager.iml" filepath="$PROJECT_DIR$/daily-manager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/timingservice/timingservice.iml" filepath="$PROJECT_DIR$/timingservice/timingservice.iml" />
+    </modules>
+  </component>
+</project>
