@@ -8,6 +8,7 @@ spring:
     password: root
     initialization-mode: always
     data : classpath:data.sql
+    sql-script-encoding : utf-8
 
   jpa:
     show-sql: true
