@@ -2,12 +2,16 @@ package com.jichuangsi.school.timingservice.service;
 
 import com.jichuangsi.school.timingservice.constant.ResultCode;
 import com.jichuangsi.school.timingservice.dao.mapper.StaffMapper;
+import com.jichuangsi.school.timingservice.dao.mapper.UrlRelationMapper;
 import com.jichuangsi.school.timingservice.entity.OpLog;
 import com.jichuangsi.school.timingservice.entity.Role;
+import com.jichuangsi.school.timingservice.entity.RoleDepartment;
 import com.jichuangsi.school.timingservice.exception.BackUserException;
+import com.jichuangsi.school.timingservice.model.DeptModel;
 import com.jichuangsi.school.timingservice.model.UserInfoForToken;
 import com.jichuangsi.school.timingservice.repository.IBackUserRepository;
 import com.jichuangsi.school.timingservice.repository.IOpLogRepository;
+import com.jichuangsi.school.timingservice.repository.IRoleDepartmentRepository;
 import com.jichuangsi.school.timingservice.repository.IRoleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +30,10 @@ public class BackRoleService {
     private StaffMapper staffMapper;
     @Resource
     private IBackUserRepository backUserRepository;
+    @Resource
+    private IRoleDepartmentRepository roleDepartmentRepository;
+    @Resource
+    private UrlRelationMapper urlRelationMapper;
 
     @Transactional(rollbackFor = Exception.class)
     public void saveRole(UserInfoForToken userInfo, Role role){
@@ -58,5 +66,23 @@ public class BackRoleService {
 
     public List<Role> getRoleList(){
         return roleRepository.findAll();
+    }
+
+    //根据角色查询管理部门
+    public List<DeptModel> getRoleDepartment(String roleId) throws BackUserException{
+        if(roleId==null){
+            throw new BackUserException(ResultCode.PARAM_MISS_MSG);
+        }
+        return urlRelationMapper.findByRoleId(roleId);
+    }
+    //批量增加
+    @Transactional(rollbackFor = Exception.class)
+    public void batchInsertRoleDepartment(List<RoleDepartment> roleDepartmentList){
+        roleDepartmentRepository.saveAll(roleDepartmentList);
+    }
+    //批量删除
+    @Transactional(rollbackFor = Exception.class)
+    public void batchdeleteRoleDepartment(List<RoleDepartment> roleDepartmentList){
+        roleDepartmentRepository.deleteInBatch(roleDepartmentList);
     }
 }

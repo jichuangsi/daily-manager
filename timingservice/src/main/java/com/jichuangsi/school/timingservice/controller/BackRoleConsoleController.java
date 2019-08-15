@@ -3,6 +3,7 @@ package com.jichuangsi.school.timingservice.controller;
 import com.jichuangsi.school.timingservice.entity.Role;
 import com.jichuangsi.school.timingservice.exception.BackUserException;
 import com.jichuangsi.school.timingservice.model.ResponseModel;
+import com.jichuangsi.school.timingservice.model.RoleDepartmentModel;
 import com.jichuangsi.school.timingservice.model.UrlModel;
 import com.jichuangsi.school.timingservice.model.UserInfoForToken;
 import com.jichuangsi.school.timingservice.service.BackRoleService;
@@ -158,5 +159,40 @@ public class BackRoleConsoleController {
         }catch (BackUserException e){
             return ResponseModel.fail("",e.getMessage());
         }
+    }
+
+    @ApiOperation("查询角色对应部门列表")
+    @ApiImplicitParams({})
+    @GetMapping("/getRoleDepartmentByRoleId")
+    public ResponseModel getRoleDepartmentByRoleId(@RequestParam String roleId){
+        try {
+            return ResponseModel.sucess("",roleService.getRoleDepartment(roleId));
+        }catch (BackUserException e){
+            return ResponseModel.fail("",e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "批量添加角色可以管理的部门", notes = "")
+    @ApiImplicitParams({})
+    @PostMapping("/batchAddRoleDepartment")
+    public ResponseModel batchAddRoleDepartment(@ModelAttribute UserInfoForToken userInfo, @RequestBody RoleDepartmentModel model){
+        try {
+            roleService.batchInsertRoleDepartment(model.getRoleDepartmentList());
+        }catch (Exception e){
+            return ResponseModel.fail("",e.getMessage());
+        }
+        return ResponseModel.sucessWithEmptyData("");
+    }
+
+    @ApiOperation(value = "根据id批量删除可以管理的部门", notes = "")
+    @ApiImplicitParams({})
+    @PostMapping("/batchDeleteRoleDepartment")
+    public ResponseModel batchDeleteRoleDepartment(@ModelAttribute UserInfoForToken userInfo, @RequestBody RoleDepartmentModel model){
+        try {
+            roleService.batchdeleteRoleDepartment(model.getRoleDepartmentList());
+        }catch (Exception e){
+            return ResponseModel.fail("",e.getMessage());
+        }
+        return ResponseModel.sucessWithEmptyData("");
     }
 }

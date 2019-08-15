@@ -24,9 +24,9 @@ public class BackStaffController {
     @ApiOperation("多条件分页查询员工列表")
     @ApiImplicitParams({})
     @GetMapping("/getStaffListByPage")
-    public ResponseModel<Page<Staff>> getStaffListByPage(@ModelAttribute UserInfoForToken userInfo, @RequestParam(required = false)String statusId, @RequestParam(required = false)String staffName, @RequestParam int pageNum, @RequestParam int pageSize){
+    public ResponseModel<Page<Staff>> getStaffListByPage(@ModelAttribute UserInfoForToken userInfo, @RequestParam(required = false)String statusId, @RequestParam(required = false)String staffName,@RequestParam(required = false)String deptId, @RequestParam int pageNum, @RequestParam int pageSize){
         try {
-            return ResponseModel.sucess("",staffConsoleService.getStaffListByPage(userInfo,pageNum,pageSize,staffName,statusId));
+            return ResponseModel.sucess("",staffConsoleService.getStaffListByPage(userInfo,pageNum,pageSize,staffName,statusId,deptId));
         }catch (BackUserException e){
             return ResponseModel.fail("",e.getMessage());
         }

@@ -39,6 +39,7 @@ INSERT INTO `resource_staticpage` VALUES ('59332b816c42363c016c423579786341', '4
 INSERT INTO `resource_staticpage` VALUES ('59332b816c42363c016c423579723697', '40282b816c280feb016c284408600004', '40282b816c42363c016c423703170009');
 INSERT INTO `resource_staticpage` VALUES ('59332b816c42363c016c423579712397', '40282b816c280feb016c284408600004', '40282b816c42363c016c423703170010');
 INSERT INTO `resource_staticpage` VALUES ('59332b816c42363c016c423579746975', '40282b816c280feb016c284408600004', '40282b816c42363c016c423703170011');
+INSERT INTO `resource_staticpage` VALUES ('59332b816c42363c016c4235717842', '40282b816c280feb016c284408600003', '40282b816c42363c016c42370317187914');
 
 -- ----------------------------
 -- Table structure for roleurl
@@ -54,16 +55,16 @@ CREATE TABLE `roleurl` (
 -- ----------------------------
 -- Records of roleurl
 -- ----------------------------
-INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbcb2bb0003', '批量添加角色可以访问的url', '/backrole/batchAddRoleUrl ');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbcb2bb0003', '批量添加角色可以访问的url', '/backrole/batchAddRoleUrl');
 INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2daf8cc70001', '添加部门', '/backdepartment/saveDepartment');
 INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db0452f0002', '修改部门', '/backdepartment/updateDepartment');
-INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db0d28f0003', '删除部门', '/backdepartment/deleteDepartment/{deptId}');
+INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db0d28f0003', '删除部门', '/backdepartment/deleteDepartment/');
 INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db12ef30004', '查询部门列表', '/backdepartment/getDepartmentList');
-INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2db9fcef0001', '查询模块列表', '/backrole/getUsemoduleList ');
-INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db3bdef0006', '查询角色列表', '/backrole/getRoleList ');
-INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbbc7900002', '查询全部url列表', '/backrole/getRoleUrlList ');
-INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbced8c0004', '根据id批量删除角色相关url', '/backrole/batchDeleteRoleUrl ');
-INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d0005', '查询角色对应url列表', '/backrole/getAllRoleUrlByRoleId/{roleId} ');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2db9fcef0001', '查询模块列表', '/backrole/getUsemoduleList');
+INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db3bdef0006', '查询角色列表', '/backrole/getRoleList');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbbc7900002', '查询全部url列表', '/backrole/getRoleUrlList');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbced8c0004', '根据id批量删除角色相关url', '/backrole/batchDeleteRoleUrl');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d0005', '查询角色对应url列表', '/backrole/getAllRoleUrlByRoleId/');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d0455', '添加角色', '/backrole/saveRole');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d0258', '修改角色', '/backrole/updateRole');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d4898', '删除角色', '/backrole/deleteRole/');
@@ -73,30 +74,34 @@ INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d1102', '修改员工�
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d1489', '修改员工部门', '/backstaff/updateStaffDept');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d1561', '修改职位部门', '/backstaff/updateStaffRole');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbcb2bb0013', '查看考勤', '/kq/getTDBB');
-INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2daf8cc70021', '查看考勤申请', '/sq/getAllUnapprovedSQ ');
+INSERT INTO `roleurl` VALUE S ('40282b816c2d273d016c2daf8cc70021', '查看考勤申请', '/sq/getAllUnapprovedSQ');
 INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db0452f0032', '查看请假申请', '/ol/getolrecord1');
 INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db0d28f0043', '查看加班申请', '/ol/getolrecord1');
 INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db12ef30054', '查看行为日志', '/backuser/getOpLogByNameAndPage');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2db9fcef0061', '删除行为日志', '/backuser/deleteOpLog');
 INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db3bdef0076', '查看模板', '/backrole/getStaticPageList');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbbc7900082', '查看url', '/backrole/getRoleUrlList');
-INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbced8c0094', '查看角色', ' /backrole/getRoleList');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbced8c0094', '查看角色', '/backrole/getRoleList');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb11d0105', '查看角色的url', '/backrole/getAllRoleUrlByRoleId/');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb12d0455', '给角色添加权限 ', '/backrole/batchAddRoleUrl');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb13d0258', '删除角色权限', '/backrole/batchDeleteRoleUrl');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb14d4898', '添加模板规则', '/rule/getrulefatherlist');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb15d2598', '查看当天规则', '/rule/getrulefatherlist');
-INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb15d2876', '查看模板规则', ' /rule/getrulefatherlist');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb15d2876', '查看模板规则', '/rule/getrulefatherlist');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d3102', '删除模板规则', '/rule/delrule');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d4489', '启动模板规则 ', '/rule/rulefatherstopandstart');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d5561', '添加今天规则', '/rule/insertrule');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d6561', '修改当天规则', '/rule/updaterule');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d15698', '查看报表', '/kq/getBB');
-INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d76856', '请假审核', ' /ol/olsh');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d76856', '请假审核', '/ol/olsh');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d2143', '申诉审核', '/sq/sssh');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d08797', '查看申诉图片', '/sq/getimg');
-INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d879524', '加班审核', ' /ol/olsh');
-
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d879524', '加班审核', '/ol/olsh');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d789456', '获取所有部门', '/backdepartment/getDepartmentList');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d23645', '获取角色所管理部门', '/backrole/getRoleDepartmentByRoleId');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d4568', '获取角色', '/backrole/getRoleList');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d15488', '给角色添加需要管理的部门', '/backrole/batchAddRoleDepartment');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d75416', '取消角色所管理的部门', '/backrole/batchDeleteRoleDepartment');
 
 -- ----------------------------
 -- Table structure for staticpage_url
@@ -148,6 +153,11 @@ INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d67852', '40282
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d62586', '40282b816c42363c016c423703170005', '40282b816c2db5d6016c2dbeb16d879524');
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d2585', '40282b816c42363c016c423703170004', '40282b816c2db5d6016c2dbeb16d2143');
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d345867', '40282b816c42363c016c423703170004', '40282b816c2db5d6016c2dbeb16d08797');
+INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d6983', '40282b816c42363c016c42370317187914', '40282b816c2db5d6016c2dbeb16d789456');
+INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d2186', '40282b816c42363c016c42370317187914', '40282b816c2db5d6016c2dbeb16d23645');
+INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d88876', '40282b816c42363c016c42370317187914', '40282b816c2db5d6016c2dbeb16d4568');
+INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d27865', '40282b816c42363c016c42370317187914', '40282b816c2db5d6016c2dbeb16d15488');
+INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d75876', '40282b816c42363c016c42370317187914', '40282b816c2db5d6016c2dbeb16d75416');
 
 -- ----------------------------
 -- Table structure for static_page
@@ -174,6 +184,7 @@ INSERT INTO `static_page` VALUES ('40282b816c42363c016c423703170008', '权限管
 INSERT INTO `static_page` VALUES ('40282b816c42363c016c423703170009', '考勤规则', 'RuleSettings.html');
 INSERT INTO `static_page` VALUES ('40282b816c42363c016c423703170010', '打卡规则', 'CardingRules.html');
 INSERT INTO `static_page` VALUES ('40282b816c42363c016c423703170011', '报表 ', 'ReportForm.html');
+INSERT INTO `static_page` VALUES ('40282b816c42363c016c42370317187914', '管理部门 ', 'AdministrativeDepartment.html');
 
 -- ----------------------------
 -- Table structure for status
