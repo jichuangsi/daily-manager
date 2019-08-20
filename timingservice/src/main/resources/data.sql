@@ -74,7 +74,7 @@ INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d1102', '修改员工�
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d1489', '修改员工部门', '/backstaff/updateStaffDept');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d1561', '修改职位部门', '/backstaff/updateStaffRole');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbcb2bb0013', '查看考勤', '/kq/getTDBB');
-INSERT INTO `roleurl` VALUE S ('40282b816c2d273d016c2daf8cc70021', '查看考勤申请', '/sq/getAllUnapprovedSQ');
+INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2daf8cc70021', '查看考勤申请', '/sq/getAllUnapprovedSQ');
 INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db0452f0032', '查看请假申请', '/ol/getolrecord1');
 INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db0d28f0043', '查看加班申请', '/ol/getolrecord1');
 INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db12ef30054', '查看行为日志', '/backuser/getOpLogByNameAndPage');

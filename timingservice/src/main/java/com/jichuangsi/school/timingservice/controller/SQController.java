@@ -250,11 +250,13 @@ public class SQController {
 
                 }
                 ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
-                List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
-                odel.setPageNum(pageNum);
-                odel.setPageSize(sqFlieModel2s.size());
-                odel.setData(pager);
-                odel.setCode(ResultCode.SUCESS);
+                if(sqFlieModel2s.size()!=0){
+                    List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
+                    odel.setPageNum(pageNum);
+                    odel.setPageSize(sqFlieModel2s.size());
+                    odel.setData(pager);
+                    odel.setCode(ResultCode.SUCESS);
+                }
                 return odel;
             }
         }
