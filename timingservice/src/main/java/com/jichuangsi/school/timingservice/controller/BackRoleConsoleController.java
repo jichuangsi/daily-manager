@@ -177,7 +177,7 @@ public class BackRoleConsoleController {
     @PostMapping("/batchAddRoleDepartment")
     public ResponseModel batchAddRoleDepartment(@ModelAttribute UserInfoForToken userInfo, @RequestBody RoleDepartmentModel model){
         try {
-            roleService.batchInsertRoleDepartment(model.getRoleDepartmentList());
+            roleService.batchInsertRoleDepartment(userInfo,model.getRoleDepartmentList());
         }catch (Exception e){
             return ResponseModel.fail("",e.getMessage());
         }
@@ -189,7 +189,7 @@ public class BackRoleConsoleController {
     @PostMapping("/batchDeleteRoleDepartment")
     public ResponseModel batchDeleteRoleDepartment(@ModelAttribute UserInfoForToken userInfo, @RequestBody RoleDepartmentModel model){
         try {
-            roleService.batchdeleteRoleDepartment(model.getRoleDepartmentList());
+            roleService.batchdeleteRoleDepartment(userInfo,model.getRoleDepartmentList());
         }catch (Exception e){
             return ResponseModel.fail("",e.getMessage());
         }

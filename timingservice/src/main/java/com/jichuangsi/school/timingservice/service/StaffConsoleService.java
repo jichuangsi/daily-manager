@@ -91,6 +91,13 @@ public class StaffConsoleService {
                         Department department=departmentRepository.findByid(deptId);
                         predicateList.add(criteriaBuilder.equal(root.get("department"),department));
                     }
+                    if(deptId==null || deptId.equals("")){
+                        Department department=new Department();
+                        department.setDeptname("不查询");
+                        department.setId("12345");
+                        department.setDeptdescribe("不查询");
+                        predicateList.add(criteriaBuilder.equal(root.get("department"),department));
+                    }
                 }
             }
 
@@ -136,7 +143,7 @@ public class StaffConsoleService {
         backUserService.saveBackUser(backUser);
         OpLog opLog=new OpLog(userInfo.getUserNum(),"修改","修改员工角色信息");
         //lai
-        peopleRepostitory.updateJSQXforOPENID(roleId,wechat);
+        peopleRepostitory.updateJSQXforOPENID(role.getRolename(),wechat);
         opLogRepository.save(opLog);
     }
 

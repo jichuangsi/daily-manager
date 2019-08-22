@@ -1,13 +1,16 @@
 package com.jichuangsi.school.timingservice.controller;
 
+import com.github.pagehelper.util.StringUtil;
 import com.jichuangsi.school.timingservice.constant.ResultCode;
 import com.jichuangsi.school.timingservice.entity.*;
 import com.jichuangsi.school.timingservice.model.*;
 import com.jichuangsi.school.timingservice.repository.IDepartmentRepository;
 import com.jichuangsi.school.timingservice.repository.IRoleRepository;
+import com.jichuangsi.school.timingservice.service.BackRoleService;
 import com.jichuangsi.school.timingservice.service.PeopleService;
 import com.jichuangsi.school.timingservice.service.RecordService;
 import com.jichuangsi.school.timingservice.service.RuleService;
+import com.jichuangsi.school.timingservice.utils.ListUtils;
 import com.jichuangsi.school.timingservice.utils.TimeUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +31,8 @@ public class DaKaController {
     private IDepartmentRepository iDepartmentRepository;
     @Resource
     private IRoleRepository roleRepository;
+    @Resource
+    private BackRoleService backRoleService;
 
     @Resource
     private RecordService recordService;
@@ -302,11 +307,17 @@ public class DaKaController {
 
     @ApiOperation(value = "今日报表", notes = "")
     @PostMapping("/getTDBB")
-    public ResponseModel<List<ReportFormModel2>> getTDBB(@RequestParam(required = false) String name,@RequestParam @Nullable String openid,@RequestParam @Nullable String dpid, @RequestParam @Nullable String jpid,@RequestParam int pageSize ,@RequestParam @Nullable int pageNum){
+    public ResponseModel<List<ReportFormModel2>> getTDBB(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam(required = false) String name,@RequestParam @Nullable String openid,@RequestParam @Nullable String dpid, @RequestParam @Nullable String jpid,@RequestParam int pageSize ,@RequestParam @Nullable int pageNum){
         Role role=roleRepository.findByid(jpid);
-        if (jpid.equalsIgnoreCase("123456")||role.getRolename().equals("院长")) {
+        if (dpid.equalsIgnoreCase("123456")||role.getRolename().equals("院长")) {
             try {
-                List<People> peopleList = peopleService.findAll();
+                List<People> peopleList=null;
+                if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
+                    peopleList = peopleService.findAll();
+                }else{
+                    peopleList = peopleService.findAllPeople(name);
+                }
+                ResponseModel<List<ReportFormModel2>> listResponseModel=new ResponseModel<>();
                 List<ReportFormModel2> models = new ArrayList<>();
                 for (People people : peopleList
                         ) {
@@ -363,14 +374,30 @@ public class DaKaController {
 //                rModel.setPeopleName(people.getPeopleName());
 //                models.add(rModel);
                 }
-                return ResponseModel.sucess("", models);
+                if (models!=null && models.size()!=0){
+                    listResponseModel.setData(ListUtils.Pager(pageSize,pageNum,models));
+                    listResponseModel.setPageSize(models.size());
+                    listResponseModel.setPageNum(pageNum);
+                    listResponseModel.setCode(ResultCode.SUCESS);
+                }
+                return listResponseModel;
             } catch (Exception e) {
                 return ResponseModel.fail("", ResultCode.SYS_ERROR);
             }
-        } else if (role.getRolename().equals("部长")){
+        } else if (role.getRolename().equals("部长") || role.getRolename().equals("副院长")){
             try {
                 //String s="40282b816c45f723016c46081cc70006";
-                List<People> peopleList = peopleService.findForD(dpid);
+                ResponseModel<List<ReportFormModel2>> listResponseModel=new ResponseModel<>();
+                List<People> peopleList =null;
+                if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
+                    peopleList = peopleService.findForD(dpid);
+                }else{
+                    peopleList = peopleService.findAllPeople(name,dpid);
+                }
+                if(role.getRolename().equals("副院长")){
+                    if(backRoleService.getRoleDepartment(userInfoForToken.getUserId()).size()==0)
+                    peopleList=new ArrayList<>();
+                }
                 List<ReportFormModel2> models = new ArrayList<>();
                 for (People people : peopleList
                         ) {
@@ -427,13 +454,20 @@ public class DaKaController {
 //                rModel.setPeopleName(people.getPeopleName());
 //                models.add(rModel);
                 }
-                return ResponseModel.sucess("", models);
+                if (models!=null && models.size()!=0){
+                    listResponseModel.setData(ListUtils.Pager(pageSize,pageNum,models));
+                    listResponseModel.setPageSize(models.size());
+                    listResponseModel.setPageNum(pageNum);
+                    listResponseModel.setCode(ResultCode.SUCESS);
+                }
+                return listResponseModel;
             } catch (Exception e) {
                 return ResponseModel.fail("", ResultCode.SYS_ERROR);
             }
         }else {
             try {
                 People people = peopleService.findPeople(openid);
+                ResponseModel<List<ReportFormModel2>> listResponseModel=new ResponseModel<>();
                 List<ReportFormModel2> models = new ArrayList<>();
                 List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndStuas(people.getOpenId());
                 List<Rule> rulelistForTime = ruleService.getRulelistForTime();
@@ -487,7 +521,13 @@ public class DaKaController {
 //                rModel.setJurisdiction(people.getJurisdiction());
 //                rModel.setPeopleName(people.getPeopleName());
 //                models.add(rModel);
-                return ResponseModel.sucess("", models);
+                if (models!=null && models.size()!=0){
+                    listResponseModel.setData(ListUtils.Pager(pageSize,pageNum,models));
+                    listResponseModel.setPageSize(models.size());
+                    listResponseModel.setPageNum(pageNum);
+                    listResponseModel.setCode(ResultCode.SUCESS);
+                }
+                return listResponseModel;
             } catch (Exception e) {
                 return ResponseModel.fail("", ResultCode.SYS_ERROR);
             }

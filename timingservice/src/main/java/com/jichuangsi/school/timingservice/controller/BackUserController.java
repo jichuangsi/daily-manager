@@ -101,4 +101,11 @@ public class BackUserController {
         backUserService.saveStatus(status);
         return ResponseModel.sucessWithEmptyData("");
     }
+
+    @ApiOperation("根据角色查询后台用户")
+    @ApiImplicitParams({})
+    @GetMapping("/findBackUserByRoleId")
+    public ResponseModel updateStaffRole(@ModelAttribute UserInfoForToken userInfo){
+        return ResponseModel.sucess("",backUserService.findBackUserByRoleName("副院长"));
+    }
 }

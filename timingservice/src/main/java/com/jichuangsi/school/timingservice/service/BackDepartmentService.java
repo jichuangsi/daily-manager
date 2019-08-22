@@ -2,6 +2,7 @@ package com.jichuangsi.school.timingservice.service;
 
 import com.jichuangsi.school.timingservice.constant.ResultCode;
 import com.jichuangsi.school.timingservice.dao.mapper.StaffMapper;
+import com.jichuangsi.school.timingservice.entity.BackUser;
 import com.jichuangsi.school.timingservice.entity.Department;
 import com.jichuangsi.school.timingservice.entity.OpLog;
 import com.jichuangsi.school.timingservice.exception.BackUserException;
@@ -36,6 +37,13 @@ public class BackDepartmentService {
     @Transactional(rollbackFor = Exception.class)
     public void updateDepartment(UserInfoForToken userInfo, Department department){
         departmentRepository.save(department);
+        List<BackUser> backUsers=backUserRepository.findByDeptId(department.getId());
+        if (backUsers!=null){
+            for (BackUser user:backUsers) {
+                user.setDeptName(department.getDeptname());
+                backUserRepository.save(user);
+            }
+        }
         OpLog opLog=new OpLog(userInfo.getUserNum(),"修改","修改部门");
         opLogRepository.save(opLog);
     }

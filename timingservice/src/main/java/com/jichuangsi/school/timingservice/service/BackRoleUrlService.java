@@ -144,6 +144,7 @@ public class BackRoleUrlService {
             urlList.put("查询模块列表","/backrole/getUsemoduleList");
             urlList.put("查询静态页面列表","/backrole/getStaticPageList");
             urlList.put("查询角色管理的部门","/backrole/getRoleDepartmentByRoleId");
+            urlList.put("根据角色查询人员","/backuser/findBackUserByRoleId");
         }
         if(null!=urlList && urlList.size()!=0){
             for (Map.Entry<String,String> entry: urlList.entrySet()) {

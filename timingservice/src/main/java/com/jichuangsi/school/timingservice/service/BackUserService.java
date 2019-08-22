@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class BackUserService {
@@ -116,5 +117,9 @@ public class BackUserService {
     @Transactional(rollbackFor = Exception.class)
     public void saveBackUser(BackUser backUser){
         backUserRepository.save(backUser);
+    }
+
+    public List<BackUser> findBackUserByRoleName(String roleName){
+        return backUserRepository.findByRoleName(roleName);
     }
 }

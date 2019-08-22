@@ -77,12 +77,16 @@ public class BackRoleService {
     }
     //批量增加
     @Transactional(rollbackFor = Exception.class)
-    public void batchInsertRoleDepartment(List<RoleDepartment> roleDepartmentList){
+    public void batchInsertRoleDepartment(UserInfoForToken userInfo,List<RoleDepartment> roleDepartmentList){
         roleDepartmentRepository.saveAll(roleDepartmentList);
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"添加","分配部门");
+        opLogRepository.save(opLog);
     }
     //批量删除
     @Transactional(rollbackFor = Exception.class)
-    public void batchdeleteRoleDepartment(List<RoleDepartment> roleDepartmentList){
+    public void batchdeleteRoleDepartment(UserInfoForToken userInfo,List<RoleDepartment> roleDepartmentList){
         roleDepartmentRepository.deleteInBatch(roleDepartmentList);
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"删除","移除部门");
+        opLogRepository.save(opLog);
     }
 }

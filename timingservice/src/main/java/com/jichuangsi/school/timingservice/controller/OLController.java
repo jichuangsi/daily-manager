@@ -81,11 +81,12 @@ public class OLController {
                     overtimeleaveModel.setOvertimeleave(overtimeleave);
                     overtimeleaveModels.add(overtimeleaveModel);
                 }
-
-                listResponseModel.setData(ListUtils.Pager(pageSize, pageNum, overtimeleaveModels));
-                listResponseModel.setPageSize(overtimeleaveModels.size());
-                listResponseModel.setPageNum(pageNum);
-                listResponseModel.setCode(ResultCode.SUCESS);
+                if(overtimeleaveModels!=null&&overtimeleaveModels.size()!=0){
+                    listResponseModel.setData(ListUtils.Pager(pageSize, pageNum, overtimeleaveModels));
+                    listResponseModel.setPageSize(overtimeleaveModels.size());
+                    listResponseModel.setPageNum(pageNum);
+                    listResponseModel.setCode(ResultCode.SUCESS);
+                }
                 return listResponseModel;
             } else {
                 List<People> allPeople = peopleService.findAllPeople(name);
@@ -107,10 +108,12 @@ public class OLController {
                         overtimeleaveModels.add(overtimeleaveModel);
                     }
                 }
-                listResponseModel.setData(ListUtils.Pager(pageSize, pageNum, overtimeleaveModels));
-                listResponseModel.setPageSize(overtimeleaveModels.size());
-                listResponseModel.setPageNum(pageNum);
-                listResponseModel.setCode(ResultCode.SUCESS);
+                if(overtimeleaveModels!=null&&overtimeleaveModels.size()!=0){
+                    listResponseModel.setData(ListUtils.Pager(pageSize, pageNum, overtimeleaveModels));
+                    listResponseModel.setPageSize(overtimeleaveModels.size());
+                    listResponseModel.setPageNum(pageNum);
+                    listResponseModel.setCode(ResultCode.SUCESS);
+                }
                 return listResponseModel;
             }
         } else if (sttt.equalsIgnoreCase("2")) {
@@ -131,10 +134,12 @@ public class OLController {
                     overtimeleaveModel.setOvertimeleave(overtimeleave);
                 }
 
-                listResponseModel.setData(overtimeleaveModels);
-                listResponseModel.setPageSize(overtimeleaveModels.size());
-                listResponseModel.setPageNum(pageNum);
-                listResponseModel.setCode(ResultCode.SUCESS);
+                if(overtimeleaveModels!=null&&overtimeleaveModels.size()!=0){
+                    listResponseModel.setData(ListUtils.Pager(pageSize, pageNum, overtimeleaveModels));
+                    listResponseModel.setPageSize(overtimeleaveModels.size());
+                    listResponseModel.setPageNum(pageNum);
+                    listResponseModel.setCode(ResultCode.SUCESS);
+                }
                 return listResponseModel;
             } else {
                 List<People> allPeople = peopleService.findAllPeople(name);
@@ -156,10 +161,12 @@ public class OLController {
                         overtimeleaveModels.add(overtimeleaveModel);
                     }
                 }
-                listResponseModel.setData(ListUtils.Pager(pageSize, pageNum, overtimeleaveModels));
-                listResponseModel.setPageSize(overtimeleaveModels.size());
-                listResponseModel.setPageNum(pageNum);
-                listResponseModel.setCode(ResultCode.SUCESS);
+                if(overtimeleaveModels!=null&&overtimeleaveModels.size()!=0){
+                    listResponseModel.setData(ListUtils.Pager(pageSize, pageNum, overtimeleaveModels));
+                    listResponseModel.setPageSize(overtimeleaveModels.size());
+                    listResponseModel.setPageNum(pageNum);
+                    listResponseModel.setCode(ResultCode.SUCESS);
+                }
                 return listResponseModel;
             }
         } else {
@@ -180,11 +187,12 @@ public class OLController {
                         overtimeleaveModels.add(overtimeleaveModel);
                     }
 
-                    listResponseModel.setData(ListUtils.Pager(pageSize, pageNum, overtimeleaveModels));
-                    listResponseModel.setPageSize(overtimeleaveModels.size());
-                    listResponseModel.setPageNum(pageNum);
-                    listResponseModel.setCode(ResultCode.SUCESS);
-
+                    if(overtimeleaveModels!=null&&overtimeleaveModels.size()!=0){
+                        listResponseModel.setData(ListUtils.Pager(pageSize, pageNum, overtimeleaveModels));
+                        listResponseModel.setPageSize(overtimeleaveModels.size());
+                        listResponseModel.setPageNum(pageNum);
+                        listResponseModel.setCode(ResultCode.SUCESS);
+                    }
                     return listResponseModel;
                 } else {
                     List<People> allPeople = peopleService.findAllPeople(name);
@@ -206,11 +214,13 @@ public class OLController {
                             overtimeleaveModels.add(overtimeleaveModel);
                         }
                     }
-                    listResponseModel.setData(ListUtils.Pager(pageSize,pageNum,overtimeleaveModels));
-                    listResponseModel.setPageSize(overtimeleaveModels.size());
-                    listResponseModel.setPageNum(pageNum);
-                    listResponseModel.setCode(ResultCode.SUCESS);
-                    return listResponseModel ;
+                    if(overtimeleaveModels!=null&&overtimeleaveModels.size()!=0){
+                        listResponseModel.setData(ListUtils.Pager(pageSize, pageNum, overtimeleaveModels));
+                        listResponseModel.setPageSize(overtimeleaveModels.size());
+                        listResponseModel.setPageNum(pageNum);
+                        listResponseModel.setCode(ResultCode.SUCESS);
+                    }
+                    return listResponseModel;
                 }
             }
         }

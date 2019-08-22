@@ -221,3 +221,23 @@ CREATE TABLE `useway` (
 INSERT INTO `useway` VALUES ('40282b816c280feb016c284408600002', '考勤管理');
 INSERT INTO `useway` VALUES ('40282b816c280feb016c284408600003', '部门管理');
 INSERT INTO `useway` VALUES ('40282b816c280feb016c284408600004', '管理员管理');
+
+-- ----------------------------
+-- Table structure for role
+-- ----------------------------
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE `role` (
+  `id` varchar(255) NOT NULL,
+  `rolename` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of role
+-- ----------------------------
+INSERT INTO `role` VALUES ('40282b816cacb930016cacbef9040007', '员工');
+INSERT INTO `role` VALUES ('40282b816cacb930016cacbf0b5d0009', '部长');
+INSERT INTO `role` VALUES ('40282b816cacb930016cacbf1b8f000b', '院长');
+INSERT INTO `role` VALUES ('40282b816cacb930016cacbf34a7000d', '副院长');
+
+
