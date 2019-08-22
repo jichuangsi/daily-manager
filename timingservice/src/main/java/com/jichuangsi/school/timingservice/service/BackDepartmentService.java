@@ -48,7 +48,7 @@ public class BackDepartmentService {
         if(backUserRepository.countByDeptId(id)>0){
             throw new BackUserException(ResultCode.DEPT_BACKUSER_EXIST);
         }
-        OpLog opLog=new OpLog(userInfo.getUserNum(),"修改","删除部门");
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"删除","删除部门");
         opLogRepository.save(opLog);
         departmentRepository.deleteById(id);
     }

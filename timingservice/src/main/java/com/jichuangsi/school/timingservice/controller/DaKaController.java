@@ -1,12 +1,10 @@
 package com.jichuangsi.school.timingservice.controller;
 
 import com.jichuangsi.school.timingservice.constant.ResultCode;
-import com.jichuangsi.school.timingservice.entity.Department;
-import com.jichuangsi.school.timingservice.entity.People;
-import com.jichuangsi.school.timingservice.entity.Record;
-import com.jichuangsi.school.timingservice.entity.Rule;
+import com.jichuangsi.school.timingservice.entity.*;
 import com.jichuangsi.school.timingservice.model.*;
 import com.jichuangsi.school.timingservice.repository.IDepartmentRepository;
+import com.jichuangsi.school.timingservice.repository.IRoleRepository;
 import com.jichuangsi.school.timingservice.service.PeopleService;
 import com.jichuangsi.school.timingservice.service.RecordService;
 import com.jichuangsi.school.timingservice.service.RuleService;
@@ -28,6 +26,8 @@ import java.util.List;
 public class DaKaController {
     @Resource
     private IDepartmentRepository iDepartmentRepository;
+    @Resource
+    private IRoleRepository roleRepository;
 
     @Resource
     private RecordService recordService;
@@ -302,8 +302,9 @@ public class DaKaController {
 
     @ApiOperation(value = "今日报表", notes = "")
     @PostMapping("/getTDBB")
-    public ResponseModel<List<ReportFormModel2>> getTDBB(@RequestParam @Nullable String dpid, @RequestParam @Nullable String jpid,@RequestParam int pageSize ,@RequestParam @Nullable int pageNum){
-        if (jpid.equalsIgnoreCase("123456")||jpid.equalsIgnoreCase("40282b816c2878a9016c287b79470002")) {
+    public ResponseModel<List<ReportFormModel2>> getTDBB(@RequestParam(required = false) String name,@RequestParam @Nullable String openid,@RequestParam @Nullable String dpid, @RequestParam @Nullable String jpid,@RequestParam int pageSize ,@RequestParam @Nullable int pageNum){
+        Role role=roleRepository.findByid(jpid);
+        if (jpid.equalsIgnoreCase("123456")||role.getRolename().equals("院长")) {
             try {
                 List<People> peopleList = peopleService.findAll();
                 List<ReportFormModel2> models = new ArrayList<>();
@@ -366,9 +367,9 @@ public class DaKaController {
             } catch (Exception e) {
                 return ResponseModel.fail("", ResultCode.SYS_ERROR);
             }
-        } else if (jpid.equalsIgnoreCase("40282b816c45f723016c46081cc70006")){
+        } else if (role.getRolename().equals("部长")){
             try {
-                String s="40282b816c45f723016c46081cc70006";
+                //String s="40282b816c45f723016c46081cc70006";
                 List<People> peopleList = peopleService.findForD(dpid);
                 List<ReportFormModel2> models = new ArrayList<>();
                 for (People people : peopleList
@@ -432,15 +433,44 @@ public class DaKaController {
             }
         }else {
             try {
-                List<People> peopleList = peopleService.findAll();
+                People people = peopleService.findPeople(openid);
                 List<ReportFormModel2> models = new ArrayList<>();
-                for (People people : peopleList
-                        ) {
-                    List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndStuas(people.getOpenId());
-                    List<Rule> rulelistForTime = ruleService.getRulelistForTime();
-                    if (allByOpenIdAndStuas.size() == rulelistForTime.size()) {
-                        for (Rule rule : rulelistForTime
+                List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndStuas(people.getOpenId());
+                List<Rule> rulelistForTime = ruleService.getRulelistForTime();
+                if (allByOpenIdAndStuas.size() == rulelistForTime.size()) {
+                    for (Rule rule : rulelistForTime
+                            ) {
+                        ReportFormModel2 rModel = new ReportFormModel2();
+                        rModel.setStuas(rule.getStuas());
+                        rModel.setStuas2("0");
+                        rModel.setTime(rule.getTime());
+                        Department byid = iDepartmentRepository.findByid(people.getDepartment());
+                        rModel.setDepartment(byid.getDeptname());
+                        rModel.setJurisdiction(people.getJurisdiction());
+                        rModel.setPeopleName(people.getPeopleName());
+                        models.add(rModel);
+                    }
+                } else {
+                    for (Rule rule : rulelistForTime
+                            ) {
+                        int i = 0;
+                        for (Record record : allByOpenIdAndStuas
                                 ) {
+                            if (rule.getTime() == record.getTime()) {
+                                i++;
+                            }
+                        }
+                        if (i == 0) {
+                            ReportFormModel2 rModel = new ReportFormModel2();
+                            rModel.setStuas(rule.getStuas());
+                            rModel.setStuas2("1");
+                            rModel.setTime(rule.getTime());
+                            Department byid = iDepartmentRepository.findByid(people.getDepartment());
+                            rModel.setDepartment(byid.getDeptname());
+                            rModel.setJurisdiction(people.getJurisdiction());
+                            rModel.setPeopleName(people.getPeopleName());
+                            models.add(rModel);
+                        } else {
                             ReportFormModel2 rModel = new ReportFormModel2();
                             rModel.setStuas(rule.getStuas());
                             rModel.setStuas2("0");
@@ -451,44 +481,12 @@ public class DaKaController {
                             rModel.setPeopleName(people.getPeopleName());
                             models.add(rModel);
                         }
-                    } else {
-                        for (Rule rule : rulelistForTime
-                                ) {
-                            int i = 0;
-                            for (Record record : allByOpenIdAndStuas
-                                    ) {
-                                if (rule.getTime() == record.getTime()) {
-                                    i++;
-                                }
-                            }
-                            if (i == 0) {
-                                ReportFormModel2 rModel = new ReportFormModel2();
-                                rModel.setStuas(rule.getStuas());
-                                rModel.setStuas2("1");
-                                rModel.setTime(rule.getTime());
-                                Department byid = iDepartmentRepository.findByid(people.getDepartment());
-                                rModel.setDepartment(byid.getDeptname());
-                                rModel.setJurisdiction(people.getJurisdiction());
-                                rModel.setPeopleName(people.getPeopleName());
-                                models.add(rModel);
-                            } else {
-                                ReportFormModel2 rModel = new ReportFormModel2();
-                                rModel.setStuas(rule.getStuas());
-                                rModel.setStuas2("0");
-                                rModel.setTime(rule.getTime());
-                                Department byid = iDepartmentRepository.findByid(people.getDepartment());
-                                rModel.setDepartment(byid.getDeptname());
-                                rModel.setJurisdiction(people.getJurisdiction());
-                                rModel.setPeopleName(people.getPeopleName());
-                                models.add(rModel);
-                            }
-                        }
                     }
+                }
 //                rModel.setDepartment(people.getDepartment());
 //                rModel.setJurisdiction(people.getJurisdiction());
 //                rModel.setPeopleName(people.getPeopleName());
 //                models.add(rModel);
-                }
                 return ResponseModel.sucess("", models);
             } catch (Exception e) {
                 return ResponseModel.fail("", ResultCode.SYS_ERROR);

@@ -78,16 +78,18 @@ public class SQController {
 
     @ApiOperation(value = "根据uuid查图片", notes = "")
     @PostMapping("/getimg")
-    public ResponseModel<List<File>> SQGetImg( @RequestParam String uuid) throws FileNotFoundException {
+    public ResponseModel<List<byte[]>> SQGetImg( @RequestParam String uuid) throws FileNotFoundException {
 
-        List<File> files = new ArrayList<>();
+        //List<File> files = new ArrayList<>();
+        List<byte[]> imgs=new ArrayList<>();
         List<Img> f=sqService.getImgList(uuid);
-            for (Img img:f
-                 ) {
-                files.add(Byte2File.getFile(img.getImg(),filePath,UUID.randomUUID().toString()+".jpg"));
+            for (Img img:f) {
+                byte[] b=img.getImg();
+                imgs.add(b);
+                //files.add(Byte2File.getFile(img.getImg(),filePath,UUID.randomUUID().toString()+".jpg"));
             }
-        ResponseModel<List<File>> odel = new ResponseModel<>();
-        odel.setData(files);
+        ResponseModel<List<byte[]>> odel = new ResponseModel<>();
+        odel.setData(imgs);
         odel.setCode(ResultCode.SUCESS);
         return odel;
 
@@ -120,12 +122,13 @@ public class SQController {
                     sqFlieModel2.setSqFlie(sqFlie);
                     sqFlieModel2s.add(sqFlieModel2);
                 }
-
-                List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
-                odel.setPageNum(pageNum);
-                odel.setPageSize(sqFlieModel2s.size());
-                odel.setData(pager);
-                odel.setCode(ResultCode.SUCESS);
+                if(sqFlieModel2s.size()!=0){
+                    List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
+                    odel.setPageNum(pageNum);
+                    odel.setPageSize(sqFlieModel2s.size());
+                    odel.setData(pager);
+                    odel.setCode(ResultCode.SUCESS);
+                }
                 return odel;
             } else {
                 List<People> allPeople = peopleService.findAllPeople(name);
@@ -148,11 +151,13 @@ public class SQController {
 
                 }
                 ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
-                List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
-                odel.setPageNum(pageNum);
-                odel.setPageSize(sqFlieModel2s.size());
-                odel.setData(pager);
-                odel.setCode(ResultCode.SUCESS);
+                if(sqFlieModel2s.size()!=0){
+                    List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
+                    odel.setPageNum(pageNum);
+                    odel.setPageSize(sqFlieModel2s.size());
+                    odel.setData(pager);
+                    odel.setCode(ResultCode.SUCESS);
+                }
                 return odel;
             }
         } else if (sttt.equalsIgnoreCase("2")) {
@@ -172,11 +177,13 @@ public class SQController {
                     sqFlieModel2.setSqFlie(sqFlie);
                     sqFlieModel2s.add(sqFlieModel2);
                 }
-                List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
-                odel.setPageNum(pageNum);
-                odel.setPageSize(sqFlieModel2s.size());
-                odel.setData(pager);
-                odel.setCode(ResultCode.SUCESS);
+                if(sqFlieModel2s.size()!=0){
+                    List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
+                    odel.setPageNum(pageNum);
+                    odel.setPageSize(sqFlieModel2s.size());
+                    odel.setData(pager);
+                    odel.setCode(ResultCode.SUCESS);
+                }
                 return odel;
             } else {
                 List<People> allPeople = peopleService.findAllPeople(name);
@@ -199,11 +206,13 @@ public class SQController {
 
                 }
                 ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
-                List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
-                odel.setPageNum(pageNum);
-                odel.setPageSize(sqFlieModel2s.size());
-                odel.setData(pager);
-                odel.setCode(ResultCode.SUCESS);
+                if(sqFlieModel2s.size()!=0){
+                    List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
+                    odel.setPageNum(pageNum);
+                    odel.setPageSize(sqFlieModel2s.size());
+                    odel.setData(pager);
+                    odel.setCode(ResultCode.SUCESS);
+                }
                 return odel;
             }
         } else {
@@ -222,12 +231,13 @@ public class SQController {
                     sqFlieModel2.setSqFlie(sqFlie);
                     sqFlieModel2s.add(sqFlieModel2);
                 }
-
-                List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
-                odel.setPageNum(pageNum);
-                odel.setPageSize(sqFlieModel2s.size());
-                odel.setData(pager);
-                odel.setCode(ResultCode.SUCESS);
+                if(sqFlieModel2s.size()!=0){
+                    List pager = ListUtils.Pager(pageSize, pageNum, sqFlieModel2s);
+                    odel.setPageNum(pageNum);
+                    odel.setPageSize(sqFlieModel2s.size());
+                    odel.setData(pager);
+                    odel.setCode(ResultCode.SUCESS);
+                }
                 return odel;
             }else {
                 List<People> allPeople = peopleService.findAllPeople(name);

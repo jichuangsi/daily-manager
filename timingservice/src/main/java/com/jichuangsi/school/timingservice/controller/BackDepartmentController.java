@@ -32,7 +32,7 @@ public class BackDepartmentController {
     @ApiImplicitParams({})
     @PostMapping("/updateDepartment")
     public ResponseModel updateDepartment(@ModelAttribute UserInfoForToken userInfo,@RequestBody Department department){
-        departmentService.saveDepartment(userInfo,department);
+        departmentService.updateDepartment(userInfo,department);
         return ResponseModel.sucessWithEmptyData("");
     }
     @ApiOperation("删除部门信息")
