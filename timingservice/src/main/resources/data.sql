@@ -235,9 +235,9 @@ CREATE TABLE `role` (
 -- ----------------------------
 -- Records of role
 -- ----------------------------
-INSERT INTO `role` VALUES ('40282b816cacb930016cacbef9040007', '员工');
-INSERT INTO `role` VALUES ('40282b816cacb930016cacbf0b5d0009', '部长');
-INSERT INTO `role` VALUES ('40282b816cacb930016cacbf1b8f000b', '院长');
-INSERT INTO `role` VALUES ('40282b816cacb930016cacbf34a7000d', '副院长');
+INSERT INTO `role` VALUES ('40282b816c427657016c4282d71f0005', '员工');
+INSERT INTO `role` VALUES ('40282b816c2878a9016c287b79470002', '院长');
+INSERT INTO `role` VALUES ('40282b816c45f723016c46081cc70006', '部长');
+INSERT INTO `role` VALUES ('40282b816c45f723016c46081cc725676', '副院长');
 
 
