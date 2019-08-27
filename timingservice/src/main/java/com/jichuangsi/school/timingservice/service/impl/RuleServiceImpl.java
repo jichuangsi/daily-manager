@@ -39,7 +39,7 @@ public class RuleServiceImpl implements RuleService {
 
     @Override
     public List<Rule> getRulelist() {
-       return ruleRepostitory.findAllByTimeGreaterThanEqual(TimeUtils.todayMorning());
+       return ruleRepostitory.findAllByTimeGreaterThanEqualOrderByTime(TimeUtils.todayMorning());
     }
 
     @Override
@@ -61,7 +61,7 @@ public class RuleServiceImpl implements RuleService {
 
     @Override
     public void copyRlueModel() {
-        List<RuleFather> all = rfRepostitory.findAll();
+        List<RuleFather> all = rfRepostitory.findAllOrderBy();
         ;
         for (RuleFather rf:all
              ) {
@@ -94,7 +94,7 @@ public class RuleServiceImpl implements RuleService {
 
     @Override
     public List<RuleFather> getRuleFatherList() {
-        return rfRepostitory.findAll();
+        return rfRepostitory.findAllOrderBy();
     }
 
     @Override

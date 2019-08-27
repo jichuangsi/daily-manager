@@ -65,5 +65,10 @@ public class RecordServiceImpl implements RecordService {
         return recordRepostitory.findAllByOpenIdAndStuasAndTimeBetween(openId,"0",timeStart,timeEnd);
     }
 
+    @Override
+    public List<Record> findAllByOpenIdAndStuasAndRuleIdAndTimeBetween(String openId, long timeStart, long timeEnd,String ruleId) {
+        return recordRepostitory.findAllByOpenIdAndStuasAndTimeBetweenAndRuleId(openId,"0",timeStart,timeEnd,ruleId);
+    }
+
 
 }

@@ -18,7 +18,7 @@ public interface RuleRepostitory extends JpaRepository<Rule,Integer>{
     @Query(value = "insert into rule(time,wifi_name,longitude_latitude,stuas,wucha) values(?1,?2,?3,?4,?5)",nativeQuery = true)
     void insertRule(Long time, String wifiName, String longitudeLatitude, String stuas,String wucha);
 
-    List<Rule> findAllByTimeGreaterThanEqual(long time);
+    List<Rule> findAllByTimeGreaterThanEqualOrderByTime(long time);
 
     @Query(value = "SELECT * FROM rule  ORDER BY id DESC LIMIT 1",nativeQuery = true)
     Rule findLastRule();

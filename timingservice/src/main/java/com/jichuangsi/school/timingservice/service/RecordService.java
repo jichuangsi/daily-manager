@@ -23,4 +23,6 @@ public interface RecordService {
 
 
     List<Record> findAllByOpenIdAndStuasAndTimeBetween(String openId, long timeStart, long timeEnd);
+
+    List<Record> findAllByOpenIdAndStuasAndRuleIdAndTimeBetween(String openId, long timeStart, long timeEnd,String ruleId);
 }

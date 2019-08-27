@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 public interface RFRepostitory extends JpaRepository<RuleFather,String> {
@@ -25,4 +26,8 @@ public interface RFRepostitory extends JpaRepository<RuleFather,String> {
     @Modifying
     @Query(value = "DELETE FROM rulefather WHERE id = ?1",nativeQuery = true)
     void deleteForId(String ruleFatherId);
+
+    @Transactional
+    @Query(value = "SELECT * FROM rulefather ORDER BY time",nativeQuery = true)
+    List<RuleFather> findAllOrderBy();
 }

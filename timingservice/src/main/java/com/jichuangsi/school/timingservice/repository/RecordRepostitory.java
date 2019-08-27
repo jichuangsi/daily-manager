@@ -33,4 +33,6 @@ public interface RecordRepostitory extends JpaRepository<Record,String>{
     List<Record> findFirstByOpenIdAndRuleIdAndStuasOrOpenIdAndRuleIdAndStuasOrderByStuas(String openId1, String ruleId1, String s, String s1);
 
     List<Record> findAllByOpenIdAndStuasAndTimeBetween(String openId,String stuas, long timeStart, long timeEnd);
+
+    List<Record> findAllByOpenIdAndStuasAndTimeBetweenAndRuleId(String openId,String stuas, long timeStart, long timeEnd,String ruleId);
 }
