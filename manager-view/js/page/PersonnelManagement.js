@@ -2,7 +2,10 @@ layui.use(['form', 'table'], function() {
 	var form = layui.form,
 		table = layui.table;
 	var status = [];
-
+	var user = JSON.parse(sessionStorage.getItem('userInfo'))
+	var deptId;
+	
+	getRoleDep(user);
 	table.render({
 		elem: '#demo',
 		method: "get",
@@ -63,7 +66,7 @@ layui.use(['form', 'table'], function() {
 				arr = res.data.content;
 				totalElements = res.data.totalElements;
 			} else if(res.code == '0031') {
-				code=0031
+				code = 0031
 			}
 			return {
 				"code": code,
@@ -75,6 +78,9 @@ layui.use(['form', 'table'], function() {
 		request: {
 			pageName: 'pageNum',
 			limitName: "pageSize"
+		},
+		where: {
+			deptId: deptId
 		}
 	});
 	//条件查询
@@ -83,11 +89,19 @@ layui.use(['form', 'table'], function() {
 		if(param.statusId == -1) {
 			param.statusId = '';
 		}
-		console.log(param);
 		table.reload('idTest', {
 			where: {
 				"statusId": param.statusId,
-				"staffName": param.staffName
+				"staffName": param.staffName,
+				'deptId': param.roleDept
+			}
+		});
+	});	
+	form.on('select(roleDept)', function(data) {
+		var param =data.value;
+		table.reload('idTest', {
+			where: {
+				'deptId': param
 			}
 		});
 	});
@@ -118,7 +132,9 @@ layui.use(['form', 'table'], function() {
 					$('#status').append(options);
 					$('#setStatus').append(options);
 					form.render('select');
-				} else {}
+				} else {
+
+				}
 			}
 		});
 	}
@@ -290,14 +306,38 @@ layui.use(['form', 'table'], function() {
 		}
 
 	});
-	UrlSearch();
-
-	function UrlSearch() { //获取url里面的参数
-		var name, value;
-		var str = location.href; //取得整个地址栏
-		var num = str.indexOf("//")
-		str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
-		var arr = str.split("/"); //各个参数放到数组里
-		return arr[1];
+	//根据角色获取角色所管理的部门
+	function getRoleDep(user) {
+		var	id=user.id;
+		var options = '';
+		var arr = [];
+		$('#roleDept').empty();
+		$.ajax({
+			type: "get",
+			async: false,
+			url: httpUrl() + '/backrole/getRoleDepartmentByRoleId?roleId=' + id,
+			headers: {
+				'accessToken': getToken()
+			},
+			success: function(res) {
+				if(res.code == '0010') {
+					arr = res.data;
+					if(arr.length == 0) {
+						$('#allDept').empty();
+					} else {
+						for(var i = 0; i < arr.length; i++) {
+							options += '<option value="' + arr[i].deptId + '" >' + arr[i].deptName + '</option>'
+						}
+						$('#roleDept').append(options);
+						$("#roleDept option[value=" + arr[0].deptId + "]").prop("selected", true);
+						form.render('select');
+						deptId = arr[0].deptId
+					}
+				} else {
+					console.log(res.msg)
+				}
+			}
+		});
 	}
+
 })

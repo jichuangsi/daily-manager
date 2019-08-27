@@ -67,12 +67,21 @@ layui.use(['form', 'table'], function() {
 					field: 'schooldel',
 					title: '详情',
 					align: 'center',
+					event: 'setSign',
 					toolbar: '#details'
-				}, {
+				},{
 					field: 'schooldel',
-					title: '操作',
+					title: '操作状态',
 					align: 'center',
-					toolbar: '#operation'
+					templet: function(d) {
+						if(d.sqFlie.stuas == 0) {
+							return '<span class="layui-btn-sm layui-btn" id="Agree">同意</span><span class="layui-btn-sm layui-btn" id="Reject">驳回</span> '
+						} else if(d.sqFlie.stuas == 1) {
+							return "同意"
+						} else if(d.sqFlie.stuas == 2) {
+							return "驳回"
+						}
+					}
 				}
 
 			]
@@ -97,22 +106,29 @@ layui.use(['form', 'table'], function() {
 		request: {
 			pageName: 'pageNum',
 			limitName: "pageSize"
-		},where:{
-			name:'',
-			sttt:''
+		},
+		where: {
+			name: '',
+			sttt: ''
 		}
 	});
+	table.on('tool(demo)', function(data) {
+		var param = data.data;
+		if(param.sqFlie.uuid != null) {
+			setImg(param.sqFlie.uuid);
+		}
+	})
+	
 	table.on('row(demo)', function(data) {
 		var param = data.data;
-		setImg(param.sqFlie.uuid);
 
 		$(document).on('click', '#Agree', function() {
-			param.sqFlie.id = '1'; //
-			AuditApplications("确认要同意该申请吗", param);
+			param.sqFlie.stuas = '1'; //
+			AuditApplications("确认要同意该申请吗", param.sqFlie);
 		});
 		$(document).on('click', '#Reject', function() {
-			param.sqFlie.id = '2'; //不同意
-			AuditApplications('确认要驳回该申请吗', param);
+			param.sqFlie.stuas = '2'; //不同意
+			AuditApplications('确认要驳回该申请吗', param.sqFlie);
 		});
 	});
 	/*审核*/
@@ -162,8 +178,8 @@ layui.use(['form', 'table'], function() {
 					$("#img").empty();
 					var data = res.data;
 					var content = ''
-					if(data.length!=0) {
-						for(var i=0;i<data.length;i++){
+					if(data.length != 0) {
+						for(var i = 0; i < data.length; i++) {
 							content += '<img src="data:image/jpeg;base64,' + data[i] + '" />';
 						}
 						//获取数据生成图片

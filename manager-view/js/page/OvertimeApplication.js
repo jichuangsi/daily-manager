@@ -18,7 +18,6 @@ layui.use(['form', 'table'], function() {
 			}
 		});
 	});
-		console.log(getToken());
 	table.render({
 		elem: '#demo',
 		method: "post",
@@ -83,9 +82,9 @@ layui.use(['form', 'table'], function() {
 					align: 'center',
 					templet: function(d) {
 						if(d.overtimeleave.stuas == 1) {
-							return "请假申请"
-						} else if(d.overtimeleave.stuas == 2) {
 							return "加班申请"
+						} else if(d.overtimeleave.stuas == 2) {
+							return "请假申请"
 						}
 					}
 				}, {

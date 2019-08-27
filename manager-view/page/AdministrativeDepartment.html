@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>管理部门</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../css/font.css">
+		<link rel="stylesheet" href="../css/xadmin.css">
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all">
+		<script src="../lib/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/xadmin.js"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
+		<script type="text/javascript" src="../js/page/AdministrativeDepartment.js"></script>
+	</head>
+	<style type="text/css">
+		.widths {
+			width: 300px;
+		}
+		
+		#demo {
+			margin-left: 110px;
+		}
+		
+		.toast-success {
+			background-color: #04A3FF !important;
+		}
+		
+		.layui-form-select dl dd.layui-this {
+			background-color: #1E9FFF;
+		}
+	</style>
+
+	<body>
+		<div class="x-nav">
+			<a class="layui-btn layui-btn-small layui-btn-normal" style="line-height:1.6em;margin-top:3px;float:right;" href="javascript:location.replace(location.href);" title="刷新">
+				<i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+		</div>
+		<div class="x-body">
+
+			<fieldset class="layui-elem-field layui-field-title">
+
+				<legend>管理部门</legend>
+				<form class="layui-form" autocomplete="off" lay-filter="test">
+					<div class="layui-form-item">
+						<label class="layui-form-label"></label>
+						<div class="layui-input-block widths">
+							<select name="role" lay-verify="required" lay-filter="role" id="status">
+								<option value="-1">请选择角色用户</option>
+								<option value="">院长</option>
+								<option value="">副院长</option>
+								<option value="">科长</option>
+							</select>
+
+						</div>
+					</div>
+				</form>
+				<div class="layui-field-box">
+					<div id="demo"></div>
+				</div>
+			</fieldset>
+		</div>
+	</body>
+
+</html>
