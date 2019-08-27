@@ -3,9 +3,13 @@ layui.use(['form', 'table'], function() {
 		table = layui.table;
 	//获取登陆者的信息
 	function getUser() {
-		var user =JSON.parse(sessionStorage.getItem('userInfo'))
-		if(user.roleName=="M"){
-			user.wechat='';	
+		var user = JSON.parse(sessionStorage.getItem('userInfo'))
+		getRoleDep(user);
+		if(user.roleName == "M") {
+			user.wechat = '';
+		}
+		if(user.roleName == '员工') {
+			$('#name').hide();
 		}
 		return user;
 	}
@@ -79,7 +83,7 @@ layui.use(['form', 'table'], function() {
 			if(res.code == "0010") {
 				code = 0;
 				arr = res.data;
-				total = arr.length;
+				total = res.pageSize;
 			}
 			return {
 				"code": 0,
@@ -91,13 +95,22 @@ layui.use(['form', 'table'], function() {
 		request: {
 			pageName: 'pageNum',
 			limitName: "pageSize"
-		},where:{
-			dpid:getUser().deptId,
-			jpid:getUser().roleId,
-			openid:getUser().wechat
+		},
+		where: {
+			dpid: getUser().deptId,
+			jpid: getUser().roleId,
+			openid: getUser().wechat
 		}
 	});
-
+	//下拉查询部门
+	form.on('select(roleDept)', function(data) {
+		var param = data.value;
+		table.reload('idTest', {
+			where: {
+				'dpid': param
+			}
+		});
+	});
 	form.on('submit(sreach)', function(data) {
 		var param = data.field;
 		table.reload('idTest', {
@@ -110,4 +123,37 @@ layui.use(['form', 'table'], function() {
 			}
 		});
 	})
+	//根据角色获取角色所管理的部门
+	function getRoleDep(user) {
+		var id=user.id;
+		var options = '';
+		var arr = [];
+		$('#roleDept').empty();
+		$.ajax({
+			type: "get",
+			async: false,
+			url: httpUrl() + '/backrole/getRoleDepartmentByRoleId?roleId=' + id,
+			headers: {
+				'accessToken': getToken()
+			},
+			success: function(res) {
+				if(res.code == '0010') {
+					arr = res.data;
+					if(arr.length == 0) {
+						$('#allDept').empty();
+					} else {
+						for(var i = 0; i < arr.length; i++) {
+							options += '<option value="' + arr[i].deptId + '" >' + arr[i].deptName + '</option>'
+						}
+						$('#roleDept').append(options);
+						$("#roleDept option[value=" + user.deptId + "]").prop("selected", true);
+						form.render('select');
+						deptId = arr[0].deptId
+					}
+				} else {
+					console.log(res.msg)
+				}
+			}
+		});
+	}
 })

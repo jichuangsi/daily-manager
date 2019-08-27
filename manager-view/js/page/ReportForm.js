@@ -6,6 +6,10 @@ layui.use(['form', 'table', 'laydate'], function() {
 	date.setMonth(date.getMonth() - 1);
 	var dateStart = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 	var dateEnd = date.getFullYear() + "-" + (date.getMonth() + 2) + "-" + date.getDate();
+	//获取角色登陆的信息
+	var user = JSON.parse(sessionStorage.getItem('userInfo'))
+	var deptId;
+	getRoleDep(user);
 	table.render({
 		elem: '#demo',
 		method: "post",
@@ -16,7 +20,6 @@ layui.use(['form', 'table', 'laydate'], function() {
 			'content-type': 'application/x-www-form-urlencoded',
 			'accessToken': getToken()
 		},
-		id: 'idTest',
 		cols: [
 			[{
 					field: 'id',
@@ -41,7 +44,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 
 				{
 					field: 'kq',
-					title: '考勤次数',
+					title: '考勤正常次数',
 					align: 'center',
 				}, {
 					field: 'qq',
@@ -50,7 +53,6 @@ layui.use(['form', 'table', 'laydate'], function() {
 				}
 			]
 		],
-		toolbar: '#operation',
 		page: true,
 		parseData: function(res) {
 			var arr;
@@ -69,6 +71,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 			};
 		},
 		where: {
+			deptId: user.deptId,
 			timeStart: dateStart,
 			timeEnd: dateEnd,
 			name: ''
@@ -82,6 +85,15 @@ layui.use(['form', 'table', 'laydate'], function() {
 		elem: '#test',
 		range: '~'
 	});
+
+	form.on('select(roleDept)', function(data) {
+		var param = data.value;
+		table.reload('idTest', {
+			where: {
+				'deptId': param
+			}
+		});
+	});	
 	form.on('submit(sreach)', function(data) {
 		var param = data.field;
 		var date = param.date.split('~');
@@ -102,10 +114,54 @@ layui.use(['form', 'table', 'laydate'], function() {
 				'accessToken': getToken()
 			},
 			where: {
+				deptId:param.roleDept,
 				timeStart: dateStart,
 				timeEnd: dateEnd,
 				name: param.name
 			}
 		});
 	});
+	//监听部门的管理列表
+	var deptId;
+	form.on('select(roleDept)', function(data) {
+		var param = data.value;
+		table.reload('idTest', {
+			where: {
+				'deptId': param
+			}
+		});
+	});
+	//根据角色获取角色所管理的部门
+	function getRoleDep(user) {
+		var id = user.id;
+		var options = '';
+		var arr = [];
+		$('#roleDept').empty();
+		$.ajax({
+			type: "get",
+			async: false,
+			url: httpUrl() + '/backrole/getRoleDepartmentByRoleId?roleId=' + id,
+			headers: {
+				'accessToken': getToken()
+			},
+			success: function(res) {
+				if(res.code == '0010') {
+					arr = res.data;
+					if(arr.length == 0) {
+						$('#allDept').empty();
+					} else {
+						for(var i = 0; i < arr.length; i++) {
+							options += '<option value="' + arr[i].deptId + '" >' + arr[i].deptName + '</option>'
+						}
+						$('#roleDept').append(options);
+						$("#roleDept option[value=" + user.deptId + "]").prop("selected", true);
+						form.render('select');
+						deptId = arr[0].deptId
+					}
+				} else {
+					console.log(res.msg)
+				}
+			}
+		});
+	}
 })

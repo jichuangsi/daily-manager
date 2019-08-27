@@ -78,10 +78,15 @@ layui.use(['form', 'element'], function() {
 		}
 		$('#nav').empty();
 		var content = '';
+		var obj = {};
+		var Modular = Modular.reduce((cur, next) => {
+			obj[next.id] ? "" : obj[next.id] = true && cur.push(next);
+			return cur;
+		}, [])
 		for(var i = 0; i < Modular.length; i++) {
 			content += "<li>";
 			content += '<a href="javascript:;">';
-			content += '<i class="iconfont">&#xe6b8;</i>';
+			content += '<i class="iconfont"></i>';
 			content += '<cite>' + Modular[i].name + '</cite>';
 			content += '<i class="iconfont nav_right">&#xe697;</i>';
 			content += '</a>';
@@ -99,7 +104,7 @@ layui.use(['form', 'element'], function() {
 			content += '</ul>';
 			content += "</li>";
 		}
-		if(content==''){
+		if(content == '') {
 			$('.left-nav').addClass('jq');
 			$('.page-content').addClass('cq')
 		}

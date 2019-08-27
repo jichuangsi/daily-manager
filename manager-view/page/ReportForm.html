@@ -15,7 +15,7 @@
 		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 		<script type="text/javascript" src="../js/xadmin.js"></script>
 		<script type="text/javascript" src="../js/util.js"></script>
-		<script type="text/javascript" src="../js/Configuration.js" ></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
 		<script type="text/javascript" src="../js/page/ReportForm.js"></script>
 
 	</head>
@@ -37,6 +37,10 @@
 								</div>
 								<div class="layui-input-inline">
 									<input type="text" name="date" placeholder="日期范围" autocomplete="off" id="test" class="layui-input">
+								</div>
+								<div class="layui-input-inline" id="allDept">
+									<select name="roleDept" id="roleDept" lay-filter="roleDept">
+									</select>
 								</div>
 								<div class="layui-btn layui-btn layui-btn-normal" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></div>
 							</form>
