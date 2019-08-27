@@ -101,7 +101,7 @@ Page({
               })
             },1000)
           for(let i = 0; i<arr.length;i++){
-            self.savefile(arr[i],res.data.uuid)
+            self.savefile(arr[i], res.data.data)
           }
           } else if (res.data.code == '007') {
             self.setData({
@@ -150,6 +150,7 @@ Page({
     self.setData({
       ruleId: options.id
     })
+    console.log(self.data.ruleId)
     // wx.setNavigationBarTitle({title:options.name})
     wx.getStorage({
       key: 'userid',
