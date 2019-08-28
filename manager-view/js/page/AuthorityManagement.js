@@ -217,7 +217,6 @@ layui.use(['form', 'table', 'tree', 'util'], function() {
 					}
 				}
 			}
-			console.log(arrList);
 			for(var i = 0; i < arrList.length; i++) {
 				list.push({
 					rid: tableId,
@@ -273,7 +272,6 @@ layui.use(['form', 'table', 'tree', 'util'], function() {
 					}
 				}
 			}
-			console.log(arrList);
 			for(var i = 0; i < arrList.length; i++) {
 				list.push({
 					id: arrList[i].relationId

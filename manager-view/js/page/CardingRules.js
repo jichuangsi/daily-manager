@@ -185,7 +185,6 @@ layui.use(['form', 'table', 'laydate'], function() {
 
 	function init() {
 		var lat = $('input[name=lat]').val()
-		console.log(lat);
 		if(lat == '') {
 			getWifiTemplate();
 		}
@@ -204,7 +203,6 @@ layui.use(['form', 'table', 'laydate'], function() {
 				if(res.code == '0010') {
 					var arr = res.data;
 					var longitudeLatitude;
-					console.log(arr)
 					var list;
 					if(arr.length > 0) {
 						list = arr[0];
