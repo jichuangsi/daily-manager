@@ -7,6 +7,7 @@ public class ReportFormModel2 {
     private String stuas;
     private String stuas2;
     private long time;
+    private long chockinTime;
 
     public String getDepartment() {
         return department;
@@ -54,5 +55,13 @@ public class ReportFormModel2 {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public long getChockinTime() {
+        return chockinTime;
+    }
+
+    public void setChockinTime(long chockinTime) {
+        this.chockinTime = chockinTime;
     }
 }

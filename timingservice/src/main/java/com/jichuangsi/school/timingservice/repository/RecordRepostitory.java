@@ -34,5 +34,7 @@ public interface RecordRepostitory extends JpaRepository<Record,String>{
 
     List<Record> findAllByOpenIdAndStuasAndTimeBetween(String openId,String stuas, long timeStart, long timeEnd);
 
+    List<Record> findAllByOpenIdAndTimeBetween(String openId, long timeStart, long timeEnd);
+
     List<Record> findAllByOpenIdAndStuasAndTimeBetweenAndRuleId(String openId,String stuas, long timeStart, long timeEnd,String ruleId);
 }

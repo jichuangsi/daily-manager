@@ -73,7 +73,7 @@ INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d1876', '获取员工�
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d1102', '修改员工状态', '/backstaff/updateStaff');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d1489', '修改员工部门', '/backstaff/updateStaffDept');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d1561', '修改职位部门', '/backstaff/updateStaffRole');
-INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbcb2bb0013', '查看考勤', '/kq/getTDBB');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbcb2bb0013', '查看考勤', '/kq/getDailyList');
 INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2daf8cc70021', '查看考勤申请', '/sq/getAllUnapprovedSQ');
 INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db0452f0032', '查看请假申请', '/ol/getolrecord1');
 INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db0d28f0043', '查看加班申请', '/ol/getolrecord1');
@@ -102,6 +102,8 @@ INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d23645', '获取角色
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d4568', '获取角色', '/backrole/getRoleList');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d15488', '给角色添加需要管理的部门', '/backrole/batchAddRoleDepartment');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d75416', '取消角色所管理的部门', '/backrole/batchDeleteRoleDepartment');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d982364', '导出考勤记录', '/kq/importDailyList');
+
 
 -- ----------------------------
 -- Table structure for staticpage_url
@@ -158,6 +160,8 @@ INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d2186', '40282b
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d88876', '40282b816c42363c016c42370317187914', '40282b816c2db5d6016c2dbeb16d4568');
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d27865', '40282b816c42363c016c42370317187914', '40282b816c2db5d6016c2dbeb16d15488');
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d75876', '40282b816c42363c016c42370317187914', '40282b816c2db5d6016c2dbeb16d75416');
+INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbebcfd1478', '40282b816c42363c016c423703170001', '40282b816c2db5d6016c2dbeb16d982364');
+
 
 -- ----------------------------
 -- Table structure for static_page
