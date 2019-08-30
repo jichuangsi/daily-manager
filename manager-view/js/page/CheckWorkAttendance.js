@@ -19,9 +19,9 @@ layui.use(['form', 'table', 'laydate'], function() {
 		return user;
 	}
 	var date = new Date();
-	date.setMonth(date.getMonth() - 1);
+	//	date.setMonth(date.getMonth() - 1);
 	var dateStart = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-	var dateEnd = date.getFullYear() + "-" + (date.getMonth() + 2) + "-" + date.getDate();
+	var dateEnd = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 
 	var temp1 = '';
 	getUser();
@@ -144,14 +144,28 @@ layui.use(['form', 'table', 'laydate'], function() {
 		var date = param.date.split('~');
 		if(param.date == '') {
 			var date = new Date();
-			date.setMonth(date.getMonth() - 1);
+//			date.setMonth(date.getMonth() - 1);
 			var dateStart = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-			var dateEnd = date.getFullYear() + "-" + (date.getMonth() + 2) + "-" + date.getDate();
+			var dateEnd = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 		} else {
 			var dateStart = date[0];
 			var dateEnd = date[1];
+			var startTime = new Date(dateStart); // 开始时间
+			var endTime = new Date(dateEnd); // 结束时间
+			if(Math.floor((endTime - startTime) / 1000 / 60 / 60 / 24) > 93) {
+				var date = new Date();
+				date.setMonth(date.getMonth() - 1);
+				var dateStart = date.getFullYear() + "-" + (date.getMonth()-1) + "-" + date.getDate();
+				var dateEnd = date.getFullYear() + "-" + (date.getMonth() + 2) + "-" + date.getDate();
+			}
 		}
-		temp1 = setExcel(param.roleDept, dateEnd, dateStart);
+		if(param.roleDept==undefined){
+			temp1 = setExcel(' ',dateStart,dateEnd);
+			
+		}else{
+			temp1 = setExcel(param.roleDept, dateEnd, dateStart);
+		}
+		
 		table.reload('idTest', {
 			url: httpUrl() + '/kq/getDailyList',
 			header: {
@@ -214,9 +228,9 @@ layui.use(['form', 'table', 'laydate'], function() {
 			contentType: "application/json",
 			dataType: 'json',
 			success: function(res) {
-				if(res.code=='0010'){
-					temp=res.data;
-				}else if(res.code=='0031'){
+				if(res.code == '0010') {
+					temp = res.data;
+				} else if(res.code == '0031') {
 					layui.notice.info("提示信息：权限不足");
 				}
 			}
@@ -224,7 +238,8 @@ layui.use(['form', 'table', 'laydate'], function() {
 		return temp;
 	}
 	$(document).on('click', '#exportBtn', function() {
-		var str=SplicingTable(temp1);
+		var str = SplicingTable(temp1);
+		console.log(str)
 		exporExcel("考勤记录", str);
 	});
 	//拼接table与获取数据分开
