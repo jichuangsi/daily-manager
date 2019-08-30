@@ -28,14 +28,20 @@ public class BackDepartmentService {
     private IBackUserRepository backUserRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public void saveDepartment(UserInfoForToken userInfo, Department department){
+    public void saveDepartment(UserInfoForToken userInfo, Department department) throws BackUserException{
+        if(departmentRepository.countByDeptname(department.getDeptname())>0){
+            throw new BackUserException(ResultCode.DEPT_ISEXIST_MSG);
+        }
         departmentRepository.save(department);
         OpLog opLog=new OpLog(userInfo.getUserNum(),"添加","添加部门");
         opLogRepository.save(opLog);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void updateDepartment(UserInfoForToken userInfo, Department department){
+    public void updateDepartment(UserInfoForToken userInfo, Department department)throws BackUserException{
+        if(departmentRepository.countByDeptname(department.getDeptname())>0){
+            throw new BackUserException(ResultCode.DEPT_ISEXIST_MSG);
+        }
         departmentRepository.save(department);
         List<BackUser> backUsers=backUserRepository.findByDeptId(department.getId());
         if (backUsers!=null){

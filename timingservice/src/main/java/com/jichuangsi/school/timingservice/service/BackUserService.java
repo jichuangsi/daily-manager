@@ -96,8 +96,8 @@ public class BackUserService {
         if(StringUtils.isEmpty(model.getFirstPwd()) || StringUtils.isEmpty(model.getSecondPwd())){
             throw new BackUserException(ResultCode.PARAM_MISS_MSG);
         }
-        if(model.getFirstPwd().equals(model.getSecondPwd())){
-            throw new BackUserException(ResultCode.PARAM_MISS_MSG);
+        if(!(model.getFirstPwd().equals(model.getSecondPwd()))){
+            throw new BackUserException(ResultCode.PWD_NOT_MSG);
         }
         BackUser user=backUserRepository.findByid(userInfoForToken.getUserId());
         if(null==user){

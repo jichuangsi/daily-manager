@@ -113,14 +113,20 @@ public class StaffConsoleService {
 
     //修改状态
     @Transactional(rollbackFor = Exception.class)
-    public void updateStatusById(UserInfoForToken userInfo, String statusId, String wechat){
+    public void updateStatusById(UserInfoForToken userInfo, String statusId, String wechat)throws BackUserException{
+        if(StringUtils.isEmpty(statusId) || StringUtils.isEmpty(wechat)){
+            throw new BackUserException(ResultCode.PARAM_MISS_MSG);
+        }
         staffMapper.updateStatusById(wechat,statusId);
         OpLog opLog=new OpLog(userInfo.getUserNum(),"修改","修改员工状态");
         opLogRepository.save(opLog);
     }
     //修改部门
     @Transactional(rollbackFor = Exception.class)
-    public void updateDeptById(UserInfoForToken userInfo, String deptId, String wechat){
+    public void updateDeptById(UserInfoForToken userInfo, String deptId, String wechat)throws BackUserException{
+        if(StringUtils.isEmpty(deptId) || StringUtils.isEmpty(wechat)){
+            throw new BackUserException(ResultCode.PARAM_MISS_MSG);
+        }
         staffMapper.updateDepartmentById(wechat,deptId);
         Department department=departmentRepository.findByid(deptId);
         BackUser backUser=backUserService.findBackUserByWechat(wechat);
@@ -134,7 +140,10 @@ public class StaffConsoleService {
     }
     //修改角色
     @Transactional(rollbackFor = Exception.class)
-    public void updateRoleById(UserInfoForToken userInfo, String roleId, String wechat){
+    public void updateRoleById(UserInfoForToken userInfo, String roleId, String wechat)throws BackUserException{
+        if(StringUtils.isEmpty(roleId)|| StringUtils.isEmpty(wechat)){
+            throw new BackUserException(ResultCode.PARAM_MISS_MSG);
+        }
         staffMapper.updateRoleById(wechat,roleId);
         Role role=roleRepository.findByid(roleId);
         BackUser backUser=backUserService.findBackUserByWechat(wechat);
@@ -213,6 +222,9 @@ public class StaffConsoleService {
                 || StringUtils.isEmpty(model.getName()) || StringUtils.isEmpty(model.getOpendId())
                 || StringUtils.isEmpty(model.getDeptId()) || StringUtils.isEmpty(model.getRoleId())){
             throw new BackUserException(ResultCode.PARAM_MISS_MSG);
+        }
+        if(staffRepository.countByAccount(model.getAccount())>0){
+            throw new BackUserException(ResultCode.ACCOUNT_ISEXIST_MSG2);
         }
         Staff staff=staffRepository.findByWechat(model.getOpendId());
         if (null==staff){
