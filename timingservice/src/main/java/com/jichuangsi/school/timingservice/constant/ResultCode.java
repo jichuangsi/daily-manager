@@ -25,11 +25,13 @@ public class ResultCode {
 
 	public static final String OPENDID_NOFIND = "1";
 	public static final String OPENDID_ISEXIST_MSG= "2";
-	public final static String ACCOUNT_NOTEXIST_MSG = "账号不存在，或者未被激活";
+	public final static String ACCOUNT_NOTEXIST_MSG = "账号不存在，或者账户密码错误";
 	public final static String ACCOUNT_ISEXIST_MSG = "账号已存在";
+	public final static String ACCOUNT_ISEXIST_MSG2 = "工号已存在";
 	public static final String ROLE_STAFF_EXIST = "该角色仍有员工";
 	public static final String DEPT_STAFF_EXIST = "该部门仍有员工";
 	public static final String DEPT_BACKUSER_EXIST = "该部门仍有后台角色";
 	public static final String ROLE_BACKUSER_EXIST = "该角色仍有后台角色";
 	public final static String PWD_NOT_MSG = "两次密码错误";
+	public final static String DEPT_ISEXIST_MSG = "部门已存在";
 }

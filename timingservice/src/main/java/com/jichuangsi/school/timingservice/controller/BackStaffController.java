@@ -44,21 +44,33 @@ public class BackStaffController {
     @ApiImplicitParams({})
     @GetMapping("/updateStaff")
     public ResponseModel updateStaffStatus(@ModelAttribute UserInfoForToken userInfo, @RequestParam String wechat, @RequestParam String statusId){
-        staffConsoleService.updateStatusById(userInfo,statusId,wechat);
+        try {
+            staffConsoleService.updateStatusById(userInfo,statusId,wechat);
+        }catch (BackUserException e){
+            return  ResponseModel.fail("",e.getMessage());
+        }
         return ResponseModel.sucessWithEmptyData("");
     }
     @ApiOperation("修改员工部门信息")
     @ApiImplicitParams({})
     @GetMapping("/updateStaffDept")
     public ResponseModel updateStaffDept(@ModelAttribute UserInfoForToken userInfo, @RequestParam String wechat, @RequestParam String deptId){
-        staffConsoleService.updateDeptById(userInfo,deptId, wechat);
+        try {
+            staffConsoleService.updateDeptById(userInfo,deptId, wechat);
+        }catch (BackUserException e){
+            return  ResponseModel.fail("",e.getMessage());
+        }
         return ResponseModel.sucessWithEmptyData("");
     }
     @ApiOperation("修改员工角色信息")
     @ApiImplicitParams({})
     @GetMapping("/updateStaffRole")
     public ResponseModel updateStaffRole(@ModelAttribute UserInfoForToken userInfo, @RequestParam String wechat, @RequestParam String roleId){
-        staffConsoleService.updateRoleById(userInfo,roleId,wechat);
+        try {
+            staffConsoleService.updateRoleById(userInfo,roleId,wechat);
+        }catch (BackUserException e){
+            return  ResponseModel.fail("",e.getMessage());
+        }
         return ResponseModel.sucessWithEmptyData("");
     }
 }

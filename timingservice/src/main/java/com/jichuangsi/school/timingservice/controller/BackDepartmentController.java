@@ -24,7 +24,11 @@ public class BackDepartmentController {
     @ApiImplicitParams({})
     @PostMapping("/saveDepartment")
     public ResponseModel saveDepartment(@ModelAttribute UserInfoForToken userInfo,@RequestBody Department department){
-        departmentService.saveDepartment(userInfo,department);
+        try{
+            departmentService.saveDepartment(userInfo,department);
+        }catch (BackUserException e){
+            return ResponseModel.fail("",e.getMessage());
+        }
         return ResponseModel.sucessWithEmptyData("");
     }
 
@@ -32,7 +36,11 @@ public class BackDepartmentController {
     @ApiImplicitParams({})
     @PostMapping("/updateDepartment")
     public ResponseModel updateDepartment(@ModelAttribute UserInfoForToken userInfo,@RequestBody Department department){
-        departmentService.updateDepartment(userInfo,department);
+        try{
+            departmentService.updateDepartment(userInfo,department);
+        }catch (BackUserException e){
+            return ResponseModel.fail("",e.getMessage());
+        }
         return ResponseModel.sucessWithEmptyData("");
     }
     @ApiOperation("删除部门信息")

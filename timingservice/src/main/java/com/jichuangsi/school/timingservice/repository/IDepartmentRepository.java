@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IDepartmentRepository extends JpaRepository<Department,String>{
     Department findByid(String id);
+    int countByDeptname(String name);
 }
