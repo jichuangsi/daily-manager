@@ -3,6 +3,7 @@ package com.jichuangsi.school.timingservice.controller;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.util.StringUtil;
 import com.jichuangsi.school.timingservice.constant.ResultCode;
+import com.jichuangsi.school.timingservice.dao.mapper.StaffMapper;
 import com.jichuangsi.school.timingservice.entity.*;
 import com.jichuangsi.school.timingservice.model.*;
 import com.jichuangsi.school.timingservice.repository.IDepartmentRepository;
@@ -45,6 +46,9 @@ public class DaKaController {
 
     @Resource
     private PeopleService peopleService;
+
+    @Resource
+    private StaffMapper staffMapper;
 
     @Value("${com.jichuangsi.school.file}")
     private String filePath;
@@ -256,7 +260,6 @@ public class DaKaController {
 
 
     }
-
 
     @ApiOperation(value = "做报表", notes = "")
     @PostMapping("/getBB")
@@ -646,8 +649,12 @@ public class DaKaController {
                     List<ReportFormModel2> models = new ArrayList<>();
                     for (People people : peopleList
                             ) {
-                        List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndTimeBetween(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
-                        for (Record record:allByOpenIdAndStuas) {
+                        //List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndTimeBetween(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
+                        List<ReportFormModel2> model2List=staffMapper.findAllByTimeAndOpenId(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
+                        for (ReportFormModel2 item:model2List){
+                            models.add(item);
+                        }
+                        /*for (Record record:allByOpenIdAndStuas) {
                             ReportFormModel2 rModel = new ReportFormModel2();
                             Rule rule =ruleService.getRuleById(Integer.valueOf(record.getRuleId()));
                             rModel.setStuas(rule.getStuas());
@@ -659,11 +666,7 @@ public class DaKaController {
                             rModel.setJurisdiction(people.getJurisdiction());
                             rModel.setPeopleName(people.getPeopleName());
                             models.add(rModel);
-                        }
-//                rModel.setDepartment(people.getDepartment());
-//                rModel.setJurisdiction(people.getJurisdiction());
-//                rModel.setPeopleName(people.getPeopleName());
-//                models.add(rModel);
+                        }*/
                     }
                     if (models!=null && models.size()!=0){
                         listResponseModel.setData(ListUtils.Pager(pageSize,pageNum,models));
@@ -691,7 +694,11 @@ public class DaKaController {
                     List<ReportFormModel2> models = new ArrayList<>();
                     for (People people : peopleList
                             ) {
-                        List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndTimeBetween(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
+                        List<ReportFormModel2> model2List=staffMapper.findAllByTimeAndOpenId(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
+                        for (ReportFormModel2 item:model2List){
+                            models.add(item);
+                        }
+                       /* List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndTimeBetween(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
                         for (Record record:allByOpenIdAndStuas) {
                             ReportFormModel2 rModel = new ReportFormModel2();
                             Rule rule =ruleService.getRuleById(Integer.valueOf(record.getRuleId()));
@@ -704,11 +711,7 @@ public class DaKaController {
                             rModel.setJurisdiction(people.getJurisdiction());
                             rModel.setPeopleName(people.getPeopleName());
                             models.add(rModel);
-                        }
-//                rModel.setDepartment(people.getDepartment());
-//                rModel.setJurisdiction(people.getJurisdiction());
-//                rModel.setPeopleName(people.getPeopleName());
-//                models.add(rModel);
+                        }*/
                     }
                     if (models!=null && models.size()!=0){
                         listResponseModel.setData(ListUtils.Pager(pageSize,pageNum,models));
@@ -725,7 +728,7 @@ public class DaKaController {
                     People people = peopleService.findPeople(user.getWechat());
                     ResponseModel<List<ReportFormModel2>> listResponseModel=new ResponseModel<>();
                     List<ReportFormModel2> models = new ArrayList<>();
-                    List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndTimeBetween(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
+                    /*List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndTimeBetween(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
                     for (Record record:allByOpenIdAndStuas) {
                         ReportFormModel2 rModel = new ReportFormModel2();
                         Rule rule = ruleService.getRuleById(Integer.valueOf(record.getRuleId()));
@@ -738,11 +741,11 @@ public class DaKaController {
                         rModel.setJurisdiction(people.getJurisdiction());
                         rModel.setPeopleName(people.getPeopleName());
                         models.add(rModel);
+                    }*/
+                    List<ReportFormModel2> model2List=staffMapper.findAllByTimeAndOpenId(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
+                    for (ReportFormModel2 item:model2List){
+                        models.add(item);
                     }
-//                rModel.setDepartment(people.getDepartment());
-//                rModel.setJurisdiction(people.getJurisdiction());
-//                rModel.setPeopleName(people.getPeopleName());
-//                models.add(rModel);
                     if (models!=null && models.size()!=0){
                         listResponseModel.setData(ListUtils.Pager(pageSize,pageNum,models));
                         listResponseModel.setPageSize(models.size());
@@ -761,7 +764,7 @@ public class DaKaController {
 
     @ApiOperation(value = "导出考勤列表", notes = "")
     @PostMapping("/importDailyList")
-    public ResponseModel importList(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam(required = false) String name,@RequestParam @Nullable String dpid,@RequestParam String timeStart, @RequestParam String timeEnd){
+    public ResponseModel importList(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam(required = false) String name,@RequestParam @Nullable String dpid,@RequestParam String timeStart, @RequestParam String timeEnd)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {
         try {
             BackUser user=backUserService.getBackUserById(userInfoForToken.getUserId());
             if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
@@ -775,7 +778,7 @@ public class DaKaController {
                     List<ReportFormModel2> models = new ArrayList<>();
                     for (People people : peopleList
                             ) {
-                        List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndTimeBetween(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
+                       /* List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndTimeBetween(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
                         for (Record record:allByOpenIdAndStuas) {
                             ReportFormModel2 rModel = new ReportFormModel2();
                             Rule rule =ruleService.getRuleById(Integer.valueOf(record.getRuleId()));
@@ -788,6 +791,10 @@ public class DaKaController {
                             rModel.setJurisdiction(people.getJurisdiction());
                             rModel.setPeopleName(people.getPeopleName());
                             models.add(rModel);
+                        }*/
+                        List<ReportFormModel2> model2List=staffMapper.findAllByTimeAndOpenId(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
+                        for (ReportFormModel2 item:model2List){
+                            models.add(item);
                         }
                     }
                    /*List<String> title=new ArrayList<>();
@@ -823,7 +830,7 @@ public class DaKaController {
                     List<ReportFormModel2> models = new ArrayList<>();
                     for (People people : peopleList
                             ) {
-                        List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndTimeBetween(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
+                        /*List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndTimeBetween(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
                         for (Record record:allByOpenIdAndStuas) {
                             ReportFormModel2 rModel = new ReportFormModel2();
                             Rule rule =ruleService.getRuleById(Integer.valueOf(record.getRuleId()));
@@ -836,6 +843,10 @@ public class DaKaController {
                             rModel.setJurisdiction(people.getJurisdiction());
                             rModel.setPeopleName(people.getPeopleName());
                             models.add(rModel);
+                        }*/
+                        List<ReportFormModel2> model2List=staffMapper.findAllByTimeAndOpenId(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
+                        for (ReportFormModel2 item:model2List){
+                            models.add(item);
                         }
                     }
                     return ResponseModel.sucess("",models);
@@ -846,7 +857,7 @@ public class DaKaController {
                 try {
                     People people = peopleService.findPeople(user.getWechat());
                     List<ReportFormModel2> models = new ArrayList<>();
-                    List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndTimeBetween(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
+                    /*List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndTimeBetween(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
                     for (Record record:allByOpenIdAndStuas) {
                         ReportFormModel2 rModel = new ReportFormModel2();
                         Rule rule = ruleService.getRuleById(Integer.valueOf(record.getRuleId()));
@@ -859,6 +870,10 @@ public class DaKaController {
                         rModel.setJurisdiction(people.getJurisdiction());
                         rModel.setPeopleName(people.getPeopleName());
                         models.add(rModel);
+                    }*/
+                    List<ReportFormModel2> model2List=staffMapper.findAllByTimeAndOpenId(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
+                    for (ReportFormModel2 item:model2List){
+                        models.add(item);
                     }
                     return ResponseModel.sucess("",models);
                 } catch (Exception e) {
