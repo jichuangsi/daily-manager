@@ -4,7 +4,7 @@ layui.use(['form', 'table'], function() {
 	var status = [];
 	var user = JSON.parse(sessionStorage.getItem('userInfo'))
 	var deptId;
-	
+
 	getRoleDep(user);
 	table.render({
 		elem: '#demo',
@@ -86,7 +86,7 @@ layui.use(['form', 'table'], function() {
 	//条件查询
 	form.on('submit(sreach)', function(data) {
 		var param = data.field;
-		if(param.statusId == -1) {
+		if(param.statusId == -1 || param.statusId == undefined) {
 			param.statusId = '';
 		}
 		table.reload('idTest', {
@@ -96,9 +96,9 @@ layui.use(['form', 'table'], function() {
 				'deptId': param.roleDept
 			}
 		});
-	});	
+	});
 	form.on('select(roleDept)', function(data) {
-		var param =data.value;
+		var param = data.value;
 		table.reload('idTest', {
 			where: {
 				'deptId': param
@@ -123,18 +123,19 @@ layui.use(['form', 'table'], function() {
 				if(res.code == '0010') {
 					arr = res.data;
 					if(arr.length == 0) {
-						options = '<option value="" selected="selected">暂无状态信息</option>'
+						options = '<option value="-1" selected="selected">暂无状态信息</option>'
 					} else {
 						for(var i = 0; i < arr.length; i++) {
 							options += '<option value="' + arr[i].id + '" >' + arr[i].name + '</option>'
 						}
 					}
-					$('#status').append(options);
-					$('#setStatus').append(options);
-					form.render('select');
-				} else {
 
+				} else if(res.code == '0031') {
+					layui.notice.info("提示信息：访问权限不足!");
 				}
+				$('#status').append(options);
+				$('#setStatus').append(options);
+				form.render('select');
 			}
 		});
 	}
@@ -153,8 +154,8 @@ layui.use(['form', 'table'], function() {
 	});
 	form.on('submit(updataDept)', function(data) {
 		var param = data.field;
-		if(param.statusId == -1) {
-			setMsg('请选择状态', 2);
+		if(param.statusId == -1 || param.statusId == undefined) {
+			layui.notice.info("提示信息：请选择状态");
 			return false;
 		} else {
 			$.ajax({
@@ -200,24 +201,25 @@ layui.use(['form', 'table'], function() {
 				if(res.code == '0010') {
 					arr = res.data;
 					if(arr.length == 0) {
-						options = '<option value="" selected="selected">暂无部门信息</option>'
+						options = '<option value="-1" selected="selected">暂无部门信息</option>'
 					} else {
 						for(var i = 0; i < arr.length; i++) {
 							options += '<option value="' + arr[i].id + '" >' + arr[i].deptname + '</option>'
 						}
 					}
-					$('#dept').append(options);
-					form.render('select');
-				} else {
-					console.log(res.msg)
+
+				} else if(res.code == '0031') {
+					layui.notice.info("提示信息：访问权限不足!");
 				}
+				$('#dept').append(options);
+				form.render('select');
 			}
 		});
 	}
 	form.on('submit(modifyDept)', function(data) {
 		var param = data.field;
-		if(param.deptId == -1) {
-			setMsg('请选择需要调整的部门', 2);
+		if(param.deptId == -1 || param.deptId == undefined) {
+			layui.notice.info("提示信息：请选择需要调整的部门");
 			return false;
 		} else {
 			$.ajax({
@@ -260,24 +262,25 @@ layui.use(['form', 'table'], function() {
 				if(res.code == '0010') {
 					arr = res.data;
 					if(arr.length == 0) {
-						options = '<option value="" selected="selected">暂无角色信息</option>'
+						options = '<option value="-1" selected="selected">暂无角色信息</option>'
 					} else {
 						for(var i = 0; i < arr.length; i++) {
 							options += '<option value="' + arr[i].id + '" >' + arr[i].rolename + '</option>'
 						}
 					}
-					$('#role').append(options);
-					form.render('select');
-				} else {
-					console.log(res.msg)
+
+				} else if(res.code == "0031") {
+					layui.notice.info("提示信息：访问权限不足!");
 				}
+				$('#role').append(options);
+				form.render('select');
 			}
 		});
 	}
 	form.on('submit(modifyRole)', function(data) {
 		var param = data.field;
-		if(param.roleId == -1) {
-			setMsg('请选择需要调整的职位', 2);
+		if(param.roleId == -1 || param.roleId == undefined) {
+			layui.notice.info("提示信息：请选择需要调整的职位");
 			return false;
 		} else {
 			$.ajax({
@@ -308,7 +311,7 @@ layui.use(['form', 'table'], function() {
 	});
 	//根据角色获取角色所管理的部门
 	function getRoleDep(user) {
-		var	id=user.id;
+		var id = user.id;
 		var options = '';
 		var arr = [];
 		$('#roleDept').empty();

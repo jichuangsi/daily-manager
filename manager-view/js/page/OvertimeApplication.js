@@ -55,7 +55,7 @@ layui.use(['form', 'table'], function() {
 					templet: '<div>{{d.overtimeleave?d.overtimeleave.msg:""}}</div>'
 				}, {
 					field: 'd.overtimeleave.start',
-					title: '申请时间',
+					title: '加班时间',
 					align: 'center',
 					templet: function(d) {
 						if(d.overtimeleave.start != 0) {
@@ -66,7 +66,7 @@ layui.use(['form', 'table'], function() {
 					}
 				}, {
 					field: 'd.overtimeleave.time',
-					title: '加班时间',
+					title: '申请时间',
 					align: 'center',
 					templet: function(d) {
 						if(d.overtimeleave.time != 0) {

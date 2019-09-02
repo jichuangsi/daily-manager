@@ -187,8 +187,8 @@ layui.use(['form', 'table'], function() {
 						content += '<h1>暂无图片</h1>'
 					}
 					$("#img").html(content);
-				} else {
-
+				} else if(res.code=='0031'){
+					layui.notice.info("提示信息：权限不足");
 				}
 			},
 			error: function(res) {

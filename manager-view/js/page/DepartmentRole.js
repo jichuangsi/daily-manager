@@ -75,8 +75,8 @@ layui.use(['form', 'table'], function() {
 					layui.notice.success("提示信息:成功!");
 				} else if(res.code == '0031') {
 					layui.notice.info("提示信息：权限不足");
-				} else {
-					layui.notice.error("提示信息:添加失败啦!");
+				} else if(res.code=='0050') {
+					layui.notice.error("提示信息:"+res.msg);
 				}
 			},
 			error: function(res) {
