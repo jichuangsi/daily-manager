@@ -106,6 +106,14 @@ public class BackUserService {
         user.setPwd(Md5Util.encodeByMd5(model.getSecondPwd()));
         backUserRepository.save(user);
     }
+    //修改员工密码
+    public void updateBackUserPwd2(UserInfoForToken userInfoForToken,BackUser user,String pwd)throws BackUserException {
+        if(StringUtils.isEmpty(pwd) || user==null){
+            throw new BackUserException(ResultCode.PARAM_MISS_MSG);
+        }
+        user.setPwd(Md5Util.encodeByMd5(pwd));
+        backUserRepository.save(user);
+    }
     @Transactional(rollbackFor = Exception.class)
     public void saveStatus(com.jichuangsi.school.timingservice.entity.Status status){
         statusRepository.save(status);

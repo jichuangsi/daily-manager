@@ -73,4 +73,28 @@ public class BackStaffController {
         }
         return ResponseModel.sucessWithEmptyData("");
     }
+
+    @ApiOperation("修改员工个人信息")
+    @ApiImplicitParams({})
+    @PostMapping("/updateStaffInfo")
+    public ResponseModel updateStaffInfo(@ModelAttribute UserInfoForToken userInfo, @RequestBody Staff staff){
+        try {
+            staffConsoleService.updateStaff(userInfo,staff);
+        }catch (BackUserException e){
+            return  ResponseModel.fail("",e.getMessage());
+        }
+        return ResponseModel.sucessWithEmptyData("");
+    }
+
+    @ApiOperation("修改员工密码")
+    @ApiImplicitParams({})
+    @GetMapping("/updateStaffPwd")
+    public ResponseModel updateStaffPwd(@ModelAttribute UserInfoForToken userInfo, @RequestParam String openid,@RequestParam String pwd){
+        try {
+            staffConsoleService.updateStaffPwd(userInfo,openid,pwd);
+        }catch (BackUserException e){
+            return  ResponseModel.fail("",e.getMessage());
+        }
+        return ResponseModel.sucessWithEmptyData("");
+    }
 }

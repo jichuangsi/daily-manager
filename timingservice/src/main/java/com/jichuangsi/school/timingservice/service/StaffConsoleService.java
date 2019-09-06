@@ -156,6 +156,51 @@ public class StaffConsoleService {
         opLogRepository.save(opLog);
     }
 
+    //修改员工信息
+    @Transactional(rollbackFor = Exception.class)
+    public void updateStaff(UserInfoForToken userInfo,Staff staff)throws BackUserException{
+        if (staff==null){
+            throw new BackUserException(ResultCode.PARAM_MISS_MSG);
+        }
+        Department department=departmentRepository.findByid(staff.getDepartment().getId());
+        Role role=roleRepository.findByid(staff.getRole().getId());
+        BackUser user=backUserService.findBackUserByWechat(staff.getWechat());
+        user.setDeptName(department.getDeptname());
+        user.setRoleName(role.getRolename());
+        user.setRoleId(staff.getRole().getId());
+        user.setDeptId(staff.getDepartment().getId());
+        user.setUserName(staff.getName());
+        //lai
+        peopleRepostitory.updateDPMTforOPENID(staff.getDepartment().getId(),staff.getWechat());
+        //lai
+        peopleRepostitory.updateJSQXforOPENID(role.getRolename(),staff.getWechat());
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"修改","修改员工个人信息");
+        opLogRepository.save(opLog);
+        staffRepository.save(staff);
+        backUserService.saveBackUser(user);
+    }
+    //修改员工信息
+    @Transactional(rollbackFor = Exception.class)
+    public void updateStaffPwd(UserInfoForToken userInfo,String openId,String pwd)throws BackUserException{
+        if (StringUtils.isEmpty(openId) || StringUtils.isEmpty(pwd)){
+            throw new BackUserException(ResultCode.PARAM_MISS_MSG);
+        }
+        BackUser user=backUserService.findBackUserByWechat(openId);
+        if(user==null){
+            throw new BackUserException(ResultCode.SELECT_NULL_MSG);
+        }
+        Staff staff=staffRepository.findByWechat(openId);
+        if(staff==null){
+            throw new BackUserException(ResultCode.SELECT_NULL_MSG);
+        }
+        user.setPwd(Md5Util.encodeByMd5(pwd));
+        staff.setPwd(Md5Util.encodeByMd5(pwd));
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"修改","修改员工密码");
+        opLogRepository.save(opLog);
+        backUserService.saveBackUser(user);
+        staffRepository.save(staff);
+    }
+
     //获取token
     public HttpTokenModel findTokenByCode(String code) throws StaffHttpException {
         if (StringUtils.isEmpty(code)){
