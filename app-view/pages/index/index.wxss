@@ -59,6 +59,7 @@ page {
   border-bottom: 2rpx solid #DCDCDC;
   box-sizing: border-box;
   background-color: #fff;
+  display: none;
 }
 .Obtain view:first-child{
   color: #666666;

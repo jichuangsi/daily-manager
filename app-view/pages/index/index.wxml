@@ -9,7 +9,7 @@
             {{time}}
           </view>
           <view class="bj_bottom">
-            <view>考勤规则：根据定位和连接指定WIFI打卡</view>
+            <view>考勤规则：连接指定WIFI打卡</view>
           </view>
       </view>
       <view class="{{wzstate1?'Obtain red':'Obtain'}}">
