@@ -303,6 +303,7 @@ Page({
             self.setData({
               dakastate: false
             })
+            console.log(self.data.wifiName)
             wx.request({
               url: app.data.API + '/kq/daka', //仅为示例，并非真实的接口地址
               method: 'POST',
@@ -365,7 +366,9 @@ Page({
       },
       remindstateout: function (){
         this.setData({
-          remindstate : false
+          remindstate : false,
+          wifiName : '',
+          latitude: ''
         })
       },
       cdstateout: function () {
