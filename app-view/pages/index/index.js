@@ -285,8 +285,9 @@ Page({
         let newtime = Date.parse(new Date())
         if (self.data.wifiName == '' && self.data.latitude == ''){
           self.wf()
+          self.wz()
           wx.showToast({
-            title: "获取wifi名字成功",
+            title: "获取wifi成功",
             icon: 'success',//图标，支持"success"、"loading" 
             duration: 2000,//提示的延迟时间，单位毫秒，默认：1500 
           })
