@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 
 @Component
 public class TokenCheckInterceptor implements HandlerInterceptor {
@@ -52,6 +53,8 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
         }
         try {
             String accessToken=request.getHeader("accessToken");
+            Enumeration<String> headers=request.getHeaderNames();
+            String m =request.getMethod();
             String openid=request.getParameter("openId");
             if(openid!=null){
                 return true;
@@ -99,6 +102,7 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
         response.setHeader("Access-Control-Allow-Origin", "*");//设置允许哪些域名应用进行ajax访问
         response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setHeader("Access-Control-Expose-Headers", "Content-Type,Content-Disposition");
         try {
             writer=response.getWriter();
             writer.print(JSONObject.toJSONString(new ResponseModel(code, msg)));

@@ -52,8 +52,8 @@ com:
         timeZone: "GMT"
         secretKey: "K5oMIj9A5z8JqRvcrq1IHruy9LQiQN5XgxupUc9o"
         secretId: "AKIDl044BUeuP5wN9eTwU0j3U4t5xV9C1TvlBNlm"
-        appid: "wxb8f0f7c6edd6d9e6"
-        appSecret: "1a88783accd027b70794d7fd261e3318"
+        appid: "wxcc40772fd8eb6cd9"
+        appSecret: "f018a67bfbff49796d49b7caeccfa733"
         getToken:
           path: "/sns/jscode2session"
           method: "GET"
