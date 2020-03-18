@@ -194,7 +194,7 @@ Page({
       wz: function (){
         let self = this
         self.setData({
-          Obtaintext : '正在定位中，请稍后...',
+          Obtaintext : '请稍后...',
           clickstate : true
         })
         wx.getLocation({
@@ -203,7 +203,7 @@ Page({
           success (res) {
             console.log(res)
             self.setData({
-                Obtaintext : '定位成功...',
+                Obtaintext : '成功',
                 clickstate : false,
                 wzstate: true,
                 wzstate1: false,
@@ -268,7 +268,7 @@ Page({
                 }
                 else if(err.errCode == '12006'){
                   wx.showToast({
-                           title:"请打开定位",
+                           title:"请连接专用WIFI",
                            icon: 'none',//图标，支持"success"、"loading" 
                            duration: 1000,//提示的延迟时间，单位毫秒，默认：1500 
                          })
@@ -285,8 +285,9 @@ Page({
         let newtime = Date.parse(new Date())
         if (self.data.wifiName == '' && self.data.latitude == ''){
           self.wf()
+          self.wz()
           wx.showToast({
-            title: "获取wifi名字成功，请打卡",
+            title: "获取wifi成功",
             icon: 'success',//图标，支持"success"、"loading" 
             duration: 2000,//提示的延迟时间，单位毫秒，默认：1500 
           })
@@ -294,7 +295,7 @@ Page({
           // !self.data.wfstate && !self.data.wzstate &&
           if (!self.data.dakastate) {
             wx.showToast({
-              title: "请定位或连接指定WIFI",
+              title: "请连接指定WIFI",
               icon: 'none',//图标，支持"success"、"loading" 
               duration: 2000,//提示的延迟时间，单位毫秒，默认：1500 
             })
@@ -302,6 +303,7 @@ Page({
             self.setData({
               dakastate: false
             })
+            console.log(self.data.wifiName)
             wx.request({
               url: app.data.API + '/kq/daka', //仅为示例，并非真实的接口地址
               method: 'POST',
@@ -338,6 +340,7 @@ Page({
                     ruleId: id,
                   })
                   self.getrule()
+                  self.getdata()
                   if (res.data.data[0] == '2') {
                     self.setData({
                       cdstate: true
@@ -347,7 +350,7 @@ Page({
                   self.setData({
                     remindstate: true,
                     ruleId: id,
-                    msg: res.data.msg,
+                    msg: '打卡异常，请前往申诉',
                     dakastate: true
                   })
                 }
@@ -363,7 +366,9 @@ Page({
       },
       remindstateout: function (){
         this.setData({
-          remindstate : false
+          remindstate : false,
+          wifiName : '',
+          latitude: ''
         })
       },
       cdstateout: function () {
@@ -569,7 +574,7 @@ Page({
         console.log(Date.parse(new Date()) - res.data.time)
         if (Date.parse(new Date()) - res.data.time <= 900000) {
           self.setData({
-            Obtaintext: '定位成功...',
+            Obtaintext: '成功',
             latitude: res.data.latitude,
             longitude: res.data.longitude
           })
