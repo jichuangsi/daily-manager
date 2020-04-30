@@ -32,6 +32,7 @@ public class ResultCode {
 	public static final String DEPT_STAFF_EXIST = "该部门仍有员工";
 	public static final String DEPT_BACKUSER_EXIST = "该部门仍有后台角色";
 	public static final String ROLE_BACKUSER_EXIST = "该角色仍有后台角色";
+	public static final String ROLE_URL_EXIST = "请先将该角色的权限移除";
 	public final static String PWD_NOT_MSG = "两次密码错误";
 	public final static String DEPT_ISEXIST_MSG = "部门已存在";
 }

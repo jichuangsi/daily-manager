@@ -59,6 +59,9 @@ public class BackRoleService {
         if(backUserRepository.countByRoleId(id)>0){
             throw new BackUserException(ResultCode.ROLE_BACKUSER_EXIST);
         }
+        if(urlRelationMapper.getRoleUrlByRoleId(id)!=null && urlRelationMapper.getRoleUrlByRoleId(id).size()>0){
+            throw new BackUserException(ResultCode.ROLE_URL_EXIST);
+        }
         OpLog opLog=new OpLog(userInfo.getUserNum(),"删除","删除角色");
         opLogRepository.save(opLog);
         roleRepository.deleteById(id);
