@@ -175,7 +175,7 @@ layui.use(['form', 'table'], function() {
 				},
 				{
 					field: 'rolename',
-					title: '角色名称',
+					title: '职位名称',
 					align: 'center'
 				},
 				{

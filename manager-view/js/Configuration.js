@@ -3,6 +3,7 @@ var token;
 //修改路径
 function httpUrl() {
 	url = "https://sample.zaixian.jichuangsi.com";
+	// url = "http://192.168.31.84:8083";
 	return url;
 }
 //获取token
@@ -12,7 +13,7 @@ function getToken() {
 pdToken();
 
 function pdToken() {
-	if(UrlSearch() != 'login.html') {
+	if (UrlSearch() != 'login.html') {
 		getUserInfo()
 	}
 }
@@ -34,8 +35,8 @@ function getUserInfo() {
 		},
 		contentType: 'application/json',
 		success: function(res) {
-			if(res.code == '0031' || res.msg == 'token校验异常' || res.msg == '账号不存在，或者未被激活') {
-				if(UrlSearch() == 'login.html') {
+			if (res.code == '0031' || res.msg == 'token校验异常' || res.msg == '账号不存在，或者未被激活') {
+				if (UrlSearch() == 'login.html') {
 
 				} else {
 					window.location.href = 'login.html';
