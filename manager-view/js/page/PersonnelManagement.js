@@ -151,6 +151,9 @@ layui.use(['form', 'table'], function() {
 		form.val('testRole', {
 			'wechat': param.wechat
 		});
+		$(document).on('click', '#delPer', function() {
+			deleteStaffInfo(param.wechat,param.name);
+		});
 	});
 	form.on('submit(updataDept)', function(data) {
 		var param = data.field;
@@ -340,6 +343,37 @@ layui.use(['form', 'table'], function() {
 					console.log(res.msg)
 				}
 			}
+		});
+	}
+	//删除人员
+	function deleteStaffInfo(openId,name){
+		layer.confirm('确认要删除'+name+'吗？', function(index) {
+			$.ajax({
+				type: "post",
+				url: httpUrl() + "/backstaff/deleteStaffInfo/" + openId,
+				async: false,
+				headers: {
+					'accessToken': getToken()
+				},
+				success: function(res) {
+					if(res.code == '0010') {
+						layer.close(index);
+						layui.notice.success("提示信息:删除成功!");
+						table.reload('idTest');
+					} else if(res.code == '0031') {
+						layer.close(index);
+						layui.notice.info("提示信息：权限不足");
+					} else {
+						table.reload('idTest');
+						layer.close(index);
+						layui.notice.error("提示信息:" + res.msg);
+					}
+				},
+				error: function(res) {
+					console.log(res.msg)
+				}
+			})
+		
 		});
 	}
 
