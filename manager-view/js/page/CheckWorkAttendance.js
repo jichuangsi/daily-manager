@@ -102,6 +102,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 			]
 		],
 		page: true,
+		loading:true,
 		toolbar: '#exe',
 		defaultToolbar: ['filter', 'exports'],
 		parseData: function(res) {
