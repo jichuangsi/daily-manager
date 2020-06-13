@@ -48,6 +48,18 @@ public class StaffConsoleService {
     private IOpLogRepository opLogRepository;
     @Resource
     private BackUserService backUserService;
+    @Resource
+    private IBackUserRepository backUserRepository;
+    @Resource
+    private IUrlRelationRepository urlRelationRepository;
+    @Resource
+    private SQRepostitory sqRepostitory;
+    @Resource
+    private ImgRepostitory imgRepostitory;
+    @Resource
+    private OLRepostitory olRepostitory;
+    @Resource
+    private RecordRepostitory recordRepostitory;
 
     @Transactional(rollbackFor = Exception.class)
     public void saveStaff(Staff staff){
@@ -307,5 +319,37 @@ public class StaffConsoleService {
         } catch (UnsupportedEncodingException e) {
             throw new StaffHttpException(ResultCode.TOKEN_CHECK_ERR_MSG);
         }
+    }
+
+    /**
+     * 删除用户
+     * @param userInfo
+     * @param opendId
+     * @throws BackUserException
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteUser(UserInfoForToken userInfo,String opendId)throws BackUserException{
+        if(StringUtils.isEmpty(opendId)){
+            throw new BackUserException(ResultCode.PARAM_MISS_MSG);
+        }
+        Staff staff=staffRepository.findByWechat(opendId);
+        if (staff==null){
+            throw new BackUserException(ResultCode.SELECT_NULL_MSG);
+        }
+        peopleRepostitory.deleteByOpenId(opendId);//人员表
+        backUserRepository.deleteByWechat(opendId);//后台人员
+        urlRelationRepository.deleteByUid(staff.getId().toString());//角色关联
+        List<SQFlie> list=sqRepostitory.findAllByOpenId(opendId);
+        List<String> imgs=new ArrayList<>();
+        for (SQFlie item:list) {
+            imgs.add(item.getUuid());
+        }
+        imgRepostitory.deleteByUuidIn(imgs);//申请表图片
+        sqRepostitory.deleteByOpenId(opendId);//申请表
+        olRepostitory.deleteByOpenId(opendId);//请假
+        recordRepostitory.deleteByOpenId(opendId);//考勤表
+        staffRepository.delete(staff);//员工表
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"删除","删除人员："+staff.getName());
+        opLogRepository.save(opLog);
     }
 }

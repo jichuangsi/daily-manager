@@ -38,4 +38,6 @@ public interface OLRepostitory extends JpaRepository<Overtimeleave,String> {
     @Modifying
     @Query(value = "insert into ol(open_id,stuas,msg,start,end,stuas2) values(?1,?2,?3,?4,?5,?6)",nativeQuery = true)
     void insertRecord2(String openId, String stuas, String msg,long start,long end,String stuas2);
+
+    void deleteByOpenId(String opendId);
 }

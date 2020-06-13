@@ -1,6 +1,8 @@
 package com.jichuangsi.school.timingservice.service;
 
 import com.jichuangsi.school.timingservice.entity.Record;
+import com.jichuangsi.school.timingservice.model.DailyListModel;
+import com.jichuangsi.school.timingservice.model.UserInfoForToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,4 +29,14 @@ public interface RecordService {
     List<Record> findAllByOpenIdAndTimeBetween(String openId, long timeStart, long timeEnd);
 
     List<Record> findAllByOpenIdAndStuasAndRuleIdAndTimeBetween(String openId, long timeStart, long timeEnd,String ruleId);
+
+    int countByOpendIdInAndStatusAndTime(List<String> openIds, long timeStart, long timeEnd,String status);
+
+    DailyListModel getStatisticsByMonth(UserInfoForToken userInfoForToken, String dpid, String timeStart, String timeEnd);
+
+    DailyListModel getStatisticsByWeek(UserInfoForToken userInfoForToken, String dpid, String timeStart, String timeEnd);
+
+    DailyListModel backGetStatisticsByMonth(UserInfoForToken userInfoForToken, String dpid, String timeStart, String timeEnd);
+
+    DailyListModel backGetStatisticsByWeek(UserInfoForToken userInfoForToken, String dpid, String timeStart, String timeEnd);
 }

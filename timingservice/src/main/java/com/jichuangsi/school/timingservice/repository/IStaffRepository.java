@@ -1,5 +1,6 @@
 package com.jichuangsi.school.timingservice.repository;
 
+import com.jichuangsi.school.timingservice.entity.Department;
 import com.jichuangsi.school.timingservice.entity.Staff;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -11,4 +12,5 @@ import java.util.List;
 public interface IStaffRepository extends JpaRepository<Staff,String>,PagingAndSortingRepository<Staff,String>,JpaSpecificationExecutor<Staff> {
     Staff findByWechat(String opendId);
     int countByAccount(String account);
+    List<Staff> findAllByDepartment(Department department);
 }

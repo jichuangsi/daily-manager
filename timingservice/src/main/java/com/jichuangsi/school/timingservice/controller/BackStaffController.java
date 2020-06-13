@@ -97,4 +97,16 @@ public class BackStaffController {
         }
         return ResponseModel.sucessWithEmptyData("");
     }
+
+    @ApiOperation("删除员工（全部删除）")
+    @ApiImplicitParams({})
+    @PostMapping("/deleteStaffInfo/{opendId}")
+    public ResponseModel deleteStaffInfo(@ModelAttribute UserInfoForToken userInfo,@PathVariable String opendId){
+        try {
+            staffConsoleService.deleteUser(userInfo,opendId);
+        }catch (BackUserException e){
+            return  ResponseModel.fail("",e.getMessage());
+        }
+        return ResponseModel.sucessWithEmptyData("");
+    }
 }

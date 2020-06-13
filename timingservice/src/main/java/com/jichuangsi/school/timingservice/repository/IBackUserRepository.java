@@ -14,5 +14,5 @@ public interface IBackUserRepository extends JpaRepository<BackUser,String> {
     int countByRoleId(String roleId);
     List<BackUser> findByRoleName(String roleName);
     List<BackUser> findByDeptId(String deptId);
-
+    void deleteByWechat(String wechat);
 }

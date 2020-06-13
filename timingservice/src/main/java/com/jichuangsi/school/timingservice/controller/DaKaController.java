@@ -20,8 +20,10 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 @RestController
@@ -823,8 +825,7 @@ public class DaKaController {
                         peopleList = peopleService.findAllPeople(name);
                     }
                     List<ReportFormModel2> models = new ArrayList<>();
-                    for (People people : peopleList
-                            ) {
+                    for (People people : peopleList) {
                        /* List<Record> allByOpenIdAndStuas = recordService.findAllByOpenIdAndTimeBetween(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
                         for (Record record:allByOpenIdAndStuas) {
                             ReportFormModel2 rModel = new ReportFormModel2();
@@ -839,12 +840,14 @@ public class DaKaController {
                             rModel.setPeopleName(people.getPeopleName());
                             models.add(rModel);
                         }*/
+                       long s=TimeUtils.startTime(timeStart);
+                       long e=TimeUtils.endTime(timeEnd);
                         List<ReportFormModel2> model2List=staffMapper.findAllByTimeAndOpenId(people.getOpenId(),TimeUtils.startTime(timeStart),TimeUtils.endTime(timeEnd));
                         for (ReportFormModel2 item:model2List){
                             models.add(item);
                         }
                     }
-                   /*List<String> title=new ArrayList<>();
+                    /*List<String> title=new ArrayList<>();
                     title.add("序号");
                     title.add("姓名");
                     title.add("部门");
@@ -930,5 +933,29 @@ public class DaKaController {
         }catch (Exception e){
             return ResponseModel.fail("", ResultCode.SYS_ERROR);
         }
+    }
+
+    @ApiOperation(value = "导出统计列表(按月)", notes = "")
+    @PostMapping("/importStatisticsByMonth")
+    public ResponseModel importStatisticsByMonth(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam(required = false) String name,@RequestParam @Nullable String dpid,@RequestParam String timeStart, @RequestParam String timeEnd) {
+        return ResponseModel.sucess("",recordService.getStatisticsByMonth(userInfoForToken,dpid, timeStart, timeEnd));
+    }
+
+    @ApiOperation(value = "导出统计列表(按周)", notes = "")
+    @PostMapping("/importStatisticsByWeek")
+    public ResponseModel importStatisticsByWeek(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam(required = false) String name,@RequestParam @Nullable String dpid,@RequestParam String timeStart, @RequestParam String timeEnd) {
+        return ResponseModel.sucess("",recordService.getStatisticsByWeek(userInfoForToken,dpid, timeStart, timeEnd));
+    }
+
+    @ApiOperation(value = "后台导出统计列表(按月)", notes = "")
+    @PostMapping("/BackImportStatisticsByMonth")
+    public ResponseModel BackImportStatisticsByMonth(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam(required = false) String name,@RequestParam @Nullable String dpid,@RequestParam String timeStart, @RequestParam String timeEnd) {
+        return ResponseModel.sucess("",recordService.backGetStatisticsByMonth(userInfoForToken,dpid, timeStart, timeEnd));
+    }
+
+    @ApiOperation(value = "后台导出统计列表(按周)", notes = "")
+    @PostMapping("/BackImportStatisticsByWeek")
+    public ResponseModel BackImportStatisticsByWeek(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam(required = false) String name,@RequestParam @Nullable String dpid,@RequestParam String timeStart, @RequestParam String timeEnd) {
+        return ResponseModel.sucess("",recordService.backGetStatisticsByWeek(userInfoForToken,dpid, timeStart, timeEnd));
     }
 }

@@ -20,4 +20,5 @@ public interface ImgRepostitory extends JpaRepository<Img,Integer> {
 
 
     List<Img> findAllByUuid(String uuid);
+    void deleteByUuidIn(List<String> imgs);
 }

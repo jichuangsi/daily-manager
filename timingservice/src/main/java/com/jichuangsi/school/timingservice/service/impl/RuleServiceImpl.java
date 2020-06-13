@@ -118,5 +118,10 @@ public class RuleServiceImpl implements RuleService {
         ruleRepostitory.deleteById(i);
     }
 
+    @Override
+    public List<Rule> getRuleForTime(long timeStart, long timeEnd, String status) {
+        return ruleRepostitory.findAllByStuasAndTimeBetween(status, timeStart, timeEnd);
+    }
+
 
 }

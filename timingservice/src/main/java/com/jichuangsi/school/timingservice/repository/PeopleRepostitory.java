@@ -31,4 +31,7 @@ public interface PeopleRepostitory extends JpaRepository<People,String>{
     List<People> findAllByDepartment(String d);
 
     List<People> findByDepartmentAndPeopleNameLike(String deptId,String name);
+
+    @Transactional
+    void deleteByOpenId(String opendId);
 }

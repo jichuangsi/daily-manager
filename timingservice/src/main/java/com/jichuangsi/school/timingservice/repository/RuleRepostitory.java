@@ -31,5 +31,7 @@ public interface RuleRepostitory extends JpaRepository<Rule,Integer>{
 
     List<Rule> findAllByTimeBetween(long timeStart, long timeEnd);
 
+    List<Rule> findAllByStuasAndTimeBetween(String status,long timeStart, long timeEnd);
+
     Rule findFirstById(Integer Id);
 }

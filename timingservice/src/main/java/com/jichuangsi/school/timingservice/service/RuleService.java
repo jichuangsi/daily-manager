@@ -41,4 +41,6 @@ public interface RuleService {
     void ruleFatherStopAndStart(RuleFather ruleFather);
 
     void delRule2(String ruleid);
+
+    List<Rule> getRuleForTime(long timeStart, long timeEnd,String status);
 }
