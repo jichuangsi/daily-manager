@@ -3,7 +3,7 @@ var token;
 //修改路径
 function httpUrl() {
 	url = "https://sample.zaixian.jichuangsi.com";
-	// url = "http://192.168.31.84:8083";
+	// url = "http://192.168.0.109:8083";
 	return url;
 }
 //获取token
@@ -45,4 +45,22 @@ function getUserInfo() {
 			}
 		}
 	});
+}
+function getAjaxPostData(url, param) {
+	var data;
+	$.ajax({
+		type: "post",
+		url: httpUrl() + url,
+		async: false,
+		headers: {
+			'content-type': 'application/x-www-form-urlencoded',
+			'accessToken': getToken(),
+		},
+		contentType: 'application/json',
+		data: JSON.stringify(param),
+		success: function(res) {
+			data = res;
+		}
+	});
+	return data;
 }
