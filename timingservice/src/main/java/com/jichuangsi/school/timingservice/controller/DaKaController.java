@@ -938,24 +938,24 @@ public class DaKaController {
     @ApiOperation(value = "导出统计列表(按月)", notes = "")
     @PostMapping("/importStatisticsByMonth")
     public ResponseModel importStatisticsByMonth(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam(required = false) String name,@RequestParam @Nullable String dpid,@RequestParam String timeStart, @RequestParam String timeEnd) {
-        return ResponseModel.sucess("",recordService.getStatisticsByMonth(userInfoForToken,dpid, timeStart, timeEnd));
+        return ResponseModel.sucess("",recordService.getStatisticsByMonth(userInfoForToken,dpid, timeStart.trim(), timeEnd.trim()));
     }
 
     @ApiOperation(value = "导出统计列表(按周)", notes = "")
     @PostMapping("/importStatisticsByWeek")
     public ResponseModel importStatisticsByWeek(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam(required = false) String name,@RequestParam @Nullable String dpid,@RequestParam String timeStart, @RequestParam String timeEnd) {
-        return ResponseModel.sucess("",recordService.getStatisticsByWeek(userInfoForToken,dpid, timeStart, timeEnd));
+        return ResponseModel.sucess("",recordService.getStatisticsByWeek(userInfoForToken,dpid, timeStart.trim(), timeEnd.trim()));
     }
 
     @ApiOperation(value = "后台导出统计列表(按月)", notes = "")
     @PostMapping("/BackImportStatisticsByMonth")
     public ResponseModel BackImportStatisticsByMonth(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam(required = false) String name,@RequestParam @Nullable String dpid,@RequestParam String timeStart, @RequestParam String timeEnd) {
-        return ResponseModel.sucess("",recordService.backGetStatisticsByMonth(userInfoForToken,dpid, timeStart, timeEnd));
+        return ResponseModel.sucess("",recordService.backGetStatisticsByMonth(userInfoForToken,dpid, timeStart.trim(), timeEnd.trim()));
     }
 
     @ApiOperation(value = "后台导出统计列表(按周)", notes = "")
     @PostMapping("/BackImportStatisticsByWeek")
     public ResponseModel BackImportStatisticsByWeek(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam(required = false) String name,@RequestParam @Nullable String dpid,@RequestParam String timeStart, @RequestParam String timeEnd) {
-        return ResponseModel.sucess("",recordService.backGetStatisticsByWeek(userInfoForToken,dpid, timeStart, timeEnd));
+        return ResponseModel.sucess("",recordService.backGetStatisticsByWeek(userInfoForToken,dpid, timeStart.trim(), timeEnd.trim()));
     }
 }

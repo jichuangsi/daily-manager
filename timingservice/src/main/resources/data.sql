@@ -65,9 +65,9 @@ INSERT INTO `roleurl` VALUES ('40282b816c2d273d016c2db3bdef0006', '查询角色�
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbbc7900002', '查询全部url列表', '/backrole/getRoleUrlList');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbced8c0004', '根据id批量删除角色相关url', '/backrole/batchDeleteRoleUrl');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d0005', '查询角色对应url列表', '/backrole/getAllRoleUrlByRoleId/');
-/*INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d0455', '添加角色', '/backrole/saveRole');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d0455', '添加角色', '/backrole/saveRole');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d0258', '修改角色', '/backrole/updateRole');
-INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d4898', '删除角色', '/backrole/deleteRole/');*/
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d4898', '删除角色', '/backrole/deleteRole/');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d2598', '分页查询员工信息', '/backstaff/getStaffListByPage');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d1876', '获取员工状态', '/backstaff/getStatusList');
 /*INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d1102', '修改员工状态', '/backstaff/updateStaff');
@@ -106,6 +106,9 @@ INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d15488', '给角色添
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d75416', '取消角色所管理的部门', '/backrole/batchDeleteRoleDepartment');
 INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d982364', '导出考勤记录', '/kq/importDailyList');
 INSERT INTO `roleurl` VALUES ('40542b816c2db5d6016c2dbeb16d895244', '导出报表', '/kq/ExportTDBB');
+INSERT INTO `roleurl` VALUES ('40282b816c2db5d6016c2dbeb16d786413', '导出统计列表(按月)', '/importStatisticsByMonth');
+INSERT INTO `roleurl` VALUES ('40542b816c2db5d6016c2dbeb16896556', '后台导出统计列表(按周)', '/importStatisticsByWeek');
+INSERT INTO `roleurl` VALUES ('40542b816c2db5def1541465454754645', '删除员工（全部删除）', '/deleteStaffInfo/');
 
 -- ----------------------------
 -- Table structure for staticpage_url
@@ -124,10 +127,10 @@ INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d0005', '40282b
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d0165', '40282b816c42363c016c423703170002', '40282b816c2d273d016c2db0452f0002');
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d5985', '40282b816c42363c016c423703170002', '40282b816c2d273d016c2db0d28f0003');
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d0597', '40282b816c42363c016c423703170002', '40282b816c2d273d016c2db12ef30004');
-/*INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d0364', '40282b816c42363c016c423703170002', '40282b816c2db5d6016c2dbeb16d0455');
+INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d0364', '40282b816c42363c016c423703170002', '40282b816c2db5d6016c2dbeb16d0455');
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d0157', '40282b816c42363c016c423703170002', '40282b816c2db5d6016c2dbeb16d0258');
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d0598', '40282b816c42363c016c423703170002', '40282b816c2db5d6016c2dbeb16d4898');
-INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d0498', '40282b816c42363c016c423703170002', '40282b816c2d273d016c2db3bdef0006');*/
+INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d0498', '40282b816c42363c016c423703170002', '40282b816c2d273d016c2db3bdef0006');
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d1564', '40282b816c42363c016c423703170003', '40282b816c2db5d6016c2dbeb16d2598');
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d1682', '40282b816c42363c016c423703170003', '40282b816c2db5d6016c2dbeb16d1876');
 /*INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbeb16d2675', '40282b816c42363c016c423703170003', '40282b816c2db5d6016c2dbeb16d1102');*/
@@ -166,7 +169,9 @@ INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbebcfd1478', '40282b
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbebds2564', '40282b816c42363c016c423703170003', '40282b816c2d273d016c2db3bdef0006');
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbebds59682', '40282b816c42363c016c423703170003', '40282b816c2d273d016c2db12ef30004');
 INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c2dbebds896231', '40282b816c42363c016c423703170011', '40542b816c2db5d6016c2dbeb16d895244');
-
+INSERT INTO `staticpage_url` VALUES ('40282b816c2db5d6016c25678134452', '40282b816c42363c016c423703170001', '40282b816c2db5d6016c2dbeb16d786413');
+INSERT INTO `staticpage_url` VALUES ('40282b816c2d45748645418545141d', '40282b816c42363c016c423703170001', '40542b816c2db5d6016c2dbeb16896556');
+INSERT INTO `staticpage_url` VALUES ('40282b816cdw478575469856464644', '40282b816c42363c016c423703170003', '40542b816c2db5def1541465454754645');
 -- ----------------------------
 -- Table structure for static_page
 -- ----------------------------

@@ -11,6 +11,7 @@ public class StatisticsModel {
     private int shangLostKao=0;//上班缺勤人数（统计当天没有打卡的人数）
     private int xiaLostKao=0;//下班缺勤人数（统计当天没有打卡的人数）
     private int yichang=0;//考勤异常人数
+    private String dateTime;
 
     public String getDeptName() {
         return deptName;
@@ -90,5 +91,13 @@ public class StatisticsModel {
 
     public void setHeader(String header) {
         this.header = header;
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 }

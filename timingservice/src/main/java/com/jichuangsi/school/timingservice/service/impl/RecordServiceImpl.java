@@ -167,26 +167,155 @@ public class RecordServiceImpl implements RecordService {
         return listWeekOrMonth;
     }
 
+    /**
+     * 拆分成周(精确版)
+     * @param begins
+     * @param ends
+     * @throws ParseException
+     */
+    private static List<String> getWeeks(String begins, String ends) throws ParseException {
+        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdw = new SimpleDateFormat("E");
+        String begin_date =begins;
+        String end_date =ends;
+        //String begin_date_fm = begin_date.substring(0, 4) + "-" + begin_date.substring(4,6) + "-" + begin_date.substring(6,8);
+        // String end_date_fm =  end_date.substring(0, 4) + "-" + end_date.substring(4,6) + "-" + end_date.substring(6,8);
+        String begin_date_fm =  begins;
+        String end_date_fm = ends;
+        Date b = null;
+        Date e = null;
+        List<String> timeDate=new ArrayList<>();
+        try {
+            b = sd.parse(begin_date_fm);
+            e = sd.parse(end_date_fm);
+        } catch (ParseException ee) {
+            ee.printStackTrace();
+        }
+        Calendar rightNow = Calendar.getInstance();
+        rightNow.setTime(b);
+        Date time = b;
+        String year = begin_date_fm.split("-")[0];
+        String mon = Integer.parseInt(begin_date_fm.split("-")[1])<10?begin_date_fm.split("-")[1]:begin_date_fm.split("-")[1];
+        String day = Integer.parseInt(begin_date_fm.split("-")[2])<10?begin_date_fm.split("-")[2]:begin_date_fm.split("-")[2];
+        String timeb = year+mon+day;
+        String timee = null;
+        if(begin_date==end_date){
+            System.out.println(begin_date+"~"+end_date);
+            timeDate.add(begin_date);
+            timeDate.add(end_date);
+        }else{
+            while(time.getTime()<=e.getTime()){
+                rightNow.add(Calendar.DAY_OF_YEAR,1);
+                time = sd.parse(sd.format(rightNow.getTime()));
+                if(time.getTime()>e.getTime()){break;}
+                String timew = sdw.format(time);
+                if(("星期一").equals(timew)){
+                    timeb = (sd.format(time)).replaceAll("-", "");
+                }
+                if(("星期日").equals(timew) || ("星期七").equals(timew) || time.getTime() == e.getTime()){
+                    timee = (sd.format(time)).replaceAll("-", "");
+                    String begindate=fomaToDatas(timeb);
+                    String enddate=fomaToDatas(timee);
+                    System.out.println(begindate+"~"+enddate);
+                    timeDate.add(begindate);
+                    timeDate.add(enddate);
+                }
+            }
+
+        }
+        return timeDate;
+    }
+
+    public static String fomaToDatas(String data){
+        DateFormat fmt=new SimpleDateFormat("yyyyMMdd");
+        try {
+            Date parse=fmt.parse(data);
+            DateFormat fmt2=new SimpleDateFormat("yyyy-MM-dd");
+            return fmt2.format(parse);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
     @Override
     public DailyListModel getStatisticsByMonth(UserInfoForToken userInfoForToken,String dpid, String timeStart, String timeEnd){
         try {
             BackUser user=backUserService.getBackUserById(userInfoForToken.getUserId());
-            Map<String,Object> time=new HashMap<>() ;
-            time.put("startDate",timeStart);
-            time.put("endDate",timeEnd);
-            Map<String,Object> statistics = new HashMap<>();//统计
-            //按月统计
-            List<String> listMonth=doDateByStatisticsType("",time);
-            if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
-                List<Department> departments=departmentRepository.findAll();//全部部门
-                int j=1;
-                for(int i=0;i<listMonth.size();i+=2){//分割后的日期
-                    for (Department d:departments) {//部门
-                        List<Staff> staff=staffRepository.findAllByDepartment(d);
+            if(user!=null){
+                Map<String,Object> time=new HashMap<>() ;
+                time.put("startDate",timeStart);
+                time.put("endDate",timeEnd);
+                Map<String,Object> statistics = new HashMap<>();//统计
+                //按月统计
+                List<String> listMonth=doDateByStatisticsType("",time);
+                if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
+                    List<Department> departments=departmentRepository.findAll();//全部部门
+                    int j=1;
+                    for(int i=0;i<listMonth.size();i+=2){//分割后的日期
+                        for (Department d:departments) {//部门
+                            List<Staff> staff=staffRepository.findAllByDepartment(d);
+                            //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
+                            List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)),"1");//根据日期查询规则上班
+                            StatisticsModel model=new StatisticsModel();//统计模型
+                            model.setDateTime(listMonth.get(i)+"~"+listMonth.get(i+1));
+                            model.setDeptName(d.getDeptname());
+                            model.setShangRule(rulelistForTime1.size());
+                            model.setPeopleCount(staff.size());
+                            int count1=0;
+                            if(rulelistForTime1.size()!=0){
+                                List<Integer> ruleids=new ArrayList<>();
+                                for (Rule r:rulelistForTime1){
+                                    ruleids.add(r.getId());
+                                }
+                                List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,d.getId());//上班打卡人数
+                                List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId());//上班打卡异常人数
+                                model.setShangkao(monthShangCount.size());
+                                //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
+                                model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
+                                model.setYichang(monthShangYichangCount.size());
+                            }
+
+                            //下班
+                            List<Rule> rulelistForTime2=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)),"2");//根据日期查询规则下班
+                            model.setXiaRule(rulelistForTime2.size());
+                            int count2=0;
+                            if(rulelistForTime2.size()!=0){
+                                List<Integer> ruleids2=new ArrayList<>();
+                                for (Rule r:rulelistForTime2){
+                                    ruleids2.add(r.getId());
+                                }
+                                List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,d.getId());//下班打卡人数
+                                List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId());//上班打卡异常人数
+                                //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
+                                model.setXiakao(monthXiaCount.size());
+                                model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
+                                model.setYichang(monthXiaYichangCount.size());
+                            }
+                            statistics.put(d.getDeptname()+"第"+j+"月考勤统计",model);
+                        }
+                        j++;
+                    }
+                    DailyListModel model=new DailyListModel();
+                    model.setStatistics(statistics);
+                    return model;
+                }else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
+                    Department departments=departmentRepository.findByid(user.getDeptId());//查询部长相关部门
+                    int j=1;
+                    if(user.getRoleName().equals("副院长")){
+                        if(!StringUtils.isEmpty(dpid)){
+                            departments=departmentRepository.findByid(dpid);//查询部长相关部门
+                        }
+                    }
+                    for(int i=0;i<listMonth.size();i+=2){//分割
+                        List<Staff> staff=staffRepository.findAllByDepartment(departments);
                         //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
                         List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)),"1");//根据日期查询规则上班
                         StatisticsModel model=new StatisticsModel();//统计模型
-                        model.setDeptName(d.getDeptname());
+                        model.setDateTime(listMonth.get(i)+"~"+listMonth.get(i+1));
+                        model.setDeptName(departments.getDeptname());
                         model.setShangRule(rulelistForTime1.size());
                         model.setPeopleCount(staff.size());
                         int count1=0;
@@ -195,8 +324,8 @@ public class RecordServiceImpl implements RecordService {
                             for (Rule r:rulelistForTime1){
                                 ruleids.add(r.getId());
                             }
-                            List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,d.getId());//上班打卡人数
-                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId());//上班打卡异常人数
+                            List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,departments.getId());//上班打卡人数
+                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId());//上班打卡异常人数
                             model.setShangkao(monthShangCount.size());
                             //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
                             model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
@@ -212,158 +341,102 @@ public class RecordServiceImpl implements RecordService {
                             for (Rule r:rulelistForTime2){
                                 ruleids2.add(r.getId());
                             }
-                            List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,d.getId());//下班打卡人数
-                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId());//上班打卡异常人数
+                            List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,departments.getId());//下班打卡人数
+                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId());//上班打卡异常人数
                             //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
                             model.setXiakao(monthXiaCount.size());
                             model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
                             model.setYichang(monthXiaYichangCount.size());
                         }
-                        statistics.put(d.getDeptname()+"第"+j+"月考勤统计",model);
+                        statistics.put(departments.getDeptname()+"第"+j+"月考勤统计",model);
                     }
-                    j++;
                 }
                 DailyListModel model=new DailyListModel();
                 model.setStatistics(statistics);
                 return model;
-            }else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
-                Department departments=departmentRepository.findByid(user.getDeptId());//查询部长相关部门
-                int j=1;
-                if(user.getRoleName().equals("副院长")){
-                    if(!StringUtils.isEmpty(dpid)){
-                        departments=departmentRepository.findByid(dpid);//查询部长相关部门
-                    }
-                }
-                for(int i=0;i<listMonth.size();i+=2){//分割
-                    List<Staff> staff=staffRepository.findAllByDepartment(departments);
-                    //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
-                    List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)),"1");//根据日期查询规则上班
-                    StatisticsModel model=new StatisticsModel();//统计模型
-                    model.setDeptName(departments.getDeptname());
-                    model.setShangRule(rulelistForTime1.size());
-                    model.setPeopleCount(staff.size());
-                    int count1=0;
-                    if(rulelistForTime1.size()!=0){
-                        List<Integer> ruleids=new ArrayList<>();
-                        for (Rule r:rulelistForTime1){
-                            ruleids.add(r.getId());
-                        }
-                        List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,departments.getId());//上班打卡人数
-                        List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId());//上班打卡异常人数
-                        model.setShangkao(monthShangCount.size());
-                        //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
-                        model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
-                        model.setYichang(monthShangYichangCount.size());
-                    }
-
-                    //下班
-                    List<Rule> rulelistForTime2=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)),"2");//根据日期查询规则下班
-                    model.setXiaRule(rulelistForTime2.size());
-                    int count2=0;
-                    if(rulelistForTime2.size()!=0){
-                        List<Integer> ruleids2=new ArrayList<>();
-                        for (Rule r:rulelistForTime2){
-                            ruleids2.add(r.getId());
-                        }
-                        List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,departments.getId());//下班打卡人数
-                        List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId());//上班打卡异常人数
-                        //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
-                        model.setXiakao(monthXiaCount.size());
-                        model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
-                        model.setYichang(monthXiaYichangCount.size());
-                    }
-                    statistics.put(departments.getDeptname()+"第"+j+"月考勤统计",model);
-                }
             }
-            DailyListModel model=new DailyListModel();
-            model.setStatistics(statistics);
-            return model;
         }catch (Exception e){
             e.printStackTrace();
         }
         return null;
-        /*List<String> opIds=new ArrayList<>();
-        for (People people : peopleList) {
-            opIds.add(people.getOpenId());
-        }
-        //按月统计
-        List<String> listMonth=doDateByStatisticsType("",time);
-        Map<String,Object> statistics = new HashMap<>();//统计
-        int j=1;
-                    *//*for(int i=0;i<listMonth.size();i+=2){
-                        int monthLateCount=0;//迟到
-                        int monthEarlyCount=0;//早退
-                        monthLateCount+=recordService.countByOpendIdInAndStatusAndTime(opIds,TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(timeEnd),"2");
-                        monthEarlyCount+=recordService.countByOpendIdInAndStatusAndTime(opIds,TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(timeEnd),"3");
-                        statistics.put("第"+j+"月迟到统计",monthLateCount);
-                        statistics.put("第"+j+"月早退统计",monthEarlyCount);
-                        j++;
-                    }*//*
-        for (People people : peopleList) {
-            for(int i=0;i<listMonth.size();i+=2){
-                int monthLateCount=0;//迟到
-                int monthEarlyCount=0;//早退
-                monthLateCount+=recordService.countByOpendIdInAndStatusAndTime(opIds,TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(timeEnd),"2");
-                monthEarlyCount+=recordService.countByOpendIdInAndStatusAndTime(opIds,TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(timeEnd),"3");
-                statistics.put("第"+j+"月迟到统计",monthLateCount);
-                statistics.put("第"+j+"月早退统计",monthEarlyCount);
-                j++;
-            }
-        }
-
-        // 按周统计
-        List<String> listWeek=doDateByStatisticsType("week",time);
-        int k=1;
-        for(int i=0;i<listWeek.size();i+=2){
-            int weekLateCount=0;//迟到
-            int weekEarlyCount=0;//早退
-            weekLateCount+=recordService.countByOpendIdInAndStatusAndTime(opIds,TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(timeEnd),"2");
-            weekEarlyCount+=recordService.countByOpendIdInAndStatusAndTime(opIds,TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(timeEnd),"3");
-            statistics.put("第"+j+"周迟到统计",weekLateCount);
-            statistics.put("第"+j+"周早退统计",weekEarlyCount);
-            j++;
-        }
-
-                   *//*List<String> title=new ArrayList<>();
-                    title.add("序号");
-                    title.add("姓名");
-                    title.add("部门");
-                    title.add("职位");
-                    title.add("考勤");
-                    title.add("打卡时间");
-                    title.add("考勤时间");
-                    title.add("状态");
-                    List<String> zd=new ArrayList<>();
-                    for (int i=0;i<=models.size();i++){
-                        zd.add(i+"");
-                    }
-                    PoiUtils.createExcel(filePath,"考勤记录.xls",title,zd,JSON.parseArray(JSON.toJSONString(models)));*//*
-        DailyListModel model=new DailyListModel();
-        model.setModel2s(models);
-        model.setStatistics(statistics);
-        return null;*/
     }
 
     @Override
     public DailyListModel getStatisticsByWeek(UserInfoForToken userInfoForToken, String dpid, String timeStart, String timeEnd) {
         try {
             BackUser user=backUserService.getBackUserById(userInfoForToken.getUserId());
-            Map<String,Object> time=new HashMap<>() ;
-            time.put("startDate",timeStart);
-            time.put("endDate",timeEnd);
-            Map<String,Object> statistics = new HashMap<>();//统计
-            //按周统计
-            List<String> listWeek=doDateByStatisticsType("week",time);
-            if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
-                List<Department> departments=departmentRepository.findAll();//全部部门
-                int j=1;
-                for(int i=0;i<listWeek.size();i+=2){//分割后的日期
-                    for (Department d:departments) {//部门
-                        List<Staff> staff=staffRepository.findAllByDepartment(d);
+            if(user!=null){
+                Map<String,Object> time=new HashMap<>() ;
+                time.put("startDate",timeStart);
+                time.put("endDate",timeEnd);
+                Map<String,Object> statistics = new HashMap<>();//统计
+                //按周统计
+                //List<String> listWeek=doDateByStatisticsType("week",time);
+                List<String> listWeek=getWeeks(timeStart,timeEnd);
+                if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
+                    List<Department> departments=departmentRepository.findAll();//全部部门
+                    int j=1;
+                    for(int i=0;i<listWeek.size();i+=2){//分割后的日期
+                        for (Department d:departments) {//部门
+                            List<Staff> staff=staffRepository.findAllByDepartment(d);
+                            List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(listWeek.get(i+1)),"1");//根据日期查询规则上班
+                            StatisticsModel model=new StatisticsModel();//统计模型
+                            model.setDateTime(listWeek.get(i)+"~"+listWeek.get(i+1));
+                            model.setDeptName(d.getDeptname());
+                            model.setShangRule(rulelistForTime1.size());
+                            model.setPeopleCount(staff.size());
+                            int count1=0;
+                            if(rulelistForTime1.size()!=0){
+                                List<Integer> ruleids=new ArrayList<>();
+                                for (Rule r:rulelistForTime1){
+                                    ruleids.add(r.getId());
+                                }
+                                List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,d.getId());//上班打卡人数
+                                List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId());//上班打卡异常人数
+                                model.setShangkao(monthShangCount.size());
+                                //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
+                                model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
+                                model.setYichang(monthShangYichangCount.size());
+                            }
+
+                            //下班
+                            List<Rule> rulelistForTime2=ruleService.getRuleForTime(TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(listWeek.get(i+1)),"2");//根据日期查询规则下班
+                            model.setXiaRule(rulelistForTime2.size());
+                            int count2=0;
+                            if(rulelistForTime2.size()!=0){
+                                List<Integer> ruleids2=new ArrayList<>();
+                                for (Rule r:rulelistForTime2){
+                                    ruleids2.add(r.getId());
+                                }
+                                List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,d.getId());//下班打卡人数
+                                List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId());//上班打卡异常人数
+                                //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
+                                model.setXiakao(monthXiaCount.size());
+                                model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
+                                model.setYichang(monthXiaYichangCount.size());
+                            }
+                            statistics.put(d.getDeptname()+"第"+j+"周考勤统计",model);
+                        }
+                        j++;
+                    }
+                    DailyListModel model=new DailyListModel();
+                    model.setStatistics(statistics);
+                    return model;
+                }else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
+                    Department departments=departmentRepository.findByid(user.getDeptId());//查询部长相关部门
+                    int j=1;
+                    if(user.getRoleName().equals("副院长")){
+                        if(!StringUtils.isEmpty(dpid)){
+                            departments=departmentRepository.findByid(dpid);//查询部长相关部门
+                        }
+                    }
+                    for(int i=0;i<listWeek.size();i+=2){//分割
+                        List<Staff> staff=staffRepository.findAllByDepartment(departments);
                         //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
                         List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(listWeek.get(i+1)),"1");//根据日期查询规则上班
                         StatisticsModel model=new StatisticsModel();//统计模型
-                        model.setDeptName(d.getDeptname());
+                        model.setDateTime(listWeek.get(i)+"~"+listWeek.get(i+1));
+                        model.setDeptName(departments.getDeptname());
                         model.setShangRule(rulelistForTime1.size());
                         model.setPeopleCount(staff.size());
                         int count1=0;
@@ -372,8 +445,8 @@ public class RecordServiceImpl implements RecordService {
                             for (Rule r:rulelistForTime1){
                                 ruleids.add(r.getId());
                             }
-                            List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,d.getId());//上班打卡人数
-                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId());//上班打卡异常人数
+                            List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,departments.getId());//上班打卡人数
+                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId());//上班打卡异常人数
                             model.setShangkao(monthShangCount.size());
                             //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
                             model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
@@ -389,72 +462,20 @@ public class RecordServiceImpl implements RecordService {
                             for (Rule r:rulelistForTime2){
                                 ruleids2.add(r.getId());
                             }
-                            List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,d.getId());//下班打卡人数
-                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId());//上班打卡异常人数
+                            List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,departments.getId());//下班打卡人数
+                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId());//上班打卡异常人数
                             //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
                             model.setXiakao(monthXiaCount.size());
                             model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
                             model.setYichang(monthXiaYichangCount.size());
                         }
-                        statistics.put(d.getDeptname()+"第"+j+"周考勤统计",model);
+                        statistics.put(departments.getDeptname()+"第"+j+"周考勤统计",model);
                     }
-                    j++;
                 }
                 DailyListModel model=new DailyListModel();
                 model.setStatistics(statistics);
                 return model;
-            }else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
-                Department departments=departmentRepository.findByid(user.getDeptId());//查询部长相关部门
-                int j=1;
-                if(user.getRoleName().equals("副院长")){
-                    if(!StringUtils.isEmpty(dpid)){
-                        departments=departmentRepository.findByid(dpid);//查询部长相关部门
-                    }
-                }
-                for(int i=0;i<listWeek.size();i+=2){//分割
-                    List<Staff> staff=staffRepository.findAllByDepartment(departments);
-                    //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
-                    List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(listWeek.get(i+1)),"1");//根据日期查询规则上班
-                    StatisticsModel model=new StatisticsModel();//统计模型
-                    model.setDeptName(departments.getDeptname());
-                    model.setShangRule(rulelistForTime1.size());
-                    model.setPeopleCount(staff.size());
-                    int count1=0;
-                    if(rulelistForTime1.size()!=0){
-                        List<Integer> ruleids=new ArrayList<>();
-                        for (Rule r:rulelistForTime1){
-                            ruleids.add(r.getId());
-                        }
-                        List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,departments.getId());//上班打卡人数
-                        List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId());//上班打卡异常人数
-                        model.setShangkao(monthShangCount.size());
-                        //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
-                        model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
-                        model.setYichang(monthShangYichangCount.size());
-                    }
-
-                    //下班
-                    List<Rule> rulelistForTime2=ruleService.getRuleForTime(TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(listWeek.get(i+1)),"2");//根据日期查询规则下班
-                    model.setXiaRule(rulelistForTime2.size());
-                    int count2=0;
-                    if(rulelistForTime2.size()!=0){
-                        List<Integer> ruleids2=new ArrayList<>();
-                        for (Rule r:rulelistForTime2){
-                            ruleids2.add(r.getId());
-                        }
-                        List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,departments.getId());//下班打卡人数
-                        List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId());//上班打卡异常人数
-                        //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
-                        model.setXiakao(monthXiaCount.size());
-                        model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
-                        model.setYichang(monthXiaYichangCount.size());
-                    }
-                    statistics.put(departments.getDeptname()+"第"+j+"周考勤统计",model);
-                }
             }
-            DailyListModel model=new DailyListModel();
-            model.setStatistics(statistics);
-            return model;
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -523,34 +544,135 @@ public class RecordServiceImpl implements RecordService {
      */
     public DailyListModel backGetStatisticsByMonth(UserInfoForToken userInfoForToken,String dpid, String timeStart, String timeEnd){
         try {
-            BackUser user=backUserService.getBackUserById("40282b816cacb930016cacb939bd0000");
-            Map<String,Object> time=new HashMap<>() ;
-            time.put("startDate",timeStart);
-            time.put("endDate",timeEnd);
-            Map<String,Object> statistics = new HashMap<>();//统计
-            List<StatisticsModel> sm=new ArrayList<>();
-            //按月统计
-            List<String> listMonth=doDateByStatisticsType("",time);
-            if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
-                List<Department> departments=departmentRepository.findAll();//全部部门
-                int j=1;
-                for(int i=0;i<listMonth.size();i+=2){//分割后的日期
-                    for (Department d:departments) {//部门
-                        List<Staff> staff=staffRepository.findAllByDepartment(d);
+            BackUser user=backUserService.getBackUserById(userInfoForToken.getUserId());
+            if(user!=null){
+                Map<String,Object> time=new HashMap<>() ;
+                time.put("startDate",timeStart);
+                time.put("endDate",timeEnd);
+                Map<String,Object> statistics = new HashMap<>();//统计
+                List<StatisticsModel> sm=new ArrayList<>();
+                //按月统计
+                List<String> listMonth=doDateByStatisticsType("",time);
+                if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
+                    List<Department> departments=departmentRepository.findAll();//全部部门
+                    int j=1;
+                    for(int i=0;i<listMonth.size();i+=2){//分割后的日期
+                        for (Department d:departments) {//部门
+                            List<Staff> staff=staffRepository.findAllByDepartment(d);
+                            //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
+                            List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)),"1");//根据日期查询规则上班
+                            StatisticsModel model=new StatisticsModel();//统计模型
+                            model.setDateTime(listMonth.get(i)+"~"+listMonth.get(i+1));
+                            model.setDeptName(d.getDeptname());
+                            model.setShangRule(rulelistForTime1.size());
+                            model.setPeopleCount(staff.size());
+                            int count1=0;
+                            if(rulelistForTime1.size()!=0){
+                                List<Integer> ruleids=new ArrayList<>();
+                                for (Rule r:rulelistForTime1){
+                                    ruleids.add(r.getId());
+                                }
+                                List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,d.getId());//上班打卡人数
+                                List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId());//上班打卡异常人数
+                                model.setShangkao(monthShangCount.size());
+                                //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
+                                model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
+                                model.setYichang(monthShangYichangCount.size());
+                            }
+
+                            //下班
+                            List<Rule> rulelistForTime2=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)),"2");//根据日期查询规则下班
+                            model.setXiaRule(rulelistForTime2.size());
+                            int count2=0;
+                            if(rulelistForTime2.size()!=0){
+                                List<Integer> ruleids2=new ArrayList<>();
+                                for (Rule r:rulelistForTime2){
+                                    ruleids2.add(r.getId());
+                                }
+                                List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,d.getId());//下班打卡人数
+                                List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId());//上班打卡异常人数
+                                //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
+                                model.setXiakao(monthXiaCount.size());
+                                model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
+                                model.setYichang(monthXiaYichangCount.size());
+                            }
+                            model.setHeader(d.getDeptname()+"第"+j+"月考勤统计");
+                            sm.add(model);
+                            statistics.put(d.getDeptname()+"第"+j+"月考勤统计",model);
+                        }
+                        j++;
+                    }
+               /*List<String> rowsName = new ArrayList<>();
+                Collections.addAll(rowsName,"序号", "部门", "部门总人数", "上班规则", "下班规则",
+                        "上班考勤人数（包含正常打卡，迟到，早退，考勤异常）", "下班考勤人数（包含正常打卡，迟到，早退，考勤异常）",
+                        "上班缺勤人数（统计当天没有打卡的人数）", "下班缺勤人数（统计当天没有打卡的人数）" ,"考勤异常人数");
+                List<String> title=new ArrayList<>();
+                title.add("考勤统计");
+                List<String> zd=new ArrayList<>();
+                for (int i=0;i<sm.size();i++){
+                    zd.add(i+"");
+                }
+                PoiUtils.createExcel("D:/downLoad1/","考勤统计（按月）.xls",rowsName,zd,JSONArray.parseArray(JSONObject.toJSONString(sm)));*/
+                    // 定义表的标题
+                    String title = "员工考勤报表一览";
+                    //定义表的列名
+                    String[] rowsName = new String[] { "名称", "部门", "部门总人数", "上班规则", "下班规则",
+                            "上班考勤次数", "下班考勤次数", "上班缺勤次数", "下班缺勤次数" ,"考勤异常次数","日期"};
+                    //定义表的内容
+                    List<Object[]> dataList = new ArrayList<Object[]>();
+                    Object[] objs = null;
+                    for (int i = 0; i < sm.size(); i++) {
+                        StatisticsModel s = sm.get(i);
+                        objs = new Object[rowsName.length];
+                        objs[0] = s.getHeader();
+                        objs[1] = s.getDeptName();
+                        objs[2] = s.getPeopleCount();
+                        objs[3] = s.getShangRule();
+                        objs[4] = s.getXiaRule();
+                    /*SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                    String date = df.format(per.getJobtime());*/
+                        objs[5] = s.getShangkao();
+                        objs[6] = s.getXiakao();
+                        objs[7] = s.getShangLostKao();
+                        objs[8] = s.getXiaLostKao();
+                        objs[9] = s.getYichang();
+                        objs[10] = s.getDateTime();
+                        dataList.add(objs);
+                    }
+                    // 创建ExportExcel对象
+                    ExportExcel ex = new ExportExcel(title, rowsName, dataList);
+
+                    ex.export();
+
+
+                    DailyListModel model=new DailyListModel();
+                    model.setStatistics(statistics);
+                    return model;
+                }else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
+                    Department departments=departmentRepository.findByid(user.getDeptId());//查询部长相关部门
+                    int j=1;
+                    if(user.getRoleName().equals("副院长")){
+                        if(!StringUtils.isEmpty(dpid)){
+                            departments=departmentRepository.findByid(dpid);//查询部长相关部门
+                        }
+                    }
+                    for(int i=0;i<listMonth.size();i+=2){//分割
+                        List<Staff> staff=staffRepository.findAllByDepartment(departments);
                         //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
                         List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)),"1");//根据日期查询规则上班
                         StatisticsModel model=new StatisticsModel();//统计模型
-                        model.setDeptName(d.getDeptname());
+                        model.setDeptName(departments.getDeptname());
                         model.setShangRule(rulelistForTime1.size());
                         model.setPeopleCount(staff.size());
+                        model.setDateTime(listMonth.get(i)+"~"+listMonth.get(i+1));
                         int count1=0;
                         if(rulelistForTime1.size()!=0){
                             List<Integer> ruleids=new ArrayList<>();
                             for (Rule r:rulelistForTime1){
                                 ruleids.add(r.getId());
                             }
-                            List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,d.getId());//上班打卡人数
-                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId());//上班打卡异常人数
+                            List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,departments.getId());//上班打卡人数
+                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId());//上班打卡异常人数
                             model.setShangkao(monthShangCount.size());
                             //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
                             model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
@@ -566,35 +688,23 @@ public class RecordServiceImpl implements RecordService {
                             for (Rule r:rulelistForTime2){
                                 ruleids2.add(r.getId());
                             }
-                            List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,d.getId());//下班打卡人数
-                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId());//上班打卡异常人数
+                            List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,departments.getId());//下班打卡人数
+                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId());//上班打卡异常人数
                             //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
                             model.setXiakao(monthXiaCount.size());
                             model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
                             model.setYichang(monthXiaYichangCount.size());
                         }
-                        model.setHeader(d.getDeptname()+"第"+j+"月考勤统计");
+                        statistics.put(departments.getDeptname()+"第"+j+"月考勤统计",model);
+                        model.setHeader(departments.getDeptname()+"第"+j+"月考勤统计");
                         sm.add(model);
-                        statistics.put(d.getDeptname()+"第"+j+"月考勤统计",model);
                     }
-                    j++;
                 }
-               /*List<String> rowsName = new ArrayList<>();
-                Collections.addAll(rowsName,"序号", "部门", "部门总人数", "上班规则", "下班规则",
-                        "上班考勤人数（包含正常打卡，迟到，早退，考勤异常）", "下班考勤人数（包含正常打卡，迟到，早退，考勤异常）",
-                        "上班缺勤人数（统计当天没有打卡的人数）", "下班缺勤人数（统计当天没有打卡的人数）" ,"考勤异常人数");
-                List<String> title=new ArrayList<>();
-                title.add("考勤统计");
-                List<String> zd=new ArrayList<>();
-                for (int i=0;i<sm.size();i++){
-                    zd.add(i+"");
-                }
-                PoiUtils.createExcel("D:/downLoad1/","考勤统计（按月）.xls",rowsName,zd,JSONArray.parseArray(JSONObject.toJSONString(sm)));*/
                 // 定义表的标题
                 String title = "员工考勤报表一览";
                 //定义表的列名
                 String[] rowsName = new String[] { "名称", "部门", "部门总人数", "上班规则", "下班规则",
-                        "上班考勤次数", "下班考勤次数", "上班缺勤次数", "下班缺勤次数" ,"考勤异常次数"};
+                        "上班考勤次数", "下班考勤次数", "上班缺勤次数", "下班缺勤次数" ,"考勤异常次数","日期"};
                 //定义表的内容
                 List<Object[]> dataList = new ArrayList<Object[]>();
                 Object[] objs = null;
@@ -613,137 +723,152 @@ public class RecordServiceImpl implements RecordService {
                     objs[7] = s.getShangLostKao();
                     objs[8] = s.getXiaLostKao();
                     objs[9] = s.getYichang();
+                    objs[10] = s.getDateTime();
                     dataList.add(objs);
                 }
                 // 创建ExportExcel对象
                 ExportExcel ex = new ExportExcel(title, rowsName, dataList);
 
                 ex.export();
-
-
                 DailyListModel model=new DailyListModel();
                 model.setStatistics(statistics);
                 return model;
-            }else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
-                Department departments=departmentRepository.findByid(user.getDeptId());//查询部长相关部门
-                int j=1;
-                if(user.getRoleName().equals("副院长")){
-                    if(!StringUtils.isEmpty(dpid)){
-                        departments=departmentRepository.findByid(dpid);//查询部长相关部门
-                    }
-                }
-                for(int i=0;i<listMonth.size();i+=2){//分割
-                    List<Staff> staff=staffRepository.findAllByDepartment(departments);
-                    //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
-                    List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)),"1");//根据日期查询规则上班
-                    StatisticsModel model=new StatisticsModel();//统计模型
-                    model.setDeptName(departments.getDeptname());
-                    model.setShangRule(rulelistForTime1.size());
-                    model.setPeopleCount(staff.size());
-                    int count1=0;
-                    if(rulelistForTime1.size()!=0){
-                        List<Integer> ruleids=new ArrayList<>();
-                        for (Rule r:rulelistForTime1){
-                            ruleids.add(r.getId());
-                        }
-                        List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,departments.getId());//上班打卡人数
-                        List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId());//上班打卡异常人数
-                        model.setShangkao(monthShangCount.size());
-                        //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
-                        model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
-                        model.setYichang(monthShangYichangCount.size());
-                    }
-
-                    //下班
-                    List<Rule> rulelistForTime2=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)),"2");//根据日期查询规则下班
-                    model.setXiaRule(rulelistForTime2.size());
-                    int count2=0;
-                    if(rulelistForTime2.size()!=0){
-                        List<Integer> ruleids2=new ArrayList<>();
-                        for (Rule r:rulelistForTime2){
-                            ruleids2.add(r.getId());
-                        }
-                        List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,departments.getId());//下班打卡人数
-                        List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId());//上班打卡异常人数
-                        //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
-                        model.setXiakao(monthXiaCount.size());
-                        model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
-                        model.setYichang(monthXiaYichangCount.size());
-                    }
-                    statistics.put(departments.getDeptname()+"第"+j+"月考勤统计",model);
-                    model.setHeader(departments.getDeptname()+"第"+j+"月考勤统计");
-                    sm.add(model);
-                }
             }
-            // 定义表的标题
-            String title = "员工考勤报表一览";
-            //定义表的列名
-            String[] rowsName = new String[] { "名称", "部门", "部门总人数", "上班规则", "下班规则",
-                    "上班考勤次数", "下班考勤次数", "上班缺勤次数", "下班缺勤次数" ,"考勤异常次数"};
-            //定义表的内容
-            List<Object[]> dataList = new ArrayList<Object[]>();
-            Object[] objs = null;
-            for (int i = 0; i < sm.size(); i++) {
-                StatisticsModel s = sm.get(i);
-                objs = new Object[rowsName.length];
-                objs[0] = s.getHeader();
-                objs[1] = s.getDeptName();
-                objs[2] = s.getPeopleCount();
-                objs[3] = s.getShangRule();
-                objs[4] = s.getXiaRule();
-                    /*SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                    String date = df.format(per.getJobtime());*/
-                objs[5] = s.getShangkao();
-                objs[6] = s.getXiakao();
-                objs[7] = s.getShangLostKao();
-                objs[8] = s.getXiaLostKao();
-                objs[9] = s.getYichang();
-                dataList.add(objs);
-            }
-            // 创建ExportExcel对象
-            ExportExcel ex = new ExportExcel(title, rowsName, dataList);
-
-            ex.export();
-            DailyListModel model=new DailyListModel();
-            model.setStatistics(statistics);
-            return model;
         }catch (Exception e){
             e.printStackTrace();
         }
         return null;
     }
 
+    /**
+     * 后台按周导出考勤信息
+     * @param userInfoForToken
+     * @param dpid
+     * @param timeStart
+     * @param timeEnd
+     * @return
+     */
     @Override
     public DailyListModel backGetStatisticsByWeek(UserInfoForToken userInfoForToken, String dpid, String timeStart, String timeEnd) {
         try {
-            BackUser user=backUserService.getBackUserById("40282b816cacb930016cacb939bd0000");
-            Map<String,Object> time=new HashMap<>() ;
-            time.put("startDate",timeStart);
-            time.put("endDate",timeEnd);
-            Map<String,Object> statistics = new HashMap<>();//统计
-            List<StatisticsModel> sm=new ArrayList<>();
-            //按周统计
-            List<String> listWeek=doDateByStatisticsType("week",time);
-            if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
-                List<Department> departments=departmentRepository.findAll();//全部部门
-                int j=1;
-                for(int i=0;i<listWeek.size();i+=2){//分割后的日期
-                    for (Department d:departments) {//部门
-                        List<Staff> staff=staffRepository.findAllByDepartment(d);
+            BackUser user=backUserService.getBackUserById(userInfoForToken.getUserId());
+            if(user!=null){
+                Map<String,Object> time=new HashMap<>() ;
+                time.put("startDate",timeStart);
+                time.put("endDate",timeEnd);
+                Map<String,Object> statistics = new HashMap<>();//统计
+                List<StatisticsModel> sm=new ArrayList<>();
+                //按周统计
+                //List<String> listWeek=doDateByStatisticsType("week",time);
+                List<String> listWeek=getWeeks(timeStart,timeEnd);
+                if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
+                    List<Department> departments=departmentRepository.findAll();//全部部门
+                    int j=1;
+                    for(int i=0;i<listWeek.size();i+=2){//分割后的日期
+                        for (Department d:departments) {//部门
+                            List<Staff> staff=staffRepository.findAllByDepartment(d);
+                            //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
+                            List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(listWeek.get(i+1)),"1");//根据日期查询规则上班
+                            StatisticsModel model=new StatisticsModel();//统计模型
+                            model.setDeptName(d.getDeptname());
+                            model.setShangRule(rulelistForTime1.size());
+                            model.setPeopleCount(staff.size());
+                            model.setDateTime(listWeek.get(i)+"~"+listWeek.get(i+1));
+                            int count1=0;
+                            if(rulelistForTime1.size()!=0){
+                                List<Integer> ruleids=new ArrayList<>();
+                                for (Rule r:rulelistForTime1){
+                                    ruleids.add(r.getId());
+                                }
+                                List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,d.getId());//上班打卡人数
+                                List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId());//上班打卡异常人数
+                                model.setShangkao(monthShangCount.size());
+                                //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
+                                model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
+                                model.setYichang(monthShangYichangCount.size());
+                            }
+
+                            //下班
+                            List<Rule> rulelistForTime2=ruleService.getRuleForTime(TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(listWeek.get(i+1)),"2");//根据日期查询规则下班
+                            model.setXiaRule(rulelistForTime2.size());
+                            int count2=0;
+                            if(rulelistForTime2.size()!=0){
+                                List<Integer> ruleids2=new ArrayList<>();
+                                for (Rule r:rulelistForTime2){
+                                    ruleids2.add(r.getId());
+                                }
+                                List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,d.getId());//下班打卡人数
+                                List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId());//上班打卡异常人数
+                                //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
+                                model.setXiakao(monthXiaCount.size());
+                                model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
+                                model.setYichang(monthXiaYichangCount.size());
+                            }
+                            statistics.put(d.getDeptname()+"第"+j+"周考勤统计",model);
+                            model.setHeader(d.getDeptname()+"第"+j+"周考勤统计");
+                            sm.add(model);
+                        }
+                        j++;
+                    }
+                    // 定义表的标题
+                    String title = "员工考勤报表一览";
+                    //定义表的列名
+                    String[] rowsName = new String[] { "名称", "部门", "部门总人数", "上班规则", "下班规则",
+                            "上班考勤次数", "下班考勤次数", "上班缺勤次数", "下班缺勤次数" ,"考勤异常次数","日期"};
+                    //定义表的内容
+                    List<Object[]> dataList = new ArrayList<Object[]>();
+                    Object[] objs = null;
+                    for (int i = 0; i < sm.size(); i++) {
+                        StatisticsModel s = sm.get(i);
+                        objs = new Object[rowsName.length];
+                        objs[0] = s.getHeader();
+                        objs[1] = s.getDeptName();
+                        objs[2] = s.getPeopleCount();
+                        objs[3] = s.getShangRule();
+                        objs[4] = s.getXiaRule();
+                    /*SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                    String date = df.format(per.getJobtime());*/
+                        objs[5] = s.getShangkao();
+                        objs[6] = s.getXiakao();
+                        objs[7] = s.getShangLostKao();
+                        objs[8] = s.getXiaLostKao();
+                        objs[9] = s.getYichang();
+                        objs[10] = s.getDateTime();
+                        dataList.add(objs);
+                    }
+                    // 创建ExportExcel对象
+                    ExportExcel ex = new ExportExcel(title, rowsName, dataList);
+
+                    ex.export();
+
+                    DailyListModel model=new DailyListModel();
+                    model.setStatistics(statistics);
+                    return model;
+                }else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
+                    Department departments=departmentRepository.findByid(user.getDeptId());//查询部长相关部门
+                    int j=1;
+                    if(user.getRoleName().equals("副院长")){
+                        if(!StringUtils.isEmpty(dpid)){
+                            departments=departmentRepository.findByid(dpid);//查询部长相关部门
+                        }
+                    }
+                    for(int i=0;i<listWeek.size();i+=2){//分割
+                        List<Staff> staff=staffRepository.findAllByDepartment(departments);
                         //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
                         List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(listWeek.get(i+1)),"1");//根据日期查询规则上班
                         StatisticsModel model=new StatisticsModel();//统计模型
-                        model.setDeptName(d.getDeptname());
+                        model.setDeptName(departments.getDeptname());
                         model.setShangRule(rulelistForTime1.size());
                         model.setPeopleCount(staff.size());
+                        model.setDateTime(listWeek.get(i)+"~"+listWeek.get(i+1));
                         int count1=0;
                         if(rulelistForTime1.size()!=0){
                             List<Integer> ruleids=new ArrayList<>();
                             for (Rule r:rulelistForTime1){
                                 ruleids.add(r.getId());
                             }
-                            List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,d.getId());//上班打卡人数
-                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId());//上班打卡异常人数
+                            List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,departments.getId());//上班打卡人数
+                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId());//上班打卡异常人数
                             model.setShangkao(monthShangCount.size());
                             //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
                             model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
@@ -759,24 +884,23 @@ public class RecordServiceImpl implements RecordService {
                             for (Rule r:rulelistForTime2){
                                 ruleids2.add(r.getId());
                             }
-                            List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,d.getId());//下班打卡人数
-                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId());//上班打卡异常人数
+                            List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,departments.getId());//下班打卡人数
+                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId());//上班打卡异常人数
                             //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
                             model.setXiakao(monthXiaCount.size());
                             model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
                             model.setYichang(monthXiaYichangCount.size());
                         }
-                        statistics.put(d.getDeptname()+"第"+j+"周考勤统计",model);
-                        model.setHeader(d.getDeptname()+"第"+j+"周考勤统计");
+                        statistics.put(departments.getDeptname()+"第"+j+"周考勤统计",model);
+                        model.setHeader(departments.getDeptname()+"第"+j+"周考勤统计");
                         sm.add(model);
                     }
-                    j++;
                 }
                 // 定义表的标题
                 String title = "员工考勤报表一览";
                 //定义表的列名
                 String[] rowsName = new String[] { "名称", "部门", "部门总人数", "上班规则", "下班规则",
-                        "上班考勤次数", "下班考勤次数", "上班缺勤次数", "下班缺勤次数" ,"考勤异常次数"};
+                        "上班考勤次数", "下班考勤次数", "上班缺勤次数", "下班缺勤次数" ,"考勤异常次数","日期"};
                 //定义表的内容
                 List<Object[]> dataList = new ArrayList<Object[]>();
                 Object[] objs = null;
@@ -795,6 +919,7 @@ public class RecordServiceImpl implements RecordService {
                     objs[7] = s.getShangLostKao();
                     objs[8] = s.getXiaLostKao();
                     objs[9] = s.getYichang();
+                    objs[10] = s.getDateTime();
                     dataList.add(objs);
                 }
                 // 创建ExportExcel对象
@@ -805,90 +930,7 @@ public class RecordServiceImpl implements RecordService {
                 DailyListModel model=new DailyListModel();
                 model.setStatistics(statistics);
                 return model;
-            }else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
-                Department departments=departmentRepository.findByid(user.getDeptId());//查询部长相关部门
-                int j=1;
-                if(user.getRoleName().equals("副院长")){
-                    if(!StringUtils.isEmpty(dpid)){
-                        departments=departmentRepository.findByid(dpid);//查询部长相关部门
-                    }
-                }
-                for(int i=0;i<listWeek.size();i+=2){//分割
-                    List<Staff> staff=staffRepository.findAllByDepartment(departments);
-                    //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
-                    List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(listWeek.get(i+1)),"1");//根据日期查询规则上班
-                    StatisticsModel model=new StatisticsModel();//统计模型
-                    model.setDeptName(departments.getDeptname());
-                    model.setShangRule(rulelistForTime1.size());
-                    model.setPeopleCount(staff.size());
-                    int count1=0;
-                    if(rulelistForTime1.size()!=0){
-                        List<Integer> ruleids=new ArrayList<>();
-                        for (Rule r:rulelistForTime1){
-                            ruleids.add(r.getId());
-                        }
-                        List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,departments.getId());//上班打卡人数
-                        List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId());//上班打卡异常人数
-                        model.setShangkao(monthShangCount.size());
-                        //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
-                        model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
-                        model.setYichang(monthShangYichangCount.size());
-                    }
-
-                    //下班
-                    List<Rule> rulelistForTime2=ruleService.getRuleForTime(TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(listWeek.get(i+1)),"2");//根据日期查询规则下班
-                    model.setXiaRule(rulelistForTime2.size());
-                    int count2=0;
-                    if(rulelistForTime2.size()!=0){
-                        List<Integer> ruleids2=new ArrayList<>();
-                        for (Rule r:rulelistForTime2){
-                            ruleids2.add(r.getId());
-                        }
-                        List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,departments.getId());//下班打卡人数
-                        List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId());//上班打卡异常人数
-                        //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
-                        model.setXiakao(monthXiaCount.size());
-                        model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
-                        model.setYichang(monthXiaYichangCount.size());
-                    }
-                    statistics.put(departments.getDeptname()+"第"+j+"周考勤统计",model);
-                    model.setHeader(departments.getDeptname()+"第"+j+"周考勤统计");
-                    sm.add(model);
-                }
             }
-            // 定义表的标题
-            String title = "员工考勤报表一览";
-            //定义表的列名
-            String[] rowsName = new String[] { "名称", "部门", "部门总人数", "上班规则", "下班规则",
-                    "上班考勤次数", "下班考勤次数", "上班缺勤次数", "下班缺勤次数" ,"考勤异常次数"};
-            //定义表的内容
-            List<Object[]> dataList = new ArrayList<Object[]>();
-            Object[] objs = null;
-            for (int i = 0; i < sm.size(); i++) {
-                StatisticsModel s = sm.get(i);
-                objs = new Object[rowsName.length];
-                objs[0] = s.getHeader();
-                objs[1] = s.getDeptName();
-                objs[2] = s.getPeopleCount();
-                objs[3] = s.getShangRule();
-                objs[4] = s.getXiaRule();
-                    /*SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                    String date = df.format(per.getJobtime());*/
-                objs[5] = s.getShangkao();
-                objs[6] = s.getXiakao();
-                objs[7] = s.getShangLostKao();
-                objs[8] = s.getXiaLostKao();
-                objs[9] = s.getYichang();
-                dataList.add(objs);
-            }
-            // 创建ExportExcel对象
-            ExportExcel ex = new ExportExcel(title, rowsName, dataList);
-
-            ex.export();
-
-            DailyListModel model=new DailyListModel();
-            model.setStatistics(statistics);
-            return model;
         }catch (Exception e){
             e.printStackTrace();
         }
