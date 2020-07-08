@@ -9,7 +9,7 @@
             {{time}}
           </view>
           <view class="bj_bottom">
-            <view>考勤规则：连接指定WIFI打卡</view>
+            <view>考勤规则：根据定位打卡</view>
           </view>
       </view>
       <view class="{{wzstate1?'Obtain red':'Obtain'}}">
@@ -33,8 +33,8 @@
             <view wx:if="{{item.stuas == 1}}"><image src="../../static/images/zao.png" /></view>
             <view wx:if="{{item.stuas == 2}}"><image src="../../static/images/wan.png" /></view>
             <view>
-              <span wx:if="{{item.stuas == 1}}">上班</span>
-              <span wx:if="{{item.stuas == 2}}">下班</span>
+              <span wx:if="{{item.stuas == 1}}">{{item.timestatus==1?'上午':''}}{{item.timestatus==2?'下午':''}}<span>上班</span></span>
+              <span wx:if="{{item.stuas == 2}}">{{item.timestatus==1?'上午':''}}{{item.timestatus==2?'下午':''}}<span>下班</span></span>
               <span>{{item.sj}}</span>
             </view>
           </view>

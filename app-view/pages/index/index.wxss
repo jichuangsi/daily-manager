@@ -59,7 +59,6 @@ page {
   border-bottom: 2rpx solid #DCDCDC;
   box-sizing: border-box;
   background-color: #fff;
-  display: none;
 }
 .Obtain view:first-child{
   color: #666666;
@@ -100,6 +99,7 @@ page {
 .clock .clock_box .clock_left {
   flex: 1;
   display: flex;
+  align-items: center;
 }
 .clock .clock_box .clock_left view:first-child{
   width: 82rpx;
