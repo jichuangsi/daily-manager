@@ -98,9 +98,9 @@ public class DaKaController {
             }
 
         }else {
-            String s= " wifi不对";
+            /*String s= " wifi不对";
             sb.append(s);
-            w="w";
+            w="w";*/
 
            if (!longitudeLatitude.equalsIgnoreCase(",")){
                String[] LL=lL.split(",");
@@ -125,6 +125,8 @@ public class DaKaController {
                     stuas="3";
                 }
             }else {
+                String s1=" 定位不对" ;
+                sb.append(s1);
                 d="d";
                 stuas="1";
 
@@ -248,6 +250,7 @@ public class DaKaController {
                     ruleModel.setLongitudeLatitude(r.getLongitudeLatitude());
                     ruleModel.setTime(r.getTime());
                     ruleModel.setWifiName(r.getWifiName());
+                    ruleModel.setTimestatus(r.getTimestatus());
                     rulelist.add(ruleModel);
                 }else {
                     RuleModel ruleModel = new RuleModel();
@@ -269,6 +272,7 @@ public class DaKaController {
                     ruleModel.setLongitudeLatitude(r.getLongitudeLatitude());
                     ruleModel.setTime(r.getTime());
                     ruleModel.setWifiName(r.getWifiName());
+                    ruleModel.setTimestatus(r.getTimestatus());
                     rulelist.add(ruleModel);
                 }
             }
@@ -685,6 +689,7 @@ public class DaKaController {
     public ResponseModel<List<ReportFormModel2>> getAllBB(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam(required = false) String name,@RequestParam @Nullable String dpid,@RequestParam String timeStart, @RequestParam String timeEnd,@RequestParam int pageSize ,@RequestParam @Nullable int pageNum){
         try {
             BackUser user=backUserService.getBackUserById(userInfoForToken.getUserId());
+
             if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
                 try {
                     ResponseModel<List<ReportFormModel2>> listResponseModel=new ResponseModel<>();
@@ -957,5 +962,11 @@ public class DaKaController {
     @PostMapping("/BackImportStatisticsByWeek")
     public ResponseModel BackImportStatisticsByWeek(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam(required = false) String name,@RequestParam @Nullable String dpid,@RequestParam String timeStart, @RequestParam String timeEnd) {
         return ResponseModel.sucess("",recordService.backGetStatisticsByWeek(userInfoForToken,dpid, timeStart.trim(), timeEnd.trim()));
+    }
+
+    @ApiOperation(value = "统计图列表", notes = "")
+    @PostMapping("/getStatisticsChartByTime")
+    public ResponseModel getStatisticsChartByTime(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam(required = false) String name,@RequestParam @Nullable String dpid,@RequestParam String timeStart, @RequestParam String timeEnd) {
+        return ResponseModel.sucess("",recordService.getStatisticsChartByTime(userInfoForToken,dpid, timeStart.trim(), timeEnd.trim()));
     }
 }

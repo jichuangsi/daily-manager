@@ -8,6 +8,7 @@ public class RuleModel2 {
     private String longitudeLatitude;
     private String wucha;
     private String stuas;
+    private String timestatus;
 
     public String getId() {
         return id;
@@ -55,5 +56,13 @@ public class RuleModel2 {
 
     public void setStuas(String stuas) {
         this.stuas = stuas;
+    }
+
+    public String getTimestatus() {
+        return timestatus;
+    }
+
+    public void setTimestatus(String timestatus) {
+        this.timestatus = timestatus;
     }
 }

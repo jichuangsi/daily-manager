@@ -8,6 +8,7 @@ public class ReportFormModel2 {
     private String stuas2;
     private long time;
     private long chockinTime;
+    private String timestatus;
 
     public String getDepartment() {
         return department;
@@ -63,5 +64,13 @@ public class ReportFormModel2 {
 
     public void setChockinTime(long chockinTime) {
         this.chockinTime = chockinTime;
+    }
+
+    public String getTimestatus() {
+        return timestatus;
+    }
+
+    public void setTimestatus(String timestatus) {
+        this.timestatus = timestatus;
     }
 }

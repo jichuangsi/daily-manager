@@ -27,7 +27,7 @@ public class RuleController {
     public ResponseModel<String> ruleSet(@RequestBody RuleModel2 rules){
 
             long time = TimeUtils.gettime(rules.getTime());
-            ruleService.insertRule(time,rules.getWifiName(),rules.getLongitudeLatitude(),rules.getStuas(),rules.getWucha());
+            ruleService.insertRule(time,rules.getWifiName(),rules.getLongitudeLatitude(),rules.getStuas(),rules.getWucha(),rules.getTimestatus());
 
         ResponseModel<String> stringResponseModel = new ResponseModel<>();
         stringResponseModel.setMsg("ok");
@@ -56,6 +56,7 @@ public class RuleController {
             rule1.setTime(TimeUtils.gettime(rule.getTime())+TimeUtils.todayMorning());
             rule1.setWucha(rule.getWucha());
             rule1.setWifiName(rule.getWifiName());
+            rule1.setTimestatus(rule.getTimestatus());
             ruleService.updateRule(rule1);
             return ResponseModel.sucess("",ResultCode.SUCESS);
         }catch (Exception e){
@@ -72,6 +73,7 @@ public class RuleController {
             rule1.setTime(TimeUtils.gettime(rule.getTime())+TimeUtils.todayMorning());
             rule1.setWucha(rule.getWucha());
             rule1.setWifiName(rule.getWifiName());
+            rule1.setTimestatus(rule.getTimestatus());
             ruleService.insertRule(rule1);
             return ResponseModel.sucess("",ResultCode.SUCESS);
         }catch (Exception e){

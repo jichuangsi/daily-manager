@@ -33,8 +33,8 @@ public class RuleServiceImpl implements RuleService {
     }
 
     @Override
-    public void insertRule(Long time, String wifiName, String longitudeLatitude, String stuas,String wucha) {
-        rfRepostitory.insertRule(time,wifiName,longitudeLatitude,stuas,wucha,"1");
+    public void insertRule(Long time, String wifiName, String longitudeLatitude, String stuas,String wucha,String timestatus) {
+        rfRepostitory.insertRule(time,wifiName,longitudeLatitude,stuas,wucha,"1",timestatus);
     }
 
     @Override

@@ -15,6 +15,7 @@ public class Rule {
     private String longitudeLatitude;
     private String wucha;
     private String stuas;
+    private String timestatus;
 
     public String getWucha() {
         return wucha;
@@ -62,5 +63,13 @@ public class Rule {
 
     public void setStuas(String stuas) {
         this.stuas = stuas;
+    }
+
+    public String getTimestatus() {
+        return timestatus;
+    }
+
+    public void setTimestatus(String timestatus) {
+        this.timestatus = timestatus;
     }
 }

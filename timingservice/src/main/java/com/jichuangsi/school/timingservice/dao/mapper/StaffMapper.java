@@ -26,7 +26,7 @@ public interface StaffMapper {
     @Select("<script>select count(1) from staff where roleid=#{roleId}</script>")
     int countStaffByRoleid(String roleId);
 
-    @Select("<script>SELECT d.deptname as department,u.people_name as peopleName,u.jurisdiction as jurisdiction,rule.stuas as stuas,r.stuas as stuas2,rule.time as time,r.time as chockinTime FROM record r INNER JOIN rule ON rule.id=r.rule_id INNER JOIN `user` u ON r.open_id=u.open_id INNER JOIN `department` d ON u.department=d.id WHERE u.open_id=#{openId} AND r.time BETWEEN #{timeStart} AND #{timeEnd}</script>")
+    @Select("<script>SELECT d.deptname as department,u.people_name as peopleName,u.jurisdiction as jurisdiction,rule.stuas as stuas,r.stuas as stuas2,rule.time as time,r.time as chockinTime,rule.timestatus as timestatus FROM record r INNER JOIN rule ON rule.id=r.rule_id INNER JOIN `user` u ON r.open_id=u.open_id INNER JOIN `department` d ON u.department=d.id WHERE u.open_id=#{openId} AND r.time BETWEEN #{timeStart} AND #{timeEnd}</script>")
     List<ReportFormModel2> findAllByTimeAndOpenId(@Param("openId")String openId,@Param("timeStart")long timeStart, @Param("timeEnd")long timeEnd);
 
 
@@ -49,14 +49,15 @@ public interface StaffMapper {
     List<Record> getRuleIdAndOpenId(@Param("ruleId")List<Integer> ruleId,@Param("deptId")String deptId);
 
     /**
-     * 统计考勤异常人数
+     * 根据状态统计考勤人数
      * @param ruleId
      * @param deptId
+     * @param status
      * @return
      */
     @Select(value = "<script>SELECT  record.* FROM record INNER JOIN staff ON record.open_id=staff.wechat WHERE rule_id IN" +
-            "<foreach collection='ruleId' item='item' open='(' separator=',' close=')'>#{item}</foreach> AND staff.deptid=#{deptId} AND record.stuas='1' " +
+            "<foreach collection='ruleId' item='item' open='(' separator=',' close=')'>#{item}</foreach> AND staff.deptid=#{deptId} AND record.stuas=#{status} " +
             "GROUP BY rule_id,open_id </script>")
-    List<Record> getRuleIdAndOpenIdAndStatus(@Param("ruleId")List<Integer> ruleId,@Param("deptId")String deptId);
+    List<Record> getRuleIdAndOpenIdAndStatus(@Param("ruleId")List<Integer> ruleId,@Param("deptId")String deptId,@Param("status")String status);
 }
 

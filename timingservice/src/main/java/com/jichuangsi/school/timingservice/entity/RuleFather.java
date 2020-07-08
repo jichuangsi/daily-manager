@@ -14,6 +14,7 @@ public class RuleFather {
     private String wucha;
     private String stuas;
     private String qiting;
+    private String timestatus;
 
     public String getQiting() {
         return qiting;
@@ -69,5 +70,13 @@ public class RuleFather {
 
     public void setStuas(String stuas) {
         this.stuas = stuas;
+    }
+
+    public String getTimestatus() {
+        return timestatus;
+    }
+
+    public void setTimestatus(String timestatus) {
+        this.timestatus = timestatus;
     }
 }

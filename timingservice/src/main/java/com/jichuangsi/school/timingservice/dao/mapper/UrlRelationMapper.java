@@ -12,7 +12,7 @@ import java.util.List;
 
 @Mapper
 public interface UrlRelationMapper {
-    @Select("<script>select u.id as id,u.rid as roleId,r.id as urlId,r.`name` as name,r.url as url,r.usewayid as usewayid from urlrelation as u INNER JOIN roleurl as r ON u.uid=r.id where u.rid=#{roleId}</script>")
+    @Select("<script>select u.id as id,u.rid as roleId,r.id as urlId,r.`name` as name,r.url as url from urlrelation as u INNER JOIN roleurl as r ON u.uid=r.id where u.rid=#{roleId}</script>")
     List<RoleUrlModel> getRoleUrlByRoleId(String roleId);
 
     @Select("<script>SELECT ru.id as id,ru.`name`as`name`,ru.url as url,sp.id as usewayid,sp.`name`as usewayname FROM staticpage_url su INNER JOIN  roleurl ru ON su.url_id=ru.id INNER JOIN static_page sp ON su.static_page_id=sp.id</script>")

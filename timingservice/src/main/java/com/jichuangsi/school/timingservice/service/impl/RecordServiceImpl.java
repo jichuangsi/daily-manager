@@ -271,7 +271,7 @@ public class RecordServiceImpl implements RecordService {
                                     ruleids.add(r.getId());
                                 }
                                 List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,d.getId());//上班打卡人数
-                                List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId());//上班打卡异常人数
+                                List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId(),"1");//上班打卡异常人数
                                 model.setShangkao(monthShangCount.size());
                                 //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
                                 model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
@@ -288,7 +288,7 @@ public class RecordServiceImpl implements RecordService {
                                     ruleids2.add(r.getId());
                                 }
                                 List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,d.getId());//下班打卡人数
-                                List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId());//上班打卡异常人数
+                                List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId(),"1");//上班打卡异常人数
                                 //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
                                 model.setXiakao(monthXiaCount.size());
                                 model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
@@ -325,7 +325,7 @@ public class RecordServiceImpl implements RecordService {
                                 ruleids.add(r.getId());
                             }
                             List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,departments.getId());//上班打卡人数
-                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId());//上班打卡异常人数
+                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId(),"1");//上班打卡异常人数
                             model.setShangkao(monthShangCount.size());
                             //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
                             model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
@@ -342,7 +342,7 @@ public class RecordServiceImpl implements RecordService {
                                 ruleids2.add(r.getId());
                             }
                             List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,departments.getId());//下班打卡人数
-                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId());//上班打卡异常人数
+                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId(),"1");//上班打卡异常人数
                             //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
                             model.setXiakao(monthXiaCount.size());
                             model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
@@ -392,7 +392,7 @@ public class RecordServiceImpl implements RecordService {
                                     ruleids.add(r.getId());
                                 }
                                 List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,d.getId());//上班打卡人数
-                                List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId());//上班打卡异常人数
+                                List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId(),"1");//上班打卡异常人数
                                 model.setShangkao(monthShangCount.size());
                                 //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
                                 model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
@@ -409,7 +409,7 @@ public class RecordServiceImpl implements RecordService {
                                     ruleids2.add(r.getId());
                                 }
                                 List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,d.getId());//下班打卡人数
-                                List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId());//上班打卡异常人数
+                                List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId(),"1");//上班打卡异常人数
                                 //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
                                 model.setXiakao(monthXiaCount.size());
                                 model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
@@ -446,7 +446,7 @@ public class RecordServiceImpl implements RecordService {
                                 ruleids.add(r.getId());
                             }
                             List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,departments.getId());//上班打卡人数
-                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId());//上班打卡异常人数
+                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId(),"1");//上班打卡异常人数
                             model.setShangkao(monthShangCount.size());
                             //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
                             model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
@@ -463,7 +463,7 @@ public class RecordServiceImpl implements RecordService {
                                 ruleids2.add(r.getId());
                             }
                             List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,departments.getId());//下班打卡人数
-                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId());//上班打卡异常人数
+                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId(),"1");//上班打卡异常人数
                             //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
                             model.setXiakao(monthXiaCount.size());
                             model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
@@ -573,7 +573,7 @@ public class RecordServiceImpl implements RecordService {
                                     ruleids.add(r.getId());
                                 }
                                 List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,d.getId());//上班打卡人数
-                                List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId());//上班打卡异常人数
+                                List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId(),"1");//上班打卡异常人数
                                 model.setShangkao(monthShangCount.size());
                                 //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
                                 model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
@@ -590,7 +590,7 @@ public class RecordServiceImpl implements RecordService {
                                     ruleids2.add(r.getId());
                                 }
                                 List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,d.getId());//下班打卡人数
-                                List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId());//上班打卡异常人数
+                                List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId(),"1");//上班打卡异常人数
                                 //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
                                 model.setXiakao(monthXiaCount.size());
                                 model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
@@ -672,7 +672,7 @@ public class RecordServiceImpl implements RecordService {
                                 ruleids.add(r.getId());
                             }
                             List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,departments.getId());//上班打卡人数
-                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId());//上班打卡异常人数
+                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId(),"1");//上班打卡异常人数
                             model.setShangkao(monthShangCount.size());
                             //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
                             model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
@@ -689,7 +689,7 @@ public class RecordServiceImpl implements RecordService {
                                 ruleids2.add(r.getId());
                             }
                             List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,departments.getId());//下班打卡人数
-                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId());//上班打卡异常人数
+                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId(),"1");//上班打卡异常人数
                             //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
                             model.setXiakao(monthXiaCount.size());
                             model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
@@ -781,7 +781,7 @@ public class RecordServiceImpl implements RecordService {
                                     ruleids.add(r.getId());
                                 }
                                 List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,d.getId());//上班打卡人数
-                                List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId());//上班打卡异常人数
+                                List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId(),"1");//上班打卡异常人数
                                 model.setShangkao(monthShangCount.size());
                                 //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
                                 model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
@@ -798,7 +798,7 @@ public class RecordServiceImpl implements RecordService {
                                     ruleids2.add(r.getId());
                                 }
                                 List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,d.getId());//下班打卡人数
-                                List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId());//上班打卡异常人数
+                                List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId(),"1");//上班打卡异常人数
                                 //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
                                 model.setXiakao(monthXiaCount.size());
                                 model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
@@ -868,7 +868,7 @@ public class RecordServiceImpl implements RecordService {
                                 ruleids.add(r.getId());
                             }
                             List<Record> monthShangCount=staffMapper.getRuleIdAndOpenId(ruleids,departments.getId());//上班打卡人数
-                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId());//上班打卡异常人数
+                            List<Record> monthShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId(),"1");//上班打卡异常人数
                             model.setShangkao(monthShangCount.size());
                             //count1=rulelistForTime1.size()*staff.size()-monthShangCount.size();
                             model.setShangLostKao(rulelistForTime1.size()*staff.size()-monthShangCount.size());
@@ -885,7 +885,7 @@ public class RecordServiceImpl implements RecordService {
                                 ruleids2.add(r.getId());
                             }
                             List<Record> monthXiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,departments.getId());//下班打卡人数
-                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId());//上班打卡异常人数
+                            List<Record> monthXiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId(),"1");//上班打卡异常人数
                             //count2=rulelistForTime2.size()*staff.size()-monthXiaCount.size();
                             model.setXiakao(monthXiaCount.size());
                             model.setXiaLostKao(rulelistForTime2.size()*staff.size()-monthXiaCount.size());
@@ -930,6 +930,164 @@ public class RecordServiceImpl implements RecordService {
                 DailyListModel model=new DailyListModel();
                 model.setStatistics(statistics);
                 return model;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 返回时间区间内日期合集
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    private static List<String> getDays(String startTime, String endTime) {
+
+        // 返回的日期集合
+        List<String> days = new ArrayList<String>();
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date start = dateFormat.parse(startTime);
+            Date end = dateFormat.parse(endTime);
+
+            Calendar tempStart = Calendar.getInstance();
+            tempStart.setTime(start);
+
+            Calendar tempEnd = Calendar.getInstance();
+            tempEnd.setTime(end);
+            tempEnd.add(Calendar.DATE, +1);// 日期加1(包含结束)
+            while (tempStart.before(tempEnd)) {
+                days.add(dateFormat.format(tempStart.getTime()));
+                tempStart.add(Calendar.DAY_OF_YEAR, 1);
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return days;
+    }
+
+    @Override
+    public Map<String,List<Object>> getStatisticsChartByTime(UserInfoForToken userInfoForToken, String dpid, String timeStart, String timeEnd) {
+        List<String> days= getDays(timeStart,timeEnd);
+        try {
+            BackUser user=backUserService.getBackUserById(userInfoForToken.getUserId());
+            if(user!=null){
+                List<Object> dates=new ArrayList<>();//日期
+                List<Object> yichang=new ArrayList<>();//考勤异常
+                List<Object> late=new ArrayList<>();//迟到
+                List<Object> lost=new ArrayList<>();//缺勤
+                List<Object> leaveEarly=new ArrayList<>();//早退
+                if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
+                    List<Department> departments=departmentRepository.findAll();//全部部门
+                    for (String day:days) {
+                        dates.add(day);//追加日期
+                        int y=0;
+                        int l=0;
+                        int lo=0;
+                        int le=0;
+                        for (Department d:departments) {//部门
+                            List<Staff> staff=staffRepository.findAllByDepartment(d);
+                            List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(day),TimeUtils.endTime(day),"1");//根据日期查询规则上班
+                            if(rulelistForTime1.size()!=0){
+                                List<Integer> ruleids=new ArrayList<>();
+                                for (Rule r:rulelistForTime1){
+                                    ruleids.add(r.getId());
+                                }
+                                List<Record> ShangCount=staffMapper.getRuleIdAndOpenId(ruleids,d.getId());//上班打卡人数
+                                List<Record> ShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId(),"1");//上班打卡异常人数
+                                List<Record> ShangLateCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,d.getId(),"2");//上班打卡迟到人数
+                                y+=ShangYichangCount.size();
+                                l+=ShangLateCount.size();
+                                lo+=(rulelistForTime1.size()*staff.size()-ShangCount.size());
+                            }
+
+                            //下班
+                            List<Rule> rulelistForTime2=ruleService.getRuleForTime(TimeUtils.startTime(day),TimeUtils.endTime(day),"2");//根据日期查询规则下班
+                            if(rulelistForTime2.size()!=0){
+                                List<Integer> ruleids2=new ArrayList<>();
+                                for (Rule r:rulelistForTime2){
+                                    ruleids2.add(r.getId());
+                                }
+                                List<Record> XiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,d.getId());//下班打卡人数
+                                List<Record> XiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId(),"1");//下班打卡异常人数
+                                List<Record> xiaLeaveEarlyCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,d.getId(),"3");//下班打卡早退人数
+                                y+=XiaYichangCount.size();
+                                lo+=(rulelistForTime2.size()*staff.size()-XiaCount.size());
+                                le+=xiaLeaveEarlyCount.size();
+                            }
+                        }
+                        yichang.add(y);
+                        late.add(l);
+                        lost.add(lo);
+                        leaveEarly.add(le);
+                    }
+                    Map<String,List<Object>> map= new HashMap<>();
+                    map.put("date",dates);
+                    map.put("yichang",yichang);
+                    map.put("late",late);
+                    map.put("lost",lost);
+                    map.put("leaveEarly",leaveEarly);
+                    return map;
+                }else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
+                    Department departments=departmentRepository.findByid(user.getDeptId());//查询部长相关部门
+                    if(user.getRoleName().equals("副院长")){
+                        if(!StringUtils.isEmpty(dpid)){
+                            departments=departmentRepository.findByid(dpid);//查询部长相关部门
+                        }
+                    }
+                    for (String day:days) {
+                        dates.add(day);//追加日期
+                        int y=0;
+                        int l=0;
+                        int lo=0;
+                        int le=0;
+                        List<Staff> staff=staffRepository.findAllByDepartment(departments);
+                        List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(day),TimeUtils.endTime(day),"1");//根据日期查询规则上班
+                        if(rulelistForTime1.size()!=0){
+                            List<Integer> ruleids=new ArrayList<>();
+                            for (Rule r:rulelistForTime1){
+                                ruleids.add(r.getId());
+                            }
+                            List<Record> ShangCount=staffMapper.getRuleIdAndOpenId(ruleids,departments.getId());//上班打卡人数
+                            List<Record> ShangYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId(),"1");//上班打卡异常人数
+                            List<Record> ShangLateCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids,departments.getId(),"2");//上班打卡迟到人数
+                            y+=ShangYichangCount.size();
+                            l+=ShangLateCount.size();
+                            lo+=(rulelistForTime1.size()*staff.size()-ShangCount.size());
+                        }
+
+                        //下班
+                        List<Rule> rulelistForTime2=ruleService.getRuleForTime(TimeUtils.startTime(day),TimeUtils.endTime(day),"2");//根据日期查询规则下班
+                        if(rulelistForTime2.size()!=0){
+                            List<Integer> ruleids2=new ArrayList<>();
+                            for (Rule r:rulelistForTime2){
+                                ruleids2.add(r.getId());
+                            }
+                            List<Record> XiaCount=staffMapper.getRuleIdAndOpenId(ruleids2,departments.getId());//下班打卡人数
+                            List<Record> XiaYichangCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId(),"1");//下班打卡异常人数
+                            List<Record> xiaLeaveEarlyCount=staffMapper.getRuleIdAndOpenIdAndStatus(ruleids2,departments.getId(),"3");//下班打卡早退人数
+                            y+=XiaYichangCount.size();
+                            lo+=(rulelistForTime2.size()*staff.size()-XiaCount.size());
+                            le+=xiaLeaveEarlyCount.size();
+                        }
+                        yichang.add(y);
+                        late.add(l);
+                        lost.add(lo);
+                        leaveEarly.add(le);
+                    }
+                }
+                Map<String,List<Object>> map= new HashMap<>();
+                map.put("date",dates);
+                map.put("yichang",yichang);
+                map.put("late",late);
+                map.put("lost",lost);
+                map.put("leaveEarly",leaveEarly);
+                return map;
             }
         }catch (Exception e){
             e.printStackTrace();

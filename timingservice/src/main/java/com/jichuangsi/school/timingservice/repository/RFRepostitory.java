@@ -19,8 +19,8 @@ public interface RFRepostitory extends JpaRepository<RuleFather,String> {
 
     @Transactional
     @Modifying
-    @Query(value = "insert into rulefather(time,wifi_name,longitude_latitude,stuas,wucha,qiting) values(?1,?2,?3,?4,?5,?6)",nativeQuery = true)
-    void insertRule(Long time, String wifiName, String longitudeLatitude, String stuas,String wucha,String qiting);
+    @Query(value = "insert into rulefather(time,wifi_name,longitude_latitude,stuas,wucha,qiting,timestatus) values(?1,?2,?3,?4,?5,?6,?7)",nativeQuery = true)
+    void insertRule(Long time, String wifiName, String longitudeLatitude, String stuas,String wucha,String qiting,String timestatus);
 
     @Transactional
     @Modifying

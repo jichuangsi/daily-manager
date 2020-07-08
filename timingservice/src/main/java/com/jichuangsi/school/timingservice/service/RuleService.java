@@ -12,7 +12,7 @@ public interface RuleService {
 
     String findLL();
 
-    void insertRule(Long time, String wifiName, String longitudeLatitude, String stuas,String wucha);
+    void insertRule(Long time, String wifiName, String longitudeLatitude, String stuas,String wucha,String timestatus);
 
     List<Rule> getRulelist();
 

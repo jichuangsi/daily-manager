@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface RecordService {
@@ -39,4 +40,6 @@ public interface RecordService {
     DailyListModel backGetStatisticsByMonth(UserInfoForToken userInfoForToken, String dpid, String timeStart, String timeEnd);
 
     DailyListModel backGetStatisticsByWeek(UserInfoForToken userInfoForToken, String dpid, String timeStart, String timeEnd);
+
+    Map<String,List<Object>> getStatisticsChartByTime(UserInfoForToken userInfoForToken, String dpid, String timeStart, String timeEnd);
 }

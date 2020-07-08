@@ -7,6 +7,7 @@ public class RuleModel {
     private String longitudeLatitude;
     private String stuas;
     private String stuas2="1";
+    private String timestatus;
 
     public Integer getId() {
         return Id;
@@ -54,5 +55,13 @@ public class RuleModel {
 
     public void setStuas2(String stuas2) {
         this.stuas2 = stuas2;
+    }
+
+    public String getTimestatus() {
+        return timestatus;
+    }
+
+    public void setTimestatus(String timestatus) {
+        this.timestatus = timestatus;
     }
 }
