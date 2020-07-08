@@ -71,12 +71,17 @@ layui.use(['form', 'table', 'laydate'], function() {
 			setMsg('请选择上下班', 2)
 			return false;
 		}
+		if(param.timestatus == -1) {
+			setMsg('请选择时间段', 2)
+			return false;
+		}
 		var longitudeLatitude = param.lng + ',' + param.lat;
 		var data = {
 			time: param.timeString,
 			wifiName: param.wifiName,
 			longitudeLatitude: longitudeLatitude,
 			stuas: param.stuas,
+			timestatus:param.timestatus,
 			wucha: param.wucha
 		}
 		$.ajax({

@@ -43,6 +43,13 @@
 										<div class="layui-inline">
 											<label class="layui-form-label">上下班：</label>
 											<div class="layui-input-inline widths">
+												<select name="timestatus" lay-verify="required" >
+													<option value="-1">请选择</option>
+													<option value="1">上午</option>
+													<option value="2">下午</option>
+												</select>
+											</div>
+											<div class="layui-input-inline widths">
 												<select name="stuas" lay-verify="required" >
 													<option value="-1">请选择</option>
 													<option value="1">上班</option>
@@ -77,10 +84,10 @@
 											<input type="text" name="wucha" class="layui-input" autocomplete="off" lay-verify="required">
 										</div>
 									</div>
-									<div class="layui-form-item">
+									<div class="layui-form-item" style="display: none;">
 										<label class="layui-form-label">wifi名称：</label>
 										<div class="layui-input-block widths">
-											<input type="text" name="wifiName" class="layui-input" autocomplete="off" lay-verify="required">
+											<input type="text" name="wifiName" class="layui-input" value="wifi" autocomplete="off" lay-verify="required">
 										</div>
 									</div>
 

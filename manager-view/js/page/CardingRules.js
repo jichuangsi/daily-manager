@@ -27,9 +27,20 @@ layui.use(['form', 'table', 'laydate'], function() {
 					title: '名称',
 					align: 'center',
 					templet: function(d) {
-						if(d.stuas == 1) {
+						if (d.stuas == 1) {
+							if (d.timestatus == 1) {
+								return "上午上班打卡"
+							} else if (d.timestatus == 2) {
+								return "下午上班打卡"
+							}
 							return "上班打卡"
-						} else if(d.stuas == 2) {
+
+						} else if (d.stuas == 2) {
+							if (d.timestatus == 1) {
+								return "上午下班打卡"
+							} else {
+								return "下午下班打卡"
+							}
 							return "下班打卡"
 						}
 					}
@@ -39,11 +50,11 @@ layui.use(['form', 'table', 'laydate'], function() {
 					title: '经纬度',
 					align: 'center'
 				},
-				{
-					field: 'wifiName',
-					title: 'wifi名称',
-					align: 'center'
-				},
+				// {
+				// 	field: 'wifiName',
+				// 	title: 'wifi名称',
+				// 	align: 'center'
+				// },
 				{
 					field: 'wucha',
 					title: '偏差(m)',
@@ -54,8 +65,9 @@ layui.use(['form', 'table', 'laydate'], function() {
 					title: '时间',
 					align: 'center',
 					templet: function(d) {
-						if(d.time != 0) {
-							return new Date(+new Date(d.time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '');
+						if (d.time != 0) {
+							return new Date(+new Date(d.time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/,
+								'');
 						} else {
 							return "-"
 						}
@@ -73,11 +85,11 @@ layui.use(['form', 'table', 'laydate'], function() {
 		page: false,
 		parseData: function(res) {
 			var arr, code, total;
-			if(res.code == "0010") {
+			if (res.code == "0010") {
 				code = 0;
 				arr = res.data;
 				total = arr.length;
-			} else if(res.code == '0031') {
+			} else if (res.code == '0031') {
 				code = 0031
 			}
 			return {
@@ -117,11 +129,11 @@ layui.use(['form', 'table', 'laydate'], function() {
 					'accessToken': getToken()
 				},
 				success: function(res) {
-					if(res.code == '0010') {
+					if (res.code == '0010') {
 						table.reload('demo');
 						layer.close(index);
 						layui.notice.success("提示信息:删除成功!");
-					} else if(res.code == '0031') {
+					} else if (res.code == '0031') {
 						layer.close(index);
 						layui.notice.info("提示信息：权限不足");
 					} else {
@@ -139,8 +151,12 @@ layui.use(['form', 'table', 'laydate'], function() {
 	}
 	form.on('submit(MRules)', function(data) {
 		var param = data.field;
-		if(param.Mstuas == -1) {
+		if (param.Mstuas == -1) {
 			setMsg('请选择上下班', 2)
+			return false;
+		}
+		if (param.timestatus == -1) {
+			setMsg('请选择时间段', 2)
 			return false;
 		}
 		var longitudeLatitude = param.Mlng + ',' + param.Mlat;
@@ -150,6 +166,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 			wifiName: param.MwifiName,
 			longitudeLatitude: longitudeLatitude,
 			stuas: param.Mstuas,
+			timestatus: param.timestatus,
 			wucha: param.Mwucha
 		}
 		$.ajax({
@@ -162,11 +179,11 @@ layui.use(['form', 'table', 'laydate'], function() {
 			contentType: 'application/json',
 			data: JSON.stringify(data),
 			success: function(res) {
-				if(res.code == '0010') {
+				if (res.code == '0010') {
 					table.reload('demo');
 					layer.close(index);
 					layui.notice.success("提示信息:修改成功!");
-				} else if(res.code == '0031') {
+				} else if (res.code == '0031') {
 					layer.close(index);
 					layui.notice.info("提示信息：权限不足");
 				} else {
@@ -185,7 +202,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 
 	function init() {
 		var lat = $('input[name=lat]').val()
-		if(lat == '') {
+		if (lat == '') {
 			getWifiTemplate();
 		}
 
@@ -200,11 +217,11 @@ layui.use(['form', 'table', 'laydate'], function() {
 				'accessToken': getToken()
 			},
 			success: function(res) {
-				if(res.code == '0010') {
+				if (res.code == '0010') {
 					var arr = res.data;
 					var longitudeLatitude;
 					var list;
-					if(arr.length > 0) {
+					if (arr.length > 0) {
 						list = arr[0];
 					}
 					longitudeLatitude = list.longitudeLatitude;
@@ -225,9 +242,12 @@ layui.use(['form', 'table', 'laydate'], function() {
 	/*添加今日的规则*/
 	form.on('submit(add)', function(data) {
 		var param = data.field;
-		console.log(param)
-		if(param.stuas == -1) {
+		if (param.stuas == -1) {
 			setMsg('请选择上下班', 2)
+			return false;
+		}
+		if (param.timestatus == -1) {
+			setMsg('请选择时间段', 2)
 			return false;
 		}
 		var longitudeLatitude = param.lng + ',' + param.lat;
@@ -236,6 +256,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 			wifiName: param.wifiName,
 			longitudeLatitude: longitudeLatitude,
 			stuas: param.stuas,
+			timestatus: param.timestatus,
 			wucha: param.wucha
 		}
 		$.ajax({
@@ -248,11 +269,11 @@ layui.use(['form', 'table', 'laydate'], function() {
 			contentType: 'application/json',
 			data: JSON.stringify(data),
 			success: function(res) {
-				if(res.code == '0010') {
+				if (res.code == '0010') {
 					table.reload('demo');
 					layer.close(index);
 					layui.notice.success("提示信息:添加成功!");
-				} else if(res.code == '0031') {
+				} else if (res.code == '0031') {
 					layui.notice.info("提示信息：权限不足");
 				} else {
 					layer.close(index);
@@ -285,9 +306,20 @@ layui.use(['form', 'table', 'laydate'], function() {
 					title: '名称',
 					align: 'center',
 					templet: function(d) {
-						if(d.stuas == 1) {
+						if (d.stuas == 1) {
+							if (d.timestatus == 1) {
+								return "上午上班打卡"
+							} else if (d.timestatus == 2) {
+								return "下午上班打卡"
+							}
 							return "上班打卡"
-						} else if(d.stuas == 2) {
+
+						} else if (d.stuas == 2) {
+							if (d.timestatus == 1) {
+								return "上午下班打卡"
+							} else {
+								return "下午下班打卡"
+							}
 							return "下班打卡"
 						}
 					}
@@ -297,11 +329,11 @@ layui.use(['form', 'table', 'laydate'], function() {
 					title: '经纬度',
 					align: 'center'
 				},
-				{
-					field: 'wifiName',
-					title: 'wifi名称',
-					align: 'center'
-				},
+				// {
+				// 	field: 'wifiName',
+				// 	title: 'wifi名称',
+				// 	align: 'center'
+				// },
 				{
 					field: 'wucha',
 					title: '偏差(m)',
@@ -312,9 +344,10 @@ layui.use(['form', 'table', 'laydate'], function() {
 					title: '时间',
 					align: 'center',
 					templet: function(d) {
-						if(d.time != 0) {
+						if (d.time != 0) {
 							var date1 = new Date('1970-01-01 08:00:00')
-							var date2 = new Date(new Date(+new Date(d.time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ''))
+							var date2 = new Date(new Date(+new Date(d.time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(
+								/\.[\d]{3}Z/, ''))
 							var s1 = date1.getTime(),
 								s2 = date2.getTime();
 							var total = (s2 - s1) / 1000;
@@ -341,11 +374,11 @@ layui.use(['form', 'table', 'laydate'], function() {
 		page: false,
 		parseData: function(res) {
 			var arr, code, total;
-			if(res.code == "0010") {
+			if (res.code == "0010") {
 				code = 0;
 				arr = res.data;
 				total = arr.length;
-			} else if(res.code == '0031') {
+			} else if (res.code == '0031') {
 				code = 0031
 			}
 			return {
@@ -384,11 +417,11 @@ layui.use(['form', 'table', 'laydate'], function() {
 				contentType: 'application/json',
 				data: JSON.stringify(param),
 				success: function(res) {
-					if(res.code == '0010') {
+					if (res.code == '0010') {
 						layer.close(index);
 						layui.notice.success("提示信息:成功!");
 						table.reload('today');
-					} else if(res.code == '0031') {
+					} else if (res.code == '0031') {
 						layer.close(index);
 						layui.notice.info("提示信息：权限不足");
 					} else {
@@ -415,11 +448,11 @@ layui.use(['form', 'table', 'laydate'], function() {
 					'accessToken': getToken()
 				},
 				success: function(res) {
-					if(res.code == '0010') {
+					if (res.code == '0010') {
 						table.reload('today');
 						layer.close(index);
 						layui.notice.success("提示信息:删除成功!");
-					} else if(res.code == '0031') {
+					} else if (res.code == '0031') {
 						layer.close(index);
 						layui.notice.info("提示信息：权限不足");
 					} else {

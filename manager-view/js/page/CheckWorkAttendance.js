@@ -6,6 +6,59 @@ layui.use(['form', 'table', 'laydate'], function() {
 		elem: '#test',
 		range: '~'
 	});
+	var date = new Date();
+	//	date.setMonth(date.getMonth() - 1);
+	var dateStart = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+	var dateEnd = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+	// formatEveryDay(a,b );
+	// ch(formatEveryDay(a,b ));
+
+	function tj(data) {
+		//数据结构
+		// var data={
+		// 	"date":arr,//日期数据
+		// 	"yichang":[1,2,1,1,2,1,3,1,1,1,1,2,1,1,2,1,3,1,1,1,1,2,1,1,2,1,3,1,1,1,1,2,1,1,2,1,3,1,1,1,1,2,1,1,2,1,3,1,1,1],//异常数据
+		// 	"late":[1,1,3,2,1,2,1,1,3,0,1,1,3,2,1,2,1,1,3,0,1,1,3,2,1,2,1,1,3,0,1,1,3,2,1,2,1,1,3,0,1,1,3,2,1,2,1,1,3,0],//迟到
+		// 	"lost":[0,1,3,1,1,2,1,0,1,0,0,1,3,1,1,2,1,0,1,0,0,1,3,1,1,2,1,0,1,0,0,1,3,1,1,2,1,0,1,0,0,1,3,1,1,2,1,0,1,0],//缺勤
+		// 	"leaveEarly":[0,1,3,1,1,2,1,0,1,0,0,1,3,1,1,2,1,0,1,0,0,1,3,1,1,2,1,0,1,0,0,1,3,1,1,2,1,0,1,0,0,1,3,1,1,2,1,0,1,0]//早退
+		// }
+		var myChart = echarts.init(document.getElementById('main'));
+		console.log(data);
+		// 指定图表的配置项和数据
+		var option = {
+			title: {
+				text: '考勤异常统计图	'
+			},
+			tooltip: {},
+			legend: {
+				data: ['异常', '迟到', '缺勤', '早退']
+			},
+			xAxis: {
+				data: data["date"]
+			},
+			yAxis: {},
+			series: [{
+				name: '异常',
+				type: 'bar',
+				data: data["yichang"]
+			}, {
+				name: '迟到',
+				type: 'bar',
+				data: data["late"]
+			}, {
+				name: '缺勤',
+				type: 'bar',
+				data: data["lost"]
+			}, {
+				name: '早退',
+				type: 'bar',
+				data: data["leaveEarly"]
+			}]
+		};
+
+		// 使用刚指定的配置项和数据显示图表。
+		myChart.setOption(option);
+	}
 	//获取登陆者的信息
 	function getUser() {
 		var user = JSON.parse(sessionStorage.getItem('userInfo'))
@@ -18,10 +71,6 @@ layui.use(['form', 'table', 'laydate'], function() {
 		}
 		return user;
 	}
-	var date = new Date();
-	//	date.setMonth(date.getMonth() - 1);
-	var dateStart = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-	var dateEnd = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 
 	var temp1 = '';
 	getUser();
@@ -56,14 +105,27 @@ layui.use(['form', 'table', 'laydate'], function() {
 					title: '职位',
 					align: 'center'
 				},
+
 				{
 					field: 'stuas',
 					title: '考勤',
 					align: 'center',
 					templet: function(d) {
+
 						if (d.stuas == 1) {
+							if (d.timestatus == 1) {
+								return "上午上班打卡"
+							} else if (d.timestatus == 2) {
+								return "下午上班打卡"
+							}
 							return "上班打卡"
+
 						} else if (d.stuas == 2) {
+							if (d.timestatus == 1) {
+								return "上午下班打卡"
+							} else {
+								return "下午下班打卡"
+							}
 							return "下班打卡"
 						}
 					}
@@ -102,7 +164,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 			]
 		],
 		page: true,
-		loading:true,
+		loading: true,
 		toolbar: '#exe',
 		defaultToolbar: ['filter', 'exports'],
 		parseData: function(res) {
@@ -168,7 +230,15 @@ layui.use(['form', 'table', 'laydate'], function() {
 		} else {
 			temp1 = setExcel(param.roleDept, dateEnd, dateStart);
 		}
-		console.log(temp1);
+		var data = {
+			deptId: param.roleDept,
+			name: param.name,
+			timeEnd: dateEnd,
+			timeStart: dateStart
+		}
+		var url = "/kq/getStatisticsChartByTime?deptId="+param.roleDept+"&timeStart="+dateStart+"&timeEnd="+dateEnd;
+		var res = getAjaxPostData(url)
+		tj(res.data);
 		table.reload('idTest', {
 			url: httpUrl() + '/kq/getDailyList',
 			header: {
@@ -455,5 +525,29 @@ layui.use(['form', 'table', 'laydate'], function() {
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
+	}
+
+	function formatEveryDay(start, end) {
+		let dateList = [];
+		var startTime = getDate(start);
+		var endTime = getDate(end);
+
+		while ((endTime.getTime() - startTime.getTime()) >= 0) {
+			var year = startTime.getFullYear();
+			var month = startTime.getMonth() + 1 < 10 ? '0' + (startTime.getMonth() + 1) : startTime.getMonth() + 1;
+			var day = startTime.getDate().toString().length == 1 ? "0" + startTime.getDate() : startTime.getDate();
+			dateList.push(year + "-" + month + "-" + day);
+			startTime.setDate(startTime.getDate() + 1);
+		}
+		console.log(dateList)
+		return dateList;
+	}
+
+
+	function getDate(datestr) {
+		var temp = datestr.split("-");
+		var date = new Date(temp[0], temp[1] - 1, temp[2]);
+
+		return date;
 	}
 })
