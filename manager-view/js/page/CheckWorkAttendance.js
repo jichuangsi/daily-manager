@@ -8,10 +8,36 @@ layui.use(['form', 'table', 'laydate'], function() {
 	});
 	var date = new Date();
 	//	date.setMonth(date.getMonth() - 1);
-	var dateStart = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+	var dateStart =getDay(-7);
+	// var dateStart = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 	var dateEnd = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+	// var dateEnd =getDay(-7);
 	// formatEveryDay(a,b );
 	// ch(formatEveryDay(a,b ));
+	init()
+	function init(){
+		var url = "/kq/getStatisticsChartByTime?deptId="+getUser().deptId+"&timeStart="+dateStart+"&timeEnd="+dateEnd;
+		var res = getAjaxPostData(url)
+		tj(res.data);
+	}
+	function getDay(day){
+	    var today = new Date();
+	    var targetday_milliseconds=today.getTime() + 1000*60*60*24*day;
+	    today.setTime(targetday_milliseconds); 
+	    var tYear = today.getFullYear();
+	    var tMonth = today.getMonth();
+	    var tDate = today.getDate();
+	    tMonth = doHandleMonth(tMonth + 1);
+	    tDate = doHandleMonth(tDate);
+	    return tYear+"-"+tMonth+"-"+tDate;
+	}
+	function doHandleMonth(month){
+	    var m = month;
+	    if(month.toString().length == 1){
+	     m = "0" + month;
+	    }
+	    return m;
+	}
 
 	function tj(data) {
 		//数据结构
@@ -31,7 +57,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 			},
 			tooltip: {},
 			legend: {
-				data: ['异常', '迟到', '缺勤', '早退']
+				data: ['异常', '下班考勤', '迟到', '上班考勤']
 			},
 			xAxis: {
 				data: data["date"]
@@ -42,17 +68,17 @@ layui.use(['form', 'table', 'laydate'], function() {
 				type: 'bar',
 				data: data["yichang"]
 			}, {
+				name: '下班考勤',
+				type: 'bar',
+				data: data["xiaDaka"]
+			}, {
 				name: '迟到',
 				type: 'bar',
 				data: data["late"]
 			}, {
-				name: '缺勤',
+				name: '上班考勤',
 				type: 'bar',
-				data: data["lost"]
-			}, {
-				name: '早退',
-				type: 'bar',
-				data: data["leaveEarly"]
+				data: data["shangDaka"]
 			}]
 		};
 
