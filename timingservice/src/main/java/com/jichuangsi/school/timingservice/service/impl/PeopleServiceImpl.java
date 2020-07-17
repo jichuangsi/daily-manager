@@ -18,32 +18,32 @@ public class PeopleServiceImpl implements PeopleService {
 
     @Override
     public String findPeopleName(String openId) {
-        return  peopleRepostitory.findOneByOpenId(openId).getPeopleName();
+        return  peopleRepostitory.findOneByOpenIdAndIsDelete(openId,"0").getPeopleName();
     }
 
     @Override
     public People findPeople(String openId) {
-        return peopleRepostitory.findOneByOpenId(openId);
+        return peopleRepostitory.findOneByOpenIdAndIsDelete(openId,"0");
     }
 
     @Override
-    public List<People> findAllPeople(String name) {
-        return peopleRepostitory.findByPeopleNameLike("%"+name+"%");
+    public List<People> findAllPeopleByStatus(String name,String status) {
+        return peopleRepostitory.findByPeopleNameLikeAndIsDelete("%"+name+"%",status);
     }
 
     @Override
-    public List<People> findAll() {
-        return peopleRepostitory.findAll();
+    public List<People> findAllByStatus(String status) {
+        return peopleRepostitory.findAllByIsDelete(status);
     }
 
     @Override
-    public List<People> findForD(String d) {
-        return peopleRepostitory.findAllByDepartment(d);
+    public List<People> findForDAndStatus(String d,String status) {
+        return peopleRepostitory.findAllByDepartmentAndIsDelete(d,status);
     }
 
     @Override
-    public List<People> findAllPeople(String name, String deptId) {
-        return peopleRepostitory.findByDepartmentAndPeopleNameLike(deptId,"%"+name+"%");
+    public List<People> findAllPeopleByStatus(String name, String deptId,String status) {
+        return peopleRepostitory.findByDepartmentAndPeopleNameLikeAndIsDelete(deptId,"%"+name+"%",status);
     }
 
 

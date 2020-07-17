@@ -298,14 +298,14 @@ public class DaKaController {
                 List<ReportFormModel> models = new ArrayList<>();
                 ResponseModel<List<ReportFormModel>> listResponseModel=new ResponseModel<>();
                 if (user.getRoleName().equals("M") || user.getRoleName().equals("院长")){
-                    peopleList = peopleService.findAll();
+                    peopleList = peopleService.findAllByStatus("0");
                 }else if(user.getRoleName().equals("部长")){
-                    peopleList = peopleService.findForD(user.getDeptId());
+                    peopleList = peopleService.findForDAndStatus(user.getDeptId(),"0");
                 }else if(user.getRoleName().equals("副院长")){
                     if(backRoleService.getRoleDepartment(user.getId()).size()==0){
                         peopleList = new ArrayList<>();
                     }else{
-                        peopleList = peopleService.findForD(deptId);
+                        peopleList = peopleService.findForDAndStatus(deptId,"0");
                     }
                 }else {
                     People people = peopleService.findPeople(user.getWechat());
@@ -367,14 +367,14 @@ public class DaKaController {
                 List<ReportFormModel> models = new ArrayList<>();
                 ResponseModel<List<ReportFormModel>> listResponseModel=new ResponseModel<>();
                 if (user.getRoleName().equals("M") || user.getRoleName().equals("院长")){
-                    peopleList = peopleService.findAllPeople(name);
+                    peopleList = peopleService.findAllPeopleByStatus(name,"0");
                 }else if(user.getRoleName().equals("部长")){
-                    peopleList = peopleService.findAllPeople(name,user.getDeptId());
+                    peopleList = peopleService.findAllPeopleByStatus(name,user.getDeptId(),"0");
                 }else if(user.getRoleName().equals("副院长")){
                     if(backRoleService.getRoleDepartment(user.getId()).size()==0){
                         peopleList = new ArrayList<>();
                     }else {
-                        peopleList = peopleService.findAllPeople(name,deptId);
+                        peopleList = peopleService.findAllPeopleByStatus(name,deptId,"0");
                     }
                 }else {
                     People people = peopleService.findPeople(user.getWechat());
@@ -436,9 +436,9 @@ public class DaKaController {
                try {
                    List<People> peopleList=null;
                    if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
-                       peopleList = peopleService.findAll();
+                       peopleList = peopleService.findAllByStatus("0");
                    }else{
-                       peopleList = peopleService.findAllPeople(name);
+                       peopleList = peopleService.findAllPeopleByStatus(name,"0");
                    }
                    ResponseModel<List<ReportFormModel2>> listResponseModel=new ResponseModel<>();
                    List<ReportFormModel2> models = new ArrayList<>();
@@ -482,9 +482,9 @@ public class DaKaController {
                try {
                    List<People> peopleList =null;
                    if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
-                       peopleList = peopleService.findForD(deptId);
+                       peopleList = peopleService.findForDAndStatus(deptId,"0");
                    }else{
-                       peopleList = peopleService.findAllPeople(name,deptId);
+                       peopleList = peopleService.findAllPeopleByStatus(name,deptId,"0");
                    }
                    if(user.getRoleName().equals("副院长")){
                        if(backRoleService.getRoleDepartment(userInfoForToken.getUserId()).size()==0)
@@ -582,9 +582,9 @@ public class DaKaController {
                 try {
                     List<People> peopleList=null;
                     if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
-                        peopleList = peopleService.findAll();
+                        peopleList = peopleService.findAllByStatus("0");
                     }else{
-                        peopleList = peopleService.findAllPeople(name);
+                        peopleList = peopleService.findAllPeopleByStatus(name,"0");
                     }
                     ResponseModel<List<ReportFormModel2>> listResponseModel=new ResponseModel<>();
                     List<ReportFormModel2> models = new ArrayList<>();
@@ -616,9 +616,9 @@ public class DaKaController {
                 try {
                     List<People> peopleList =null;
                     if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
-                        peopleList = peopleService.findForD(deptId);
+                        peopleList = peopleService.findForDAndStatus(deptId,"0");
                     }else{
-                        peopleList = peopleService.findAllPeople(name,deptId);
+                        peopleList = peopleService.findAllPeopleByStatus(name,deptId,"0");
                     }
                     if(user.getRoleName().equals("副院长")){
                         if(backRoleService.getRoleDepartment(userInfoForToken.getUserId()).size()==0)
@@ -695,9 +695,9 @@ public class DaKaController {
                     ResponseModel<List<ReportFormModel2>> listResponseModel=new ResponseModel<>();
                     List<People> peopleList=null;
                     if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
-                        peopleList = peopleService.findAll();
+                        peopleList = peopleService.findAllByStatus("0");
                     }else{
-                        peopleList = peopleService.findAllPeople(name);
+                        peopleList = peopleService.findAllPeopleByStatus(name,"0");
                     }
                     //ResponseModel<List<ReportFormModel2>> listResponseModel=new ResponseModel<>();
                     List<ReportFormModel2> models = new ArrayList<>();
@@ -737,9 +737,9 @@ public class DaKaController {
                     ResponseModel<List<ReportFormModel2>> listResponseModel=new ResponseModel<>();
                     List<People> peopleList =null;
                     if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
-                        peopleList = peopleService.findForD(dpid);
+                        peopleList = peopleService.findForDAndStatus(dpid,"0");
                     }else{
-                        peopleList = peopleService.findAllPeople(name,dpid);
+                        peopleList = peopleService.findAllPeopleByStatus(name,dpid,"0");
                     }
                     if(user.getRoleName().equals("副院长")){
                         if(backRoleService.getRoleDepartment(userInfoForToken.getUserId()).size()==0)
@@ -825,9 +825,9 @@ public class DaKaController {
                 try {
                     List<People> peopleList=null;
                     if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
-                        peopleList = peopleService.findAll();
+                        peopleList = peopleService.findAllByStatus("0");
                     }else{
-                        peopleList = peopleService.findAllPeople(name);
+                        peopleList = peopleService.findAllPeopleByStatus(name,"0");
                     }
                     List<ReportFormModel2> models = new ArrayList<>();
                     for (People people : peopleList) {
@@ -874,9 +874,9 @@ public class DaKaController {
                 try {
                     List<People> peopleList =null;
                     if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
-                        peopleList = peopleService.findForD(dpid);
+                        peopleList = peopleService.findForDAndStatus(dpid,"0");
                     }else{
-                        peopleList = peopleService.findAllPeople(name,dpid);
+                        peopleList = peopleService.findAllPeopleByStatus(name,dpid,"0");
                     }
                     if(user.getRoleName().equals("副院长")){
                         if(backRoleService.getRoleDepartment(userInfoForToken.getUserId()).size()==0)

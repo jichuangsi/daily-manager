@@ -17,6 +17,7 @@ public class People {
     private String department;
     private String peopleName;
     private String jurisdiction;
+    private String isDelete;//是否删除（0.正常1.删除
 
     public String getDepartment() {
         return department;
@@ -56,5 +57,13 @@ public class People {
 
     public void setPeopleName(String peopleName) {
         this.peopleName = peopleName;
+    }
+
+    public String getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
     }
 }

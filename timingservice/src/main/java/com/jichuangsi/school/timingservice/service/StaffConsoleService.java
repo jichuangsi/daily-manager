@@ -201,7 +201,7 @@ public class StaffConsoleService {
         if(user==null){
             throw new BackUserException(ResultCode.SELECT_NULL_MSG);
         }
-        Staff staff=staffRepository.findByWechat(openId);
+        Staff staff=staffRepository.findByWechatAndIsDelete(openId,"0");
         if(staff==null){
             throw new BackUserException(ResultCode.SELECT_NULL_MSG);
         }
@@ -254,7 +254,7 @@ public class StaffConsoleService {
         if(StringUtils.isEmpty(opendId)){
             throw new StaffHttpException(ResultCode.PARAM_MISS_MSG);
         }
-        Staff staff=staffRepository.findByWechat(opendId);
+        Staff staff=staffRepository.findByWechatAndIsDelete(opendId,"0");
         LoginElementModel model=new LoginElementModel();
         if (null==staff){
             model.setResultCode(ResultCode.OPENDID_NOFIND);
@@ -298,6 +298,7 @@ public class StaffConsoleService {
             staff.setWechat(model.getOpendId());
             staff.setAccount(model.getAccount());
             staff.setPwd(Md5Util.encodeByMd5(model.getPwd()));
+            staff.setIsDelete("0");
             staffRepository.save(staff);
             backUserService.registBackUser(model);
 
@@ -307,6 +308,7 @@ public class StaffConsoleService {
             people.setJurisdiction(model.getRoleName());
             people.setOpenId(model.getOpendId());
             people.setPeopleName(model.getName());
+            people.setIsDelete("0");
             peopleRepostitory.save(people);
         }
         UserInfoForToken userInfo=MappingEntity2ModelCoverter.CONVERTERFROMSTAFF(staff);
@@ -332,7 +334,7 @@ public class StaffConsoleService {
         if(StringUtils.isEmpty(opendId)){
             throw new BackUserException(ResultCode.PARAM_MISS_MSG);
         }
-        Staff staff=staffRepository.findByWechat(opendId);
+        Staff staff=staffRepository.findByWechatAndIsDelete(opendId,"0");
         if (staff==null){
             throw new BackUserException(ResultCode.SELECT_NULL_MSG);
         }
@@ -350,6 +352,50 @@ public class StaffConsoleService {
         recordRepostitory.deleteByOpenId(opendId);//考勤表
         staffRepository.delete(staff);//员工表
         OpLog opLog=new OpLog(userInfo.getUserNum(),"删除","删除人员："+staff.getName());
+        opLogRepository.save(opLog);
+    }
+
+    /**
+     * 冻结用户 逻辑删除
+     * @param userInfo
+     * @param opendId
+     * @throws BackUserException
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void frozenStaffInfo(UserInfoForToken userInfo,String opendId)throws BackUserException{
+        if(StringUtils.isEmpty(opendId)){
+            throw new BackUserException(ResultCode.PARAM_MISS_MSG);
+        }
+        Staff staff=staffRepository.findByWechatAndIsDelete(opendId,"0");
+        if (staff==null){
+            throw new BackUserException(ResultCode.SELECT_NULL_MSG);
+        }
+        staffRepository.updateStaffStatus("1",opendId);
+        peopleRepostitory.updateStatus("1",opendId);
+        backUserRepository.updateStatus(com.jichuangsi.school.timingservice.constant.Status.DELETE.getName(),opendId);
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"冻结","冻结用户："+staff.getName());
+        opLogRepository.save(opLog);
+    }
+
+    /**
+     * 恢复员工个人信息
+     * @param userInfo
+     * @param opendId
+     * @throws BackUserException
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void thawStaffInfo(UserInfoForToken userInfo,String opendId)throws BackUserException{
+        if(StringUtils.isEmpty(opendId)){
+            throw new BackUserException(ResultCode.PARAM_MISS_MSG);
+        }
+        Staff staff=staffRepository.findByWechatAndIsDelete(opendId,"1");
+        if (staff==null){
+            throw new BackUserException(ResultCode.SELECT_NULL_MSG);
+        }
+        staffRepository.updateStaffStatus("0",opendId);
+        peopleRepostitory.updateStatus("0",opendId);
+        backUserRepository.updateStatus(com.jichuangsi.school.timingservice.constant.Status.ACTIVATE.getName(),opendId);
+        OpLog opLog=new OpLog(userInfo.getUserNum(),"恢复","恢复用户："+staff.getName());
         opLogRepository.save(opLog);
     }
 }

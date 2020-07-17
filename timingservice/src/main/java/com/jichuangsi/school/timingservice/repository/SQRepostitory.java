@@ -19,7 +19,7 @@ public interface SQRepostitory extends JpaRepository<SQFlie,String> {
 
     List<SQFlie> findAllByOpenId(String openId);
 
-    List<SQFlie> findAllByStuas(String stuas);
+    List<SQFlie> findAllByStuasAndOpenIdIn(String stuas,List<String>opids);
 
     SQFlie findFirstByOpenIdAndRuleId(String openId,String ruleId);
 
@@ -30,7 +30,9 @@ public interface SQRepostitory extends JpaRepository<SQFlie,String> {
 
     List<SQFlie> findAllByOpenIdAndStuasOrStuas(String openId, String stuas, String stuas1);
 
-    List<SQFlie> findAllByStuasOrStuas(String s, String s1);
+    List<SQFlie> findAllByOpenIdInAndStuasOrStuas(List<String>opids,String s, String s1);
+
+    List<SQFlie> findAllByOpenIdIn(List<String> opids);
 
     void deleteByOpenId(String opendId);
 }

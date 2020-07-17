@@ -23,6 +23,7 @@ public class Staff {
     private String wechat;//微信opendid
     private String account;//工号
     private String pwd;
+    private String isDelete;//是否删除（0.正常1.删除
 
     public Integer getId() {
         return id;
@@ -86,5 +87,13 @@ public class Staff {
 
     public void setPwd(String pwd) {
         this.pwd = pwd;
+    }
+
+    public String getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
     }
 }

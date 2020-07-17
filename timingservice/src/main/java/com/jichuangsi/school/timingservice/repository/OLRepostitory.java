@@ -15,7 +15,7 @@ public interface OLRepostitory extends JpaRepository<Overtimeleave,String> {
 
     List<Overtimeleave> findAllByOpenId(String openId);
 
-    List<Overtimeleave> findAllByStuas2(String stuas);
+    List<Overtimeleave> findAllByStuas2AndOpenIdIn(String stuas,List<String> opids);
 
     List<Overtimeleave> findAllByStuas2AndStuas2(String stuas, String stuas2);
 
@@ -23,11 +23,13 @@ public interface OLRepostitory extends JpaRepository<Overtimeleave,String> {
 
     List<Overtimeleave> findAllByOpenIdAndStuas2AndStuas2(String openId, String stuas, String stuas1);
 
-    List<Overtimeleave> findAllByStuas2OrStuas2(String s, String s1);
+    List<Overtimeleave> findAllByStuas2OrStuas2AndOpenIdIn(String s, String s1,List<String> opids);
 
     List<Overtimeleave> findAllByOpenIdOrStuas2(String openId, String s);
 
     List<Overtimeleave> findAllByOpenIdAndStuas2OrStuas2(String openId, String s, String s1);
+
+    List<Overtimeleave> findAllByOpenIdIn(List<String> opids);
 
     @Transactional
     @Modifying

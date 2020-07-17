@@ -50,8 +50,8 @@ public class SQServiceImpl implements SQService{
     }
 
     @Override
-    public List<SQFlie> getFile() {
-        return sqRepostitory.findAllByStuas("0");
+    public List<SQFlie> getFile(List<String> opids) {
+        return sqRepostitory.findAllByStuasAndOpenIdIn("0",opids);
     }
 
     @Override
@@ -60,13 +60,13 @@ public class SQServiceImpl implements SQService{
     }
 
     @Override
-    public List<SQFlie> getAllUnapproved() {
-        return sqRepostitory.findAllByStuas("0");
+    public List<SQFlie> getAllUnapproved(List<String> opids) {
+        return sqRepostitory.findAllByStuasAndOpenIdIn("0",opids);
     }
 
     @Override
-    public List<SQFlie> getAllapproved() {
-        return sqRepostitory.findAllByStuasOrStuas("1","2");
+    public List<SQFlie> getAllapproved(List<String> opids) {
+        return sqRepostitory.findAllByOpenIdInAndStuasOrStuas(opids,"1","2");
     }
 
     @Override
@@ -80,8 +80,8 @@ public class SQServiceImpl implements SQService{
     }
 
     @Override
-    public List<SQFlie> getAllsq() {
-        return sqRepostitory.findAll();
+    public List<SQFlie> getAllsq(List<String> opids) {
+        return sqRepostitory.findAllByOpenIdIn(opids);
     }
 
     @Override

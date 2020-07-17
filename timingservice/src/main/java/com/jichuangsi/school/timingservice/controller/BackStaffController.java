@@ -109,4 +109,28 @@ public class BackStaffController {
         }
         return ResponseModel.sucessWithEmptyData("");
     }
+
+    @ApiOperation("冻结员工")
+    @ApiImplicitParams({})
+    @PostMapping("/frozenStaffInfo/{opendId}")
+    public ResponseModel frozenStaffInfo(@ModelAttribute UserInfoForToken userInfo,@PathVariable String opendId){
+        try {
+            staffConsoleService.frozenStaffInfo(userInfo,opendId);
+        }catch (BackUserException e){
+            return  ResponseModel.fail("",e.getMessage());
+        }
+        return ResponseModel.sucessWithEmptyData("");
+    }
+
+    @ApiOperation("恢复员工")
+    @ApiImplicitParams({})
+    @PostMapping("/thawStaffInfo/{opendId}")
+    public ResponseModel thawStaffInfo(@ModelAttribute UserInfoForToken userInfo,@PathVariable String opendId){
+        try {
+            staffConsoleService.thawStaffInfo(userInfo,opendId);
+        }catch (BackUserException e){
+            return  ResponseModel.fail("",e.getMessage());
+        }
+        return ResponseModel.sucessWithEmptyData("");
+    }
 }

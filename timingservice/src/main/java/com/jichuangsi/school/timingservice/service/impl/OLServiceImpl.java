@@ -31,13 +31,13 @@ public class OLServiceImpl implements OLService {
     }
 
     @Override
-    public List<Overtimeleave> getOLList1() {
-        return olRepostitory.findAllByStuas2("0");
+    public List<Overtimeleave> getOLList1(List<String> opids) {
+        return olRepostitory.findAllByStuas2AndOpenIdIn("0",opids);
     }
 
     @Override
-    public List<Overtimeleave> getOLList2() {
-        return  olRepostitory.findAllByStuas2OrStuas2("1","2");
+    public List<Overtimeleave> getOLList2(List<String> opids) {
+        return  olRepostitory.findAllByStuas2OrStuas2AndOpenIdIn("1","2",opids);
     }
 
     @Override
@@ -51,8 +51,8 @@ public class OLServiceImpl implements OLService {
     }
 
     @Override
-    public List<Overtimeleave> getAll() {
-        return olRepostitory.findAll();
+    public List<Overtimeleave> getAll(List<String> opids) {
+        return olRepostitory.findAllByOpenIdIn(opids);
     }
 
     @Override

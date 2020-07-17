@@ -12,11 +12,11 @@ public interface PeopleService {
 
     People findPeople(String openId);
 
-    List<People> findAllPeople(String name);
+    List<People> findAllPeopleByStatus(String name,String status);
 
-    List<People> findAll();
+    List<People> findAllByStatus(String status);
 
-    List<People> findForD(String d);
+    List<People> findForDAndStatus(String d,String status);
 
-    List<People> findAllPeople(String name,String deptId);
+    List<People> findAllPeopleByStatus(String name,String deptId,String status);
 }

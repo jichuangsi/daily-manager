@@ -9,15 +9,15 @@ public interface OLService {
 
     List<Overtimeleave> getOLList(String openId);
 
-    List<Overtimeleave> getOLList1();
-    List<Overtimeleave> getOLList2();
+    List<Overtimeleave> getOLList1(List<String> opids);
+    List<Overtimeleave> getOLList2(List<String> opids);
 
 
     List<Overtimeleave> getOLForOpenId1(String openId);
 
     List<Overtimeleave> getOLForOpenId2(String openId);
 
-    List<Overtimeleave> getAll();
+    List<Overtimeleave> getAll(List<String> opids);
 
     List<Overtimeleave> getAllOL(String openId);
 

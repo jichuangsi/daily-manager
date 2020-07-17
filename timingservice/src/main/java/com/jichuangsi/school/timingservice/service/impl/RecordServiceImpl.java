@@ -256,7 +256,7 @@ public class RecordServiceImpl implements RecordService {
                     int j=1;
                     for(int i=0;i<listMonth.size();i+=2){//分割后的日期
                         for (Department d:departments) {//部门
-                            List<Staff> staff=staffRepository.findAllByDepartment(d);
+                            List<Staff> staff=staffRepository.findAllByDepartmentAndIsDelete(d,"0");
                             //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
                             List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)),"1");//根据日期查询规则上班
                             StatisticsModel model=new StatisticsModel();//统计模型
@@ -310,7 +310,7 @@ public class RecordServiceImpl implements RecordService {
                         }
                     }
                     for(int i=0;i<listMonth.size();i+=2){//分割
-                        List<Staff> staff=staffRepository.findAllByDepartment(departments);
+                        List<Staff> staff=staffRepository.findAllByDepartmentAndIsDelete(departments,"0");
                         //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
                         List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)),"1");//根据日期查询规则上班
                         StatisticsModel model=new StatisticsModel();//统计模型
@@ -378,7 +378,7 @@ public class RecordServiceImpl implements RecordService {
                     int j=1;
                     for(int i=0;i<listWeek.size();i+=2){//分割后的日期
                         for (Department d:departments) {//部门
-                            List<Staff> staff=staffRepository.findAllByDepartment(d);
+                            List<Staff> staff=staffRepository.findAllByDepartmentAndIsDelete(d,"0");
                             List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(listWeek.get(i+1)),"1");//根据日期查询规则上班
                             StatisticsModel model=new StatisticsModel();//统计模型
                             model.setDateTime(listWeek.get(i)+"~"+listWeek.get(i+1));
@@ -431,7 +431,7 @@ public class RecordServiceImpl implements RecordService {
                         }
                     }
                     for(int i=0;i<listWeek.size();i+=2){//分割
-                        List<Staff> staff=staffRepository.findAllByDepartment(departments);
+                        List<Staff> staff=staffRepository.findAllByDepartmentAndIsDelete(departments,"0");
                         //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
                         List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(listWeek.get(i+1)),"1");//根据日期查询规则上班
                         StatisticsModel model=new StatisticsModel();//统计模型
@@ -558,7 +558,7 @@ public class RecordServiceImpl implements RecordService {
                     int j=1;
                     for(int i=0;i<listMonth.size();i+=2){//分割后的日期
                         for (Department d:departments) {//部门
-                            List<Staff> staff=staffRepository.findAllByDepartment(d);
+                            List<Staff> staff=staffRepository.findAllByDepartmentAndIsDelete(d,"0");
                             //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
                             List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)),"1");//根据日期查询规则上班
                             StatisticsModel model=new StatisticsModel();//统计模型
@@ -657,7 +657,7 @@ public class RecordServiceImpl implements RecordService {
                         }
                     }
                     for(int i=0;i<listMonth.size();i+=2){//分割
-                        List<Staff> staff=staffRepository.findAllByDepartment(departments);
+                        List<Staff> staff=staffRepository.findAllByDepartmentAndIsDelete(departments,"0");
                         //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
                         List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)),"1");//根据日期查询规则上班
                         StatisticsModel model=new StatisticsModel();//统计模型
@@ -766,7 +766,7 @@ public class RecordServiceImpl implements RecordService {
                     int j=1;
                     for(int i=0;i<listWeek.size();i+=2){//分割后的日期
                         for (Department d:departments) {//部门
-                            List<Staff> staff=staffRepository.findAllByDepartment(d);
+                            List<Staff> staff=staffRepository.findAllByDepartmentAndIsDelete(d,"0");
                             //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
                             List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(listWeek.get(i+1)),"1");//根据日期查询规则上班
                             StatisticsModel model=new StatisticsModel();//统计模型
@@ -853,7 +853,7 @@ public class RecordServiceImpl implements RecordService {
                         }
                     }
                     for(int i=0;i<listWeek.size();i+=2){//分割
-                        List<Staff> staff=staffRepository.findAllByDepartment(departments);
+                        List<Staff> staff=staffRepository.findAllByDepartmentAndIsDelete(departments,"0");
                         //List<Rule> rulelistForTime=ruleService.getRuleForTime(TimeUtils.startTime(listMonth.get(i)),TimeUtils.endTime(listMonth.get(i+1)));//根据日期查询规则
                         List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(listWeek.get(i)),TimeUtils.endTime(listWeek.get(i+1)),"1");//根据日期查询规则上班
                         StatisticsModel model=new StatisticsModel();//统计模型
@@ -982,6 +982,9 @@ public class RecordServiceImpl implements RecordService {
                 List<Object> late=new ArrayList<>();//迟到
                 List<Object> lost=new ArrayList<>();//缺勤
                 List<Object> leaveEarly=new ArrayList<>();//早退
+                List<Object> shangDaka=new ArrayList<>();//上班打卡次数
+                List<Object> xiaDaka=new ArrayList<>();//下班打卡次数
+                List<Object> qingJia=new ArrayList<>();//请假
                 if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
                     List<Department> departments=departmentRepository.findAll();//全部部门
                     for (String day:days) {
@@ -990,8 +993,12 @@ public class RecordServiceImpl implements RecordService {
                         int l=0;
                         int lo=0;
                         int le=0;
+                        int sd=0;
+                        int xd=0;
+                        int qing=0;
                         for (Department d:departments) {//部门
-                            List<Staff> staff=staffRepository.findAllByDepartment(d);
+                            List<Staff> staff=staffRepository.findAllByDepartmentAndIsDelete(d,"0");
+                            List<Overtimeleave> qinj=staffMapper.getListByDeptIdAndTime(d.getId(),TimeUtils.startTime(day),TimeUtils.endTime(day));//请假次数
                             List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(day),TimeUtils.endTime(day),"1");//根据日期查询规则上班
                             if(rulelistForTime1.size()!=0){
                                 List<Integer> ruleids=new ArrayList<>();
@@ -1004,6 +1011,7 @@ public class RecordServiceImpl implements RecordService {
                                 y+=ShangYichangCount.size();
                                 l+=ShangLateCount.size();
                                 lo+=(rulelistForTime1.size()*staff.size()-ShangCount.size());
+                                sd+=ShangCount.size();
                             }
 
                             //下班
@@ -1019,12 +1027,17 @@ public class RecordServiceImpl implements RecordService {
                                 y+=XiaYichangCount.size();
                                 lo+=(rulelistForTime2.size()*staff.size()-XiaCount.size());
                                 le+=xiaLeaveEarlyCount.size();
+                                xd+=XiaCount.size();
                             }
+                            qing+=qinj.size();
                         }
                         yichang.add(y);
                         late.add(l);
                         lost.add(lo);
                         leaveEarly.add(le);
+                        shangDaka.add(sd);
+                        xiaDaka.add(xd);
+                        qingJia.add(qing);
                     }
                     Map<String,List<Object>> map= new HashMap<>();
                     map.put("date",dates);
@@ -1032,6 +1045,9 @@ public class RecordServiceImpl implements RecordService {
                     map.put("late",late);
                     map.put("lost",lost);
                     map.put("leaveEarly",leaveEarly);
+                    map.put("shangDaka",shangDaka);
+                    map.put("xiaDaka",xiaDaka);
+                    map.put("qingJia",qingJia);
                     return map;
                 }else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
                     Department departments=departmentRepository.findByid(user.getDeptId());//查询部长相关部门
@@ -1046,7 +1062,12 @@ public class RecordServiceImpl implements RecordService {
                         int l=0;
                         int lo=0;
                         int le=0;
-                        List<Staff> staff=staffRepository.findAllByDepartment(departments);
+                        int sd=0;
+                        int xd=0;
+                        int qing=0;
+                        List<Staff> staff=staffRepository.findAllByDepartmentAndIsDelete(departments,"0");
+                        List<Overtimeleave> qinj=staffMapper.getListByDeptIdAndTime(departments.getId(),TimeUtils.startTime(day),TimeUtils.endTime(day));//请假次数
+                        qing+=qinj.size();
                         List<Rule> rulelistForTime1=ruleService.getRuleForTime(TimeUtils.startTime(day),TimeUtils.endTime(day),"1");//根据日期查询规则上班
                         if(rulelistForTime1.size()!=0){
                             List<Integer> ruleids=new ArrayList<>();
@@ -1059,6 +1080,7 @@ public class RecordServiceImpl implements RecordService {
                             y+=ShangYichangCount.size();
                             l+=ShangLateCount.size();
                             lo+=(rulelistForTime1.size()*staff.size()-ShangCount.size());
+                            sd+=ShangCount.size();
                         }
 
                         //下班
@@ -1074,11 +1096,16 @@ public class RecordServiceImpl implements RecordService {
                             y+=XiaYichangCount.size();
                             lo+=(rulelistForTime2.size()*staff.size()-XiaCount.size());
                             le+=xiaLeaveEarlyCount.size();
+                            xd+=XiaCount.size();
                         }
                         yichang.add(y);
                         late.add(l);
                         lost.add(lo);
                         leaveEarly.add(le);
+                        shangDaka.add(sd);
+                        xiaDaka.add(xd);
+                        qingJia.add(qing);
+
                     }
                 }
                 Map<String,List<Object>> map= new HashMap<>();
@@ -1087,6 +1114,9 @@ public class RecordServiceImpl implements RecordService {
                 map.put("late",late);
                 map.put("lost",lost);
                 map.put("leaveEarly",leaveEarly);
+                map.put("shangDaka",shangDaka);
+                map.put("xiaDaka",xiaDaka);
+                map.put("qingJia",qingJia);
                 return map;
             }
         }catch (Exception e){

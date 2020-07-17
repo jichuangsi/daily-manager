@@ -15,19 +15,19 @@ public interface SQService {
 
     List<Img> getImgList(String uuid);
 
-    List<SQFlie> getFile();
+    List<SQFlie> getFile(List<String> opids);
 
     SQFlie getSQ(String openId, String ruleId);
 
-    List<SQFlie> getAllUnapproved();
+    List<SQFlie> getAllUnapproved(List<String> opids);
 
-    List<SQFlie> getAllapproved();
+    List<SQFlie> getAllapproved(List<String> opids);
 
     List<SQFlie> getUnapprovedSQForName(String openId);
 
     List<SQFlie> getapprovedSQForName(String openId);
 
-    List<SQFlie> getAllsq();
+    List<SQFlie> getAllsq(List<String> opids);
 
     List<SQFlie> getSQ2(String openId);
 

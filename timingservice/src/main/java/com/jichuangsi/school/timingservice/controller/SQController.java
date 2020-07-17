@@ -106,9 +106,14 @@ public class SQController {
     @ApiOperation(value = "查看审批申诉记录", notes = "")
     @PostMapping("/getAllUnapprovedSQ")
     public ResponseModel<List<SQFlieModel2>> SQAllUnapproved(@RequestParam @Nullable String name,@RequestParam @Nullable String sttt,@RequestParam int pageSize,@RequestParam int pageNum) {
+        List<People> peoples=peopleService.findAllPeopleByStatus("","0");
+        List<String> p=new ArrayList<>();
+        for (People ps:peoples) {
+            p.add(ps.getOpenId());
+        }
         if (sttt.equalsIgnoreCase("1")) {
             if (name == null || name.equalsIgnoreCase("")) {
-                List<SQFlie> file = sqService.getAllUnapproved();
+                List<SQFlie> file = sqService.getAllUnapproved(p);
                 List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
                 ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
                 for (SQFlie sqFlie : file
@@ -131,7 +136,7 @@ public class SQController {
                 }
                 return odel;
             } else {
-                List<People> allPeople = peopleService.findAllPeople(name);
+                List<People> allPeople = peopleService.findAllPeopleByStatus(name,"0");
 
                 List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
                 for (People people : allPeople
@@ -162,7 +167,7 @@ public class SQController {
             }
         } else if (sttt.equalsIgnoreCase("2")) {
             if (name == null || name.equalsIgnoreCase("")) {
-                List<SQFlie> file = sqService.getAllapproved();
+                List<SQFlie> file = sqService.getAllapproved(p);
                 List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
                 ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
                 for (SQFlie sqFlie : file
@@ -186,7 +191,7 @@ public class SQController {
                 }
                 return odel;
             } else {
-                List<People> allPeople = peopleService.findAllPeople(name);
+                List<People> allPeople = peopleService.findAllPeopleByStatus(name,"0");
 
                 List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
                 for (People people : allPeople
@@ -217,7 +222,7 @@ public class SQController {
             }
         } else {
             if (name == null || name.equalsIgnoreCase("")) {
-                List<SQFlie> file = sqService.getAllsq();
+                List<SQFlie> file = sqService.getAllsq(p);
                 List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
                 ResponseModel<List<SQFlieModel2>> odel = new ResponseModel<>();
                 for (SQFlie sqFlie : file
@@ -240,7 +245,7 @@ public class SQController {
                 }
                 return odel;
             }else {
-                List<People> allPeople = peopleService.findAllPeople(name);
+                List<People> allPeople = peopleService.findAllPeopleByStatus(name,"0");
 
                 List<SQFlieModel2> sqFlieModel2s = new ArrayList<>();
                 for (People people : allPeople

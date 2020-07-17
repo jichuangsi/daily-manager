@@ -128,6 +128,6 @@ public class BackUserService {
     }
 
     public List<BackUser> findBackUserByRoleName(String roleName){
-        return backUserRepository.findByRoleName(roleName);
+        return backUserRepository.findByRoleNameAndStatus(roleName,Status.ACTIVATE.getName());
     }
 }
