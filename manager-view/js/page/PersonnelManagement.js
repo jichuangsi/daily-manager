@@ -151,8 +151,17 @@ layui.use(['form', 'table'], function() {
 		form.val('testRole', {
 			'wechat': param.wechat
 		});
-		$(document).on('click', '#delPer', function() {
-			deleteStaffInfo(param.wechat,param.name);
+		// 删除员工
+		// $(document).on('click', '#delPer', function() {
+		// 	deleteStaffInfo(param.wechat,param.name);
+		// });
+		// 冻结
+		$(document).on('click', '#frozen', function() {
+			frozenStaffInfo(param.wechat,param.name);
+		});
+		//恢复
+		$(document).on('click', '#relieve', function() {
+			relieveStaffInfo(param.wechat,param.name);
 		});
 	});
 	form.on('submit(updataDept)', function(data) {
@@ -350,7 +359,7 @@ layui.use(['form', 'table'], function() {
 		layer.confirm('确认要删除'+name+'吗？', function(index) {
 			$.ajax({
 				type: "post",
-				url: httpUrl() + "/backstaff/deleteStaffInfo/" + openId,
+				url: httpUrl() + "/backstaff/deleteStaffInfo/"+openId,
 				async: false,
 				headers: {
 					'accessToken': getToken()
@@ -359,6 +368,67 @@ layui.use(['form', 'table'], function() {
 					if(res.code == '0010') {
 						layer.close(index);
 						layui.notice.success("提示信息:删除成功!");
+						table.reload('idTest');
+					} else if(res.code == '0031') {
+						layer.close(index);
+						layui.notice.info("提示信息：权限不足");
+					} else {
+						table.reload('idTest');
+						layer.close(index);
+						layui.notice.error("提示信息:" + res.msg);
+					}
+				},
+				error: function(res) {
+					console.log(res.msg)
+				}
+			})
+		
+		});
+	}
+	
+	function frozenStaffInfo(openId,name){
+		layer.confirm('确认要冻结'+name+'吗？', function(index) {
+			$.ajax({
+				type: "post",
+				url: httpUrl() + "/backstaff/frozenStaffInfo/"+openId,
+				async: false,
+				headers: {
+					'accessToken': getToken()
+				},
+				success: function(res) {
+					if(res.code == '0010') {
+						layer.close(index);
+						layui.notice.success("提示信息:冻结成功!");
+						table.reload('idTest');
+					} else if(res.code == '0031') {
+						layer.close(index);
+						layui.notice.info("提示信息：权限不足");
+					} else {
+						table.reload('idTest');
+						layer.close(index);
+						layui.notice.error("提示信息:" + res.msg);
+					}
+				},
+				error: function(res) {
+					console.log(res.msg)
+				}
+			})
+		
+		});
+	}
+	function relieveStaffInfo(openId,name){
+		layer.confirm('确认要恢复'+name+'吗？', function(index) {
+			$.ajax({
+				type: "post",
+				url: httpUrl() + "/backstaff/thawStaffInfo/"+openId,
+				async: false,
+				headers: {
+					'accessToken': getToken()
+				},
+				success: function(res) {
+					if(res.code == '0010') {
+						layer.close(index);
+						layui.notice.success("提示信息:恢复成功!");
 						table.reload('idTest');
 					} else if(res.code == '0031') {
 						layer.close(index);
