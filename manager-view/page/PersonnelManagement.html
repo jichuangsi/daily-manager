@@ -88,7 +88,12 @@
 		</div>
 		<script type="text/html" id="operation">
 			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" id="updataStatus" onclick="status()">更改状态</span>
-			<span class="layui-btn layui-btn-sm layui-btn-danger" id="delPer">删除</span>
+			<!-- <span class="layui-btn layui-btn-sm layui-btn-danger" id="delPer">删除</span> -->
+			{{# if(d.isDelete==0){ }}
+				<span class="layui-btn layui-btn-sm layui-btn" id="frozen">冻结</span>
+			{{#  }else if(d.isDelete==1){ }}
+				<span class="layui-btn layui-btn-sm layui-btn-normal" id="relieve">恢复</span>
+			{{# } }}
 		</script>
 		<script type="text/html" id="modify">
 			<span class="layui-btn-sm layui-btn layui-btn-normal" onclick="dept()">部门</span>
