@@ -251,7 +251,7 @@ public class RecordServiceImpl implements RecordService {
                 Map<String,Object> statistics = new HashMap<>();//统计
                 //按月统计
                 List<String> listMonth=doDateByStatisticsType("",time);
-                if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
+                if (user.getRoleName().equals("M")||user.getRoleName().equals("检察长")) {
                     List<Department> departments=departmentRepository.findAll();//全部部门
                     int j=1;
                     for(int i=0;i<listMonth.size();i+=2){//分割后的日期
@@ -301,10 +301,10 @@ public class RecordServiceImpl implements RecordService {
                     DailyListModel model=new DailyListModel();
                     model.setStatistics(statistics);
                     return model;
-                }else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
+                }else if (user.getRoleName().equals("部门负责人") || user.getRoleName().equals("副检察长")){
                     Department departments=departmentRepository.findByid(user.getDeptId());//查询部长相关部门
                     int j=1;
-                    if(user.getRoleName().equals("副院长")){
+                    if(user.getRoleName().equals("副检察长")){
                         if(!StringUtils.isEmpty(dpid)){
                             departments=departmentRepository.findByid(dpid);//查询部长相关部门
                         }
@@ -373,7 +373,7 @@ public class RecordServiceImpl implements RecordService {
                 //按周统计
                 //List<String> listWeek=doDateByStatisticsType("week",time);
                 List<String> listWeek=getWeeks(timeStart,timeEnd);
-                if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
+                if (user.getRoleName().equals("M")||user.getRoleName().equals("检察长")) {
                     List<Department> departments=departmentRepository.findAll();//全部部门
                     int j=1;
                     for(int i=0;i<listWeek.size();i+=2){//分割后的日期
@@ -422,10 +422,10 @@ public class RecordServiceImpl implements RecordService {
                     DailyListModel model=new DailyListModel();
                     model.setStatistics(statistics);
                     return model;
-                }else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
+                }else if (user.getRoleName().equals("部门负责人") || user.getRoleName().equals("副检察长")){
                     Department departments=departmentRepository.findByid(user.getDeptId());//查询部长相关部门
                     int j=1;
-                    if(user.getRoleName().equals("副院长")){
+                    if(user.getRoleName().equals("副检察长")){
                         if(!StringUtils.isEmpty(dpid)){
                             departments=departmentRepository.findByid(dpid);//查询部长相关部门
                         }
@@ -553,7 +553,7 @@ public class RecordServiceImpl implements RecordService {
                 List<StatisticsModel> sm=new ArrayList<>();
                 //按月统计
                 List<String> listMonth=doDateByStatisticsType("",time);
-                if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
+                if (user.getRoleName().equals("M")||user.getRoleName().equals("检察长")) {
                     List<Department> departments=departmentRepository.findAll();//全部部门
                     int j=1;
                     for(int i=0;i<listMonth.size();i+=2){//分割后的日期
@@ -648,10 +648,10 @@ public class RecordServiceImpl implements RecordService {
                     DailyListModel model=new DailyListModel();
                     model.setStatistics(statistics);
                     return model;
-                }else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
+                }else if (user.getRoleName().equals("部门负责人") || user.getRoleName().equals("副检察长")){
                     Department departments=departmentRepository.findByid(user.getDeptId());//查询部长相关部门
                     int j=1;
-                    if(user.getRoleName().equals("副院长")){
+                    if(user.getRoleName().equals("副检察长")){
                         if(!StringUtils.isEmpty(dpid)){
                             departments=departmentRepository.findByid(dpid);//查询部长相关部门
                         }
@@ -761,7 +761,7 @@ public class RecordServiceImpl implements RecordService {
                 //按周统计
                 //List<String> listWeek=doDateByStatisticsType("week",time);
                 List<String> listWeek=getWeeks(timeStart,timeEnd);
-                if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
+                if (user.getRoleName().equals("M")||user.getRoleName().equals("检察长")) {
                     List<Department> departments=departmentRepository.findAll();//全部部门
                     int j=1;
                     for(int i=0;i<listWeek.size();i+=2){//分割后的日期
@@ -844,10 +844,10 @@ public class RecordServiceImpl implements RecordService {
                     DailyListModel model=new DailyListModel();
                     model.setStatistics(statistics);
                     return model;
-                }else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
+                }else if (user.getRoleName().equals("部门负责人") || user.getRoleName().equals("副检察长")){
                     Department departments=departmentRepository.findByid(user.getDeptId());//查询部长相关部门
                     int j=1;
-                    if(user.getRoleName().equals("副院长")){
+                    if(user.getRoleName().equals("副检察长")){
                         if(!StringUtils.isEmpty(dpid)){
                             departments=departmentRepository.findByid(dpid);//查询部长相关部门
                         }
@@ -985,7 +985,8 @@ public class RecordServiceImpl implements RecordService {
                 List<Object> shangDaka=new ArrayList<>();//上班打卡次数
                 List<Object> xiaDaka=new ArrayList<>();//下班打卡次数
                 List<Object> qingJia=new ArrayList<>();//请假
-                if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
+                List<Object> yichangcount=new ArrayList<>();//异常综合
+                if (user.getRoleName().equals("M")||user.getRoleName().equals("检察长")) {
                     List<Department> departments=departmentRepository.findAll();//全部部门
                     for (String day:days) {
                         dates.add(day);//追加日期
@@ -1038,6 +1039,7 @@ public class RecordServiceImpl implements RecordService {
                         shangDaka.add(sd);
                         xiaDaka.add(xd);
                         qingJia.add(qing);
+                        yichangcount.add(y+lo+l);
                     }
                     Map<String,List<Object>> map= new HashMap<>();
                     map.put("date",dates);
@@ -1048,10 +1050,11 @@ public class RecordServiceImpl implements RecordService {
                     map.put("shangDaka",shangDaka);
                     map.put("xiaDaka",xiaDaka);
                     map.put("qingJia",qingJia);
+                    map.put("yichangcount",yichangcount);
                     return map;
-                }else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
+                }else if (user.getRoleName().equals("部门负责人") || user.getRoleName().equals("副检察长")){
                     Department departments=departmentRepository.findByid(user.getDeptId());//查询部长相关部门
-                    if(user.getRoleName().equals("副院长")){
+                    if(user.getRoleName().equals("副检察长")){
                         if(!StringUtils.isEmpty(dpid)){
                             departments=departmentRepository.findByid(dpid);//查询部长相关部门
                         }
@@ -1105,7 +1108,7 @@ public class RecordServiceImpl implements RecordService {
                         shangDaka.add(sd);
                         xiaDaka.add(xd);
                         qingJia.add(qing);
-
+                        yichangcount.add(y+lo+l);
                     }
                 }
                 Map<String,List<Object>> map= new HashMap<>();
@@ -1117,6 +1120,7 @@ public class RecordServiceImpl implements RecordService {
                 map.put("shangDaka",shangDaka);
                 map.put("xiaDaka",xiaDaka);
                 map.put("qingJia",qingJia);
+                map.put("yichangcount",yichangcount);
                 return map;
             }
         }catch (Exception e){

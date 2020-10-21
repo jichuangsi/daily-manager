@@ -91,14 +91,14 @@ public class StaffConsoleService {
             }
             if (user!=null){
                 //user.getRoleName().equals("M") || user.getRoleName().equals("院长") || user.getRoleName().equals("副院长")
-                if (user.getRoleName().equals("部长")){
+                if (user.getRoleName().equals("部门负责人")){
                     Department department=departmentRepository.findByid(user.getDeptId());
                     predicateList.add(criteriaBuilder.equal(root.get("department"),department));
                 }
-                if (user.getRoleName().equals("员工")){
+                if (user.getRoleName().equals("普通工作人员")){
                     predicateList.add(criteriaBuilder.equal(root.get("wechat"),user.getWechat()));
                 }
-                if (user.getRoleName().equals("副院长")){
+                if (user.getRoleName().equals("副检察长")){
                     if(deptId!=null){
                         Department department=departmentRepository.findByid(deptId);
                         predicateList.add(criteriaBuilder.equal(root.get("department"),department));

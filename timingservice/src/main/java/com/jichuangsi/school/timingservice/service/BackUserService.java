@@ -5,12 +5,14 @@ import com.jichuangsi.school.timingservice.commons.Md5Util;
 import com.jichuangsi.school.timingservice.constant.ResultCode;
 import com.jichuangsi.school.timingservice.constant.Status;
 import com.jichuangsi.school.timingservice.entity.BackUser;
+import com.jichuangsi.school.timingservice.entity.Role;
 import com.jichuangsi.school.timingservice.exception.BackUserException;
 import com.jichuangsi.school.timingservice.model.BackUserModel;
 import com.jichuangsi.school.timingservice.model.UpdatePwdModel;
 import com.jichuangsi.school.timingservice.model.UserInfoForToken;
 import com.jichuangsi.school.timingservice.model.WxLoginModel;
 import com.jichuangsi.school.timingservice.repository.IBackUserRepository;
+import com.jichuangsi.school.timingservice.repository.IRoleRepository;
 import com.jichuangsi.school.timingservice.repository.IStatusRepository;
 import com.jichuangsi.school.timingservice.utils.MappingEntity2ModelCoverter;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,8 @@ public class BackUserService {
     private BackTokenService backTokenService;
     @Resource
     private IStatusRepository statusRepository;
+    @Resource
+    private IRoleRepository roleRepository;
     public void registBackUser(WxLoginModel model) throws BackUserException {
         /*if (StringUtils.isEmpty(model.getAccount()) || StringUtils.isEmpty(model.getPwd())
                 || StringUtils.isEmpty(model.getName()) || StringUtils.isEmpty(model.getOpendId())
@@ -127,7 +131,12 @@ public class BackUserService {
         backUserRepository.save(backUser);
     }
 
-    public List<BackUser> findBackUserByRoleName(String roleName){
-        return backUserRepository.findByRoleNameAndStatus(roleName,Status.ACTIVATE.getName());
+    public List<BackUser> findBackUserByRoleName(String roleName)throws BackUserException{
+        Role role=roleRepository.findByRolename(roleName);
+        if (role!=null){
+            return backUserRepository.findByRoleIdAndStatus(role.getId(),Status.ACTIVATE.getName());
+        }else{
+            throw new BackUserException(ResultCode.SELECT_NULL_MSG);
+        }
     }
 }

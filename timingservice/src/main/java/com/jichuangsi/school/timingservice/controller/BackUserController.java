@@ -106,6 +106,10 @@ public class BackUserController {
     @ApiImplicitParams({})
     @GetMapping("/findBackUserByRoleId")
     public ResponseModel updateStaffRole(@ModelAttribute UserInfoForToken userInfo){
-        return ResponseModel.sucess("",backUserService.findBackUserByRoleName("副院长"));
+        try {
+            return ResponseModel.sucess("",backUserService.findBackUserByRoleName("副检察长"));
+        }catch (BackUserException e){
+            return ResponseModel.fail("",e.getMessage());
+        }
     }
 }

@@ -46,6 +46,7 @@ public class BackRoleService {
         roleRepository.save(role);
         OpLog opLog=new OpLog(userInfo.getUserNum(),"修改","修改角色");
         opLogRepository.save(opLog);
+        backUserRepository.updateBackUserRole(role.getId(),role.getRolename());
     }
 
     @Transactional(rollbackFor = Exception.class)

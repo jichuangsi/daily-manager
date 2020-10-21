@@ -297,11 +297,11 @@ public class DaKaController {
                 List<People> peopleList=null;
                 List<ReportFormModel> models = new ArrayList<>();
                 ResponseModel<List<ReportFormModel>> listResponseModel=new ResponseModel<>();
-                if (user.getRoleName().equals("M") || user.getRoleName().equals("院长")){
+                if (user.getRoleName().equals("M") || user.getRoleName().equals("检察长")){
                     peopleList = peopleService.findAllByStatus("0");
-                }else if(user.getRoleName().equals("部长")){
+                }else if(user.getRoleName().equals("部门负责人")){
                     peopleList = peopleService.findForDAndStatus(user.getDeptId(),"0");
-                }else if(user.getRoleName().equals("副院长")){
+                }else if(user.getRoleName().equals("副检察长")){
                     if(backRoleService.getRoleDepartment(user.getId()).size()==0){
                         peopleList = new ArrayList<>();
                     }else{
@@ -366,11 +366,11 @@ public class DaKaController {
                 List<People> peopleList=null;
                 List<ReportFormModel> models = new ArrayList<>();
                 ResponseModel<List<ReportFormModel>> listResponseModel=new ResponseModel<>();
-                if (user.getRoleName().equals("M") || user.getRoleName().equals("院长")){
+                if (user.getRoleName().equals("M") || user.getRoleName().equals("检察长")){
                     peopleList = peopleService.findAllPeopleByStatus(name,"0");
-                }else if(user.getRoleName().equals("部长")){
+                }else if(user.getRoleName().equals("部门负责人")){
                     peopleList = peopleService.findAllPeopleByStatus(name,user.getDeptId(),"0");
-                }else if(user.getRoleName().equals("副院长")){
+                }else if(user.getRoleName().equals("副检察长")){
                     if(backRoleService.getRoleDepartment(user.getId()).size()==0){
                         peopleList = new ArrayList<>();
                     }else {
@@ -432,7 +432,7 @@ public class DaKaController {
     public ResponseModel<List<ReportFormModel2>> getTDBB(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam String timeStart, @RequestParam String timeEnd,@RequestParam(required = false) String name,@RequestParam @Nullable String deptId,@RequestParam int pageSize ,@RequestParam @Nullable int pageNum){
        try {
            BackUser user=backUserService.getBackUserById(userInfoForToken.getUserId());
-           if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
+           if (user.getRoleName().equals("M")||user.getRoleName().equals("检察长")) {
                try {
                    List<People> peopleList=null;
                    if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
@@ -478,7 +478,7 @@ public class DaKaController {
                } catch (Exception e) {
                    return ResponseModel.fail("", ResultCode.SYS_ERROR);
                }
-           } else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
+           } else if (user.getRoleName().equals("部门负责人") || user.getRoleName().equals("副检察长")){
                try {
                    List<People> peopleList =null;
                    if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
@@ -486,7 +486,7 @@ public class DaKaController {
                    }else{
                        peopleList = peopleService.findAllPeopleByStatus(name,deptId,"0");
                    }
-                   if(user.getRoleName().equals("副院长")){
+                   if(user.getRoleName().equals("副检察长")){
                        if(backRoleService.getRoleDepartment(userInfoForToken.getUserId()).size()==0)
                            peopleList=new ArrayList<>();
                    }
@@ -578,7 +578,7 @@ public class DaKaController {
     public ResponseModel ExportTDBB(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam String timeStart, @RequestParam String timeEnd,@RequestParam(required = false) String name,@RequestParam @Nullable String deptId){
         try {
             BackUser user=backUserService.getBackUserById(userInfoForToken.getUserId());
-            if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
+            if (user.getRoleName().equals("M")||user.getRoleName().equals("检察长")) {
                 try {
                     List<People> peopleList=null;
                     if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
@@ -612,7 +612,7 @@ public class DaKaController {
                 } catch (Exception e) {
                     return ResponseModel.fail("", ResultCode.SYS_ERROR);
                 }
-            } else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
+            } else if (user.getRoleName().equals("部门负责人") || user.getRoleName().equals("副检察长")){
                 try {
                     List<People> peopleList =null;
                     if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
@@ -620,7 +620,7 @@ public class DaKaController {
                     }else{
                         peopleList = peopleService.findAllPeopleByStatus(name,deptId,"0");
                     }
-                    if(user.getRoleName().equals("副院长")){
+                    if(user.getRoleName().equals("副检察长")){
                         if(backRoleService.getRoleDepartment(userInfoForToken.getUserId()).size()==0)
                             peopleList=new ArrayList<>();
                     }
@@ -690,7 +690,7 @@ public class DaKaController {
         try {
             BackUser user=backUserService.getBackUserById(userInfoForToken.getUserId());
 
-            if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
+            if (user.getRoleName().equals("M")||user.getRoleName().equals("检察长")) {
                 try {
                     ResponseModel<List<ReportFormModel2>> listResponseModel=new ResponseModel<>();
                     List<People> peopleList=null;
@@ -732,7 +732,7 @@ public class DaKaController {
                 } catch (Exception e) {
                     return ResponseModel.fail("", ResultCode.SYS_ERROR);
                 }
-            } else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
+            } else if (user.getRoleName().equals("部门负责人") || user.getRoleName().equals("副检察长")){
                 try {
                     ResponseModel<List<ReportFormModel2>> listResponseModel=new ResponseModel<>();
                     List<People> peopleList =null;
@@ -741,7 +741,7 @@ public class DaKaController {
                     }else{
                         peopleList = peopleService.findAllPeopleByStatus(name,dpid,"0");
                     }
-                    if(user.getRoleName().equals("副院长")){
+                    if(user.getRoleName().equals("副检察长")){
                         if(backRoleService.getRoleDepartment(userInfoForToken.getUserId()).size()==0)
                             peopleList=new ArrayList<>();
                     }
@@ -821,7 +821,7 @@ public class DaKaController {
     public ResponseModel importList(@ModelAttribute UserInfoForToken userInfoForToken,@RequestParam(required = false) String name,@RequestParam @Nullable String dpid,@RequestParam String timeStart, @RequestParam String timeEnd)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {
         try {
             BackUser user=backUserService.getBackUserById(userInfoForToken.getUserId());
-            if (user.getRoleName().equals("M")||user.getRoleName().equals("院长")) {
+            if (user.getRoleName().equals("M")||user.getRoleName().equals("检察长")) {
                 try {
                     List<People> peopleList=null;
                     if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
@@ -870,7 +870,7 @@ public class DaKaController {
                 } catch (Exception e) {
                     return ResponseModel.fail("", ResultCode.SYS_ERROR);
                 }
-            } else if (user.getRoleName().equals("部长") || user.getRoleName().equals("副院长")){
+            } else if (user.getRoleName().equals("部门负责人") || user.getRoleName().equals("副检察长")){
                 try {
                     List<People> peopleList =null;
                     if(StringUtil.isEmpty(name)||name.equalsIgnoreCase("")){
@@ -878,7 +878,7 @@ public class DaKaController {
                     }else{
                         peopleList = peopleService.findAllPeopleByStatus(name,dpid,"0");
                     }
-                    if(user.getRoleName().equals("副院长")){
+                    if(user.getRoleName().equals("副检察长")){
                         if(backRoleService.getRoleDepartment(userInfoForToken.getUserId()).size()==0)
                             peopleList=new ArrayList<>();
                     }
