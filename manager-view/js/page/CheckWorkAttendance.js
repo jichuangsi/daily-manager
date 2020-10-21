@@ -8,35 +8,39 @@ layui.use(['form', 'table', 'laydate'], function() {
 	});
 	var date = new Date();
 	//	date.setMonth(date.getMonth() - 1);
-	var dateStart =getDay(-7);
+	var dateStart = getDay(-7);
 	// var dateStart = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 	var dateEnd = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 	// var dateEnd =getDay(-7);
 	// formatEveryDay(a,b );
 	// ch(formatEveryDay(a,b ));
 	init()
-	function init(){
-		var url = "/kq/getStatisticsChartByTime?deptId="+getUser().deptId+"&timeStart="+dateStart+"&timeEnd="+dateEnd;
+
+	function init() {
+		var url = "/kq/getStatisticsChartByTime?deptId=" + getUser().deptId + "&timeStart=" + dateStart + "&timeEnd=" +
+			dateEnd;
 		var res = getAjaxPostData(url)
 		tj(res.data);
 	}
-	function getDay(day){
-	    var today = new Date();
-	    var targetday_milliseconds=today.getTime() + 1000*60*60*24*day;
-	    today.setTime(targetday_milliseconds); 
-	    var tYear = today.getFullYear();
-	    var tMonth = today.getMonth();
-	    var tDate = today.getDate();
-	    tMonth = doHandleMonth(tMonth + 1);
-	    tDate = doHandleMonth(tDate);
-	    return tYear+"-"+tMonth+"-"+tDate;
+
+	function getDay(day) {
+		var today = new Date();
+		var targetday_milliseconds = today.getTime() + 1000 * 60 * 60 * 24 * day;
+		today.setTime(targetday_milliseconds);
+		var tYear = today.getFullYear();
+		var tMonth = today.getMonth();
+		var tDate = today.getDate();
+		tMonth = doHandleMonth(tMonth + 1);
+		tDate = doHandleMonth(tDate);
+		return tYear + "-" + tMonth + "-" + tDate;
 	}
-	function doHandleMonth(month){
-	    var m = month;
-	    if(month.toString().length == 1){
-	     m = "0" + month;
-	    }
-	    return m;
+
+	function doHandleMonth(month) {
+		var m = month;
+		if (month.toString().length == 1) {
+			m = "0" + month;
+		}
+		return m;
 	}
 
 	function tj(data) {
@@ -49,7 +53,17 @@ layui.use(['form', 'table', 'laydate'], function() {
 		// 	"leaveEarly":[0,1,3,1,1,2,1,0,1,0,0,1,3,1,1,2,1,0,1,0,0,1,3,1,1,2,1,0,1,0,0,1,3,1,1,2,1,0,1,0,0,1,3,1,1,2,1,0,1,0]//早退
 		// }
 		var myChart = echarts.init(document.getElementById('main'));
-		console.log(data);
+		if (data == null) {
+			return
+		}
+		let yichang = data["yichang"];
+		let late = data["late"];
+		let lost=data['lost'];
+		let leave=data["leaveEarly"];
+		for (let i = 0; i < yichang.length; i++) {
+			yichang[i]=yichang[i]+late[i]+lost[i]+leave[i]
+		}
+		console.log(yichang)
 		// 指定图表的配置项和数据
 		var option = {
 			title: {
@@ -57,7 +71,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 			},
 			tooltip: {},
 			legend: {
-				data: ['异常', '下班考勤', '迟到', '上班考勤']
+				data: ['异常', '下班考勤', '上班考勤']
 			},
 			xAxis: {
 				data: data["date"]
@@ -66,15 +80,11 @@ layui.use(['form', 'table', 'laydate'], function() {
 			series: [{
 				name: '异常',
 				type: 'bar',
-				data: data["yichang"]
+				data: yichang
 			}, {
 				name: '下班考勤',
 				type: 'bar',
 				data: data["xiaDaka"]
-			}, {
-				name: '迟到',
-				type: 'bar',
-				data: data["late"]
 			}, {
 				name: '上班考勤',
 				type: 'bar',
@@ -159,6 +169,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 					field: 'chockinTime',
 					title: '打卡时间',
 					align: 'center',
+					sort:true,
 					templet: function(d) {
 						if (d.chockinTime != 0) {
 							return new Date(+new Date(d.chockinTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(
@@ -172,6 +183,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 					field: 'time',
 					title: '考勤时间',
 					align: 'center',
+					sort:true,
 					templet: function(d) {
 						if (d.time != 0) {
 							return new Date(+new Date(d.time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/,
@@ -190,6 +202,7 @@ layui.use(['form', 'table', 'laydate'], function() {
 			]
 		],
 		page: true,
+		limit: 50,
 		loading: true,
 		toolbar: '#exe',
 		defaultToolbar: ['filter', 'exports'],
@@ -262,7 +275,8 @@ layui.use(['form', 'table', 'laydate'], function() {
 			timeEnd: dateEnd,
 			timeStart: dateStart
 		}
-		var url = "/kq/getStatisticsChartByTime?deptId="+param.roleDept+"&timeStart="+dateStart+"&timeEnd="+dateEnd;
+		var url = "/kq/getStatisticsChartByTime?deptId=" + param.roleDept + "&timeStart=" + dateStart + "&timeEnd=" +
+			dateEnd;
 		var res = getAjaxPostData(url)
 		tj(res.data);
 		table.reload('idTest', {
